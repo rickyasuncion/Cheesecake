@@ -5,13 +5,6 @@ import './Landing.css'
 import { Button } from "./ui/button.jsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// const movies = [
-//   { id: 1, title: "Inception", imageUrl: "" },
-//   { id: 2, title: "Interstellar", imageUrl: "" },
-//   { id: 3, title: "The Dark Knight", imageUrl: "" },
-//   { id: 4, title: "Pulp Fiction", imageUrl: "" },
-//   { id: 5, title: "The Matrix", imageUrl: "" },
-// ];
 
 const MOVIE_DISPLAY_COUNT = 5
 
@@ -26,9 +19,17 @@ const Landing = () => {
 
   const handleSearchSubmit = async (event) => {
     event.preventDefault();
+    fetchAndSetMovies(searchTerm);
+  };
+
+
+  useEffect(() => {
+    fetchAndSetMovies()
+  } , [])
+
+  async function fetchAndSetMovies(query) {
     const fetch = require("node-fetch");
-    const url = `https://api.themoviedb.org/3/search/multi?query=${searchTerm}&include_adult=false&language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470`;
-    console.log(url);
+    const url = query ? `https://api.themoviedb.org/3/search/multi?query=${query}&include_adult=false&language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470` : `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=bbd89781c7835917a2decb4989b56470`;
 
     const options = {
       method: "GET",
@@ -43,15 +44,13 @@ const Landing = () => {
       (data) => data.media_type !== "person"
     );
     setMovies(filteredData);
-    alert(`Searching for: ${searchTerm}`);
-  };
+  }
 
-  useEffect(() => { console.log(movies) }, [movies])
 
   return (
     <div className="landing-page">
-      <h1 className="text-2xl font-semibold mb-4">Welcome to Movie Recommendation</h1>
-      <p >Search for your favorite movies below:</p>
+      <h1 className="text-2xl font-semibold mb-4 text-center">Welcome to Movie Recommendation</h1>
+      <p className="text-center">Search for your favorite movies below:</p>
       <form className="mt-2 flex w-fit items-center mx-auto" onSubmit={handleSearchSubmit}>
         <Input
           type="text"
@@ -63,19 +62,23 @@ const Landing = () => {
         <Button className="px-10">Search</Button>
       </form>
 
-      <h2 className="text-lg font-medium mt-10">Recommended Movies</h2>
       <div className="container">
-        {movies.length === 0 ? <h2>No movies to display</h2> :
+        {movies.length === 0 ? <h2 className="text-center mt-10 text-lg">No movies to display</h2> :
 
-          <div>
-            <div className="flex gap-2 items-center justify-end">
+          <div className="mt-10">
+            <div className="flex gap-2 items-center justify-between">
+            <h2 className="text-lg font-medium">Recommended Popular Movies</h2>
+            <div className="flex gap-2 items-center">
               <span>{currMoviesObj.start} to {currMoviesObj.end} movies / {movies.length} movies</span>
               <div>
-                <Button className="text-xs p-1" disabled={currMoviesObj.start === 0} onClick={() => setCurrMoviesObj(curr => ({ start: curr.start - MOVIE_DISPLAY_COUNT, end: curr.end - MOVIE_DISPLAY_COUNT }))}><ChevronLeft /></Button>
-                <Button className="text-xs p-1" disabled={currMoviesObj.end === movies.length} onClick={() => (setCurrMoviesObj(curr => ({ start: curr.start + MOVIE_DISPLAY_COUNT, end: curr.end + MOVIE_DISPLAY_COUNT })))}><ChevronRight /></Button>
+                <Button className="text-xs p-1" disabled={currMoviesObj.start <= 0} onClick={() => setCurrMoviesObj(curr => ({ start: curr.start - MOVIE_DISPLAY_COUNT, end: curr.end - MOVIE_DISPLAY_COUNT }))}><ChevronLeft /></Button>
+                <Button className="text-xs p-1" disabled={currMoviesObj.end >= movies.length} onClick={() => (setCurrMoviesObj(curr => ({ start: curr.start + MOVIE_DISPLAY_COUNT, end: curr.end + MOVIE_DISPLAY_COUNT })))}><ChevronRight /></Button>
               </div>
 
             </div>
+
+            </div>
+
             <div className="movie-list">
               {
                 [...movies].slice(currMoviesObj.start, currMoviesObj.end).map((movie) => (
