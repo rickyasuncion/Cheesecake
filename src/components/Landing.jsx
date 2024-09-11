@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MovieCard from "./MovieCard";
 import { Input } from "./ui/input.jsx";
 import './Landing.css'
 import { Button } from "./ui/button.jsx";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // const movies = [
 //   { id: 1, title: "Inception", imageUrl: "" },
@@ -12,9 +13,12 @@ import { Button } from "./ui/button.jsx";
 //   { id: 5, title: "The Matrix", imageUrl: "" },
 // ];
 
+const MOVIE_DISPLAY_COUNT = 5
+
 const Landing = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [movies, setMovies] = useState([]);
+  const [currMoviesObj, setCurrMoviesObj] = useState({ start: 0, end: MOVIE_DISPLAY_COUNT })
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -39,9 +43,10 @@ const Landing = () => {
       (data) => data.media_type !== "person"
     );
     setMovies(filteredData);
-    console.log(filteredData);
     alert(`Searching for: ${searchTerm}`);
   };
+
+  useEffect(() => { console.log(movies) }, [movies])
 
   return (
     <div className="landing-page">
@@ -59,11 +64,28 @@ const Landing = () => {
       </form>
 
       <h2 className="text-lg font-medium mt-10">Recommended Movies</h2>
-      <div className="movie-list">
+      <div className="container">
         {movies.length === 0 ? <h2>No movies to display</h2> :
-        movies.map((movie) => (
-          <MovieCard id={movie.id} imageUrl={movie.imageUrl} media_type={movie.media_type} title={movie.title} name={movie.name} poster_path={movie.poster_path} />
-        ))}
+
+          <div>
+            <div className="flex gap-2 items-center justify-end">
+              <span>{currMoviesObj.start} to {currMoviesObj.end} movies / {movies.length} movies</span>
+              <div>
+                <Button className="text-xs p-1" disabled={currMoviesObj.start === 0} onClick={() => setCurrMoviesObj(curr => ({ start: curr.start - MOVIE_DISPLAY_COUNT, end: curr.end - MOVIE_DISPLAY_COUNT }))}><ChevronLeft /></Button>
+                <Button className="text-xs p-1" disabled={currMoviesObj.end === movies.length} onClick={() => (setCurrMoviesObj(curr => ({ start: curr.start + MOVIE_DISPLAY_COUNT, end: curr.end + MOVIE_DISPLAY_COUNT })))}><ChevronRight /></Button>
+              </div>
+
+            </div>
+            <div className="movie-list">
+              {
+                [...movies].slice(currMoviesObj.start, currMoviesObj.end).map((movie) => (
+                  <MovieCard key={movie.id} id={movie.id} imageUrl={movie.imageUrl} media_type={movie.media_type} title={movie.title} name={movie.name} poster_path={movie.poster_path} />
+                ))
+              }
+            </div>
+
+          </div>
+        }
       </div>
     </div>
   );
