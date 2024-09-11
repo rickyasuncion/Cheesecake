@@ -11,6 +11,7 @@ const MOVIE_DISPLAY_COUNT = 5
 const Landing = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [movies, setMovies] = useState([]);
+  const [tvShows, setTvShows] = useState([]);
   const [currMoviesObj, setCurrMoviesObj] = useState({ start: 0, end: MOVIE_DISPLAY_COUNT })
 
   const handleSearchChange = (event) => {
@@ -19,17 +20,24 @@ const Landing = () => {
 
   const handleSearchSubmit = async (event) => {
     event.preventDefault();
-    fetchAndSetMovies(searchTerm);
+    const fetchedMovies = await fetchData(`https://api.themoviedb.org/3/search/multi?query=${searchTerm}&include_adult=false&language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470`);
+    setMovies(fetchedMovies);
   };
 
 
   useEffect(() => {
-    fetchAndSetMovies()
-  } , [])
+    async function populateData() {
+      const popularMovies = await  fetchData(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=bbd89781c7835917a2decb4989b56470`)
+      setMovies(popularMovies)
 
-  async function fetchAndSetMovies(query) {
+      const popularTvShows = await fetchData(`https://api.themoviedb.org/3/trending/tv/day?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470`)
+      setTvShows(popularTvShows.slice(0,5))
+    }
+    populateData()
+  } , [])
+  
+  async function fetchData(url) {
     const fetch = require("node-fetch");
-    const url = query ? `https://api.themoviedb.org/3/search/multi?query=${query}&include_adult=false&language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470` : `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=bbd89781c7835917a2decb4989b56470`;
 
     const options = {
       method: "GET",
@@ -43,7 +51,7 @@ const Landing = () => {
     let filteredData = data.results.filter(
       (data) => data.media_type !== "person"
     );
-    setMovies(filteredData);
+    return filteredData;
   }
 
 
@@ -89,6 +97,27 @@ const Landing = () => {
 
           </div>
         }
+      </div>
+
+
+
+      <div className="container">
+     
+          <div className="mt-10">
+            <div className="flex gap-2 items-center justify-between">
+              <h2 className="text-lg font-medium">Popular TV Shows</h2>
+            </div>
+
+            <div className="movie-list">
+              {
+                tvShows.map((movie) => (
+                  <MovieCard key={movie.id} id={movie.id} imageUrl={movie.imageUrl} media_type={movie.media_type} title={movie.title} name={movie.name} poster_path={movie.poster_path} />
+                ))
+              }
+            </div>
+
+          </div>
+        
       </div>
     </div>
   );
