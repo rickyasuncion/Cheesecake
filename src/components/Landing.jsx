@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import "./Landing.css";
+import MovieCard from "./MovieCard";
+import { Input } from "./ui/input.jsx";
+import './Landing.css'
+import { Button } from "./ui/button.jsx";
 
 // const movies = [
 //   { id: 1, title: "Inception", imageUrl: "" },
@@ -42,31 +45,24 @@ const Landing = () => {
 
   return (
     <div className="landing-page">
-      <h1>Welcome to Movie Recommendation</h1>
-      <p>Search for your favorite movies below:</p>
-      <form onSubmit={handleSearchSubmit}>
-        <input
+      <h1 className="text-2xl font-semibold mb-4">Welcome to Movie Recommendation</h1>
+      <p >Search for your favorite movies below:</p>
+      <form className="mt-2 flex w-fit items-center mx-auto" onSubmit={handleSearchSubmit}>
+        <Input
           type="text"
           value={searchTerm}
           onChange={handleSearchChange}
+          className="mx-auto w-80"
           placeholder="Type your search here..."
         />
-        <button type="submit">Search</button>
+        <Button className="px-10">Search</Button>
       </form>
 
-      <h2>Recommended Movies</h2>
+      <h2 className="text-lg font-medium mt-10">Recommended Movies</h2>
       <div className="movie-list">
-        {movies.map((movie) => (
-          <div key={movie.id} className="movie-card">
-            <img
-              src={
-                movie.imageUrl ||
-                `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-              }
-              alt={movie.media_type === "movie" ? movie.title : movie.name}
-            />
-            <h3>{movie.media_type === "movie" ? movie.title : movie.name}</h3>
-          </div>
+        {movies.length === 0 ? <h2>No movies to display</h2> :
+        movies.map((movie) => (
+          <MovieCard id={movie.id} imageUrl={movie.imageUrl} media_type={movie.media_type} title={movie.title} name={movie.name} poster_path={movie.poster_path} />
         ))}
       </div>
     </div>
