@@ -20,19 +20,23 @@ const Landing = () => {
   const handleSearchSubmit = async (event) => {
     event.preventDefault();
     const fetch = require("node-fetch");
-    const url =
-      `https://api.themoviedb.org/3/search/multi?query=${searchTerm}&include_adult=false&language=en-US&page=1`;
+    const url = `https://api.themoviedb.org/3/search/multi?query=${searchTerm}&include_adult=false&language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470`;
     console.log(url);
-    const options = { method: "GET",   headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiYmQ4OTc4MWM3ODM1OTE3YTJkZWNiNDk4OWI1NjQ3MCIsIm5iZiI6MTcyNjA2NTQxMC4wNzI0OSwic3ViIjoiNjZkZjgyMGQwMDAwMDAwMDAwOWNkMTUwIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.inhfWIJljYlhfF-_RGZBsOtGVMdTT8kQFs4BuHHMRP0'
-      } };
+
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    };
 
     let response = await fetch(url, options);
     let data = await response.json();
-    let filteredData = data.results.filter((data) => data.media_type !== 'person')
+    let filteredData = data.results.filter(
+      (data) => data.media_type !== "person"
+    );
     setMovies(filteredData);
-    console.log(filteredData)
+    console.log(filteredData);
     alert(`Searching for: ${searchTerm}`);
   };
 
@@ -55,7 +59,10 @@ const Landing = () => {
         {movies.map((movie) => (
           <div key={movie.id} className="movie-card">
             <img
-              src={movie.imageUrl || `https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+              src={
+                movie.imageUrl ||
+                `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+              }
               alt={movie.media_type === "movie" ? movie.title : movie.name}
             />
             <h3>{movie.media_type === "movie" ? movie.title : movie.name}</h3>
