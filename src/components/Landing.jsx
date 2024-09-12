@@ -1,9 +1,12 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import MovieCard from "./MovieCard";
 import { Input } from "./ui/input.jsx";
 import './Landing.css'
 import { Button } from "./ui/button.jsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useUserAuth } from "../_utils/auth-context";
 
 
 const MOVIE_DISPLAY_COUNT = 5
@@ -13,6 +16,9 @@ const Landing = () => {
   const [movies, setMovies] = useState([]);
   const [tvShows, setTvShows] = useState([]);
   const [currMoviesObj, setCurrMoviesObj] = useState({ start: 0, end: MOVIE_DISPLAY_COUNT })
+
+  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+  console.log(user);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -58,6 +64,11 @@ const Landing = () => {
   return (
     <div className="landing-page">
       <h1 className="text-2xl font-semibold mb-4 text-center">Welcome to Movie Recommendation</h1>
+      <p className="p-4">
+        {user ? (<button className="mr-2 px-4 py-2 rounded  bg-blue-600 text-white" onClick={firebaseSignOut}>Sign Out</button>) 
+        : (<button className="mr-2 px-4 py-2 rounded  bg-blue-600 hover:bg-blue-500 text-white" onClick={gitHubSignIn}>Sign in with your gitHub</button>
+        )}
+      </p>
       <p className="text-center">Search for your favorite movies below:</p>
       <form className="mt-2 flex w-fit items-center mx-auto" onSubmit={handleSearchSubmit}>
         <Input
