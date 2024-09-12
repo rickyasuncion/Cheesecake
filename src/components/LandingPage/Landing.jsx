@@ -7,9 +7,9 @@ import MovieListView from "./MovieListView.jsx";
 const Landing = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [queriedMovies, setQueriedMovies] = useState([]);
-  const [queried, setQueried] = useState(false);
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [trendingTvShows, setTrendingTvShows] = useState([]);
+  const [queried, setQueried] = useState(false);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);

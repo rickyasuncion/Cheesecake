@@ -1,12 +1,19 @@
 import { React } from "react";
-import Landing from "./components/LandingPage/Landing";
-import Header from "./components/Layout/Header";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+
 
 function App() {
   return (
     <>
-      <Header></Header>
-      <Landing></Landing>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Home></Home>}></Route> 
+          <Route path="/home" element={<Home></Home>}></Route>
+          <Route path="/login" element={<Login></Login>}></Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
