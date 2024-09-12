@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import MovieCard from "./MovieCard";
+import MovieCard from "./ui/MovieCard.jsx";
 import { Input } from "./ui/input.jsx";
-import './Landing.css'
+import './LandingPage/Landing.css';
 import { Button } from "./ui/button.jsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useUserAuth } from "../_utils/auth-context";
