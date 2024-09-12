@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Input } from "../UI/input.jsx";
 import "./Landing.css";
-import { Button } from "../UI/button.jsx";
 import MovieListView from "./MovieListView.jsx";
+import LandingSearchForm from "./LandingSearchForm.jsx";
 
 const Landing = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -62,24 +61,18 @@ const Landing = () => {
       <h1 className="text-2xl font-semibold mb-4 text-center">
         Welcome to Movie Recommendation
       </h1>
-      <p className="text-center">Search for your favorite Movies below:</p>
-      <form
-        className="mt-2 flex w-fit items-center mx-auto"
-        onSubmit={handleSearchSubmit}
-      >
-        <Input
-          type="text"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="mx-auto w-80"
-          placeholder="Type your search here..."
-        />
-        <Button className="px-10">Search</Button>
-      </form>
+
+      <LandingSearchForm
+        searchTerm={searchTerm}
+        onSearchSubmit={handleSearchSubmit}
+        onSearchChange={handleSearchChange}
+      ></LandingSearchForm>
+
       {queried && queriedMovies.length === 0 && <h2>No results found.</h2>}
       {queried && queriedMovies.length > 0 && (
         <MovieListView movies={queriedMovies} title={"Search Results"} />
       )}
+      
       <MovieListView
         movies={trendingMovies}
         title={"Popular Movies"}

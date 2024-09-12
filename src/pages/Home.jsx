@@ -4,10 +4,10 @@ import Landing from "../components/LandingPage/Landing";
 
 const Home = () => {
   return (
-    <div>
+    <React.Fragment>
       <Header></Header>
       <Landing></Landing>
-    </div>
+    </React.Fragment>
   );
 };
 
