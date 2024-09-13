@@ -26,7 +26,7 @@ const Landing = () => {
   useEffect(() => {
     async function populateData() {
       const popularMovies = await fetchData(
-        `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=bbd89781c7835917a2decb4989b56470`
+        `https://api.themoviedb.org/3/trending/movie/day?language=en-US&api_key=bbd89781c7835917a2decb4989b56470`
       );
       setTrendingMovies(popularMovies);
 
@@ -72,7 +72,7 @@ const Landing = () => {
       {queried && queriedMovies.length > 0 && (
         <MovieListView movies={queriedMovies} title={"Search Results"} />
       )}
-      
+
       <MovieListView
         movies={trendingMovies}
         title={"Popular Movies"}
