@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'; // If using React Router
-import { Button } from '../UI/lib/button.jsx'; // Adjust the path as necessary
-import MovieCard from '../UI/lib/MovieCard.jsx'; // Adjust the path as necessary
+import { Button } from '../components/UI/button';
+import { MovieCard } from '../components/UI/MovieCard';
 
 const MovieDetailsPage = () => {
   const { id } = useParams(); // Gets the movie ID from the URL

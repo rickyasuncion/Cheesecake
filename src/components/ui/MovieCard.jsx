@@ -15,4 +15,4 @@ const MovieCard = ({id, imageUrl, media_type, title, name, poster_path}) => {
   )
 }
 
-export default MovieCard
+export {MovieCard};

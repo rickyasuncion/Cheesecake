@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState } from "react";
-import { Button } from "../UI/lib/button";
-import MovieCard from "../UI/lib/MovieCard";
+import { Button } from "../UI/button";
+import { MovieCard } from "../UI/MovieCard";
 
 const MOVIE_DISPLAY_COUNT = 5;
 
@@ -21,7 +21,8 @@ const MovieListView = ({ movies, title }) => {
             <h2 className="text-lg font-medium">{title}</h2>
             <div className="flex gap-2 items-center">
               <span>
-                {currMoviesObj.start} to {currMoviesObj.end} Movies / {movies.length} Movies
+                {currMoviesObj.start} to {currMoviesObj.end} Movies /{" "}
+                {movies.length} Movies
               </span>
               <div>
                 <Button
