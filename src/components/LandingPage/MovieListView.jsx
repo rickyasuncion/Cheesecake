@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState } from "react";
-import { Button } from "../UI/button";
-import MovieCard from "../UI/MovieCard";
+import { Button } from "../ui/button";
+import MovieCard from "../ui/MovieCard";
 
 const MOVIE_DISPLAY_COUNT = 5;
 

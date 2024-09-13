@@ -1,6 +1,6 @@
 import React from "react";
-import { Input } from "../UI/input";
-import { Button } from "../UI/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 const LandingSearchForm = ({searchTerm, onSearchSubmit, onSearchChange}) => {
   return (
