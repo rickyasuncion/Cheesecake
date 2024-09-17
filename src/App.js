@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import { AuthContextProvider } from "./_utils/auth-context";
 import MovieDetails from "./pages/Details";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -14,8 +15,9 @@ function App() {
         <Route index element={<Home />} />
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/search/:searched" element={<Search />} />
         <Route path="/login" element={<Login />} />
-        {/* Add MovieDetails route with dynamic movie ID */}
         <Route path="/details/:type/:id" element={<MovieDetails />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
