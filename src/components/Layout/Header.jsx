@@ -37,7 +37,7 @@ const Header = () => {
           </ul>
         </nav>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center space-x-2">
         <form onSubmit={handleSearch} className="flex items-center">
           <Input
             type="text"
@@ -51,7 +51,7 @@ const Header = () => {
           </Button>
         </form>
 
-        <Button className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent">
+        <Button asChild className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent">
           <Link to={'/favourites'}>
             <FaHeart className='text-red-600 text-xl' />
           </Link>
