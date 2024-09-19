@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const MovieDetails = ({ id }) => {
   const [movie, setMovie] = useState(null);
+  const [videos, setVideos] = useState([]);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -16,7 +17,20 @@ const MovieDetails = ({ id }) => {
       }
     };
 
+    const fetchMovieVideos = async () => {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/videos?api_key=bbd89781c7835917a2decb4989b56470`
+        );
+        const data = await response.json();
+        setVideos(data.results);
+      } catch (error) {
+        console.error("Error fetching movie videos:", error);
+      }
+    };
+    
     fetchMovieDetails();
+    fetchMovieVideos();
   }, [id]);
 
   if (!movie) {
@@ -49,6 +63,31 @@ const MovieDetails = ({ id }) => {
       >
         Visit Official Homepage
       </a>
+
+      {/* Display Movie Trailers */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Trailers</h2>
+        {videos.length > 0 ? (
+          videos
+            .filter(video => video.site === 'YouTube' && video.type === 'Trailer') // Only YouTube trailers
+            .map(video => (
+              <div key={video.id} className="mb-6">
+                <h3 className="text-xl font-semibold mb-2">{video.name}</h3>
+                <iframe
+                  width="100%"
+                  height="315"
+                  src={`https://www.youtube.com/embed/${video.key}`} // Embed YouTube video
+                  title={video.name}
+                  style={{ border: 'none' }}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            ))
+        ) : (
+          <p>No trailers available.</p>
+        )}
+      </div>      
     </div>
   );
 };
