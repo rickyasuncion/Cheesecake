@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import Input from "../ui/input";
 import SearchItems from "./SearchItems";
@@ -17,16 +17,9 @@ const SearchForm = () => {
     navigate(`/search/${searchTerm}`);
   };
 
-  useEffect(() => {
-    console.log(searched);
-  }, [searched]);
-
-  const fetchData = async (query) => {
-    // Mock fetch function, replace with actual API call
-    // Example: const response = await fetch(`your_api_endpoint?q=${query}`);
-    // const data = await response.json();
-    return [];
-  };
+  const handleSetResults = (res) => {
+    setResults(res);
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -45,10 +38,10 @@ const SearchForm = () => {
           <Button type="submit">Search</Button>
         </form>
         <div>
-          {results.length === 0 ? (
+          {results.length === 1 ? (
             <p className="text-center">No results found.</p>
           ) : (
-            <SearchItems></SearchItems>
+            <SearchItems onSetResult={handleSetResults} searchTerm={searched}></SearchItems>
           )}
         </div>
       </div>
