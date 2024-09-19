@@ -5,7 +5,7 @@ import { MovieCard } from "../ui/MovieCard";
 
 const MOVIE_DISPLAY_COUNT = 5;
 
-const MovieListView = ({ movies, title, contentType }) => {
+const MovieListView = ({ movies, title }) => {
   const [currMoviesObj, setCurrMoviesObj] = useState({
     start: 0,
     end: MOVIE_DISPLAY_COUNT,
@@ -57,10 +57,8 @@ const MovieListView = ({ movies, title, contentType }) => {
               .slice(currMoviesObj.start, currMoviesObj.end)
               .map((movie) => (
                 <MovieCard
-                  contentType={contentType}
                   key={movie.id}
                   id={movie.id}
-                  imageUrl={movie.imageUrl}
                   media_type={movie.media_type}
                   title={movie.title}
                   name={movie.name}

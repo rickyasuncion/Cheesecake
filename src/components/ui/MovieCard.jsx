@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "./button";
 import { FaHeart } from "react-icons/fa";
 
-const MovieCard = ({ id, imageUrl, media_type, title, name, poster_path, showFavButton = true, contentType }) => {
+const MovieCard = ({ id, imageUrl, media_type, title, name, poster_path, showFavButton = true }) => {
 
   const detailPath = `/details/${media_type}/${id}`;
   const [isFavourite, setIsFavourite] = useState(false);
@@ -16,7 +16,7 @@ const MovieCard = ({ id, imageUrl, media_type, title, name, poster_path, showFav
     if (isAlreadyFavourite) {
       setIsFavourite(true);
     }
-  }, [])
+  }, [id])
 
 
   function addToFavourites(contentId) {
@@ -29,7 +29,7 @@ const MovieCard = ({ id, imageUrl, media_type, title, name, poster_path, showFav
 
     setIsFavourite(true)
 
-    if (contentType === 'movie') {
+    if (media_type === 'movie') {
       if (favouriteMovies) {
         localStorage.setItem('favouriteMovies', JSON.stringify([...favouriteMovies, contentId]));
       }
@@ -37,7 +37,7 @@ const MovieCard = ({ id, imageUrl, media_type, title, name, poster_path, showFav
         localStorage.setItem('favouriteMovies', JSON.stringify([contentId]));
       }
     }
-    else if (contentType === 'tv') {
+    else if (media_type === 'tv') {
       if (favouriteTv) {
         localStorage.setItem('favouriteTv', JSON.stringify([...favouriteTv, contentId]));
       }
@@ -52,7 +52,7 @@ const MovieCard = ({ id, imageUrl, media_type, title, name, poster_path, showFav
     <div className="isolate relative movie-card">
       <Link to={detailPath} key={id} className="space-y-2">
         <img
-          src={imageUrl || `https://image.tmdb.org/t/p/w500/${poster_path}`}
+          src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
           alt={media_type === "movie" ? title : name}
         />
       </Link>

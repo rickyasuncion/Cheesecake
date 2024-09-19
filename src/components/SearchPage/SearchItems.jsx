@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { MovieCard } from "../ui/MovieCard";
 import { fetchData, filterResults } from "../../_utils/utils";
+import SearchCardMovie from "./SearchCardMovie";
 
-const SearchItems = ({ onSetResult, searchTerm }) => {
+const SearchItems = ({ searchTerm }) => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
@@ -25,15 +25,16 @@ const SearchItems = ({ onSetResult, searchTerm }) => {
           <h2>Search results for "{searchTerm}"</h2>
           <ul>
             {movies.map((movie) => (
-              <MovieCard
-                contentType={movie.contentType}
+              <SearchCardMovie
                 key={movie.id}
                 id={movie.id}
-                imageUrl={movie.imageUrl}
                 media_type={movie.media_type}
                 title={movie.title}
                 name={movie.name}
                 poster_path={movie.poster_path}
+                release_date={movie.release_date}
+                first_air_date={movie.first_air_date}
+                description={movie.overview}
               />
             ))}
           </ul>
