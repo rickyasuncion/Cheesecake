@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Landing.css";
 import MovieListView from "./MovieListView.jsx";
 import LandingSearchForm from "./LandingSearchForm.jsx";
+import { fetchData, filterResults } from "../../_utils/utils.js";
 
 const Landing = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,7 +20,7 @@ const Landing = () => {
     const fetchedMovies = await fetchData(
       `https://api.themoviedb.org/3/search/multi?query=${searchTerm}&include_adult=false&language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470`
     );
-    setQueriedMovies(fetchedMovies);
+    setQueriedMovies(filterResults(fetchedMovies));
     setQueried(true);
   };
 
@@ -28,33 +29,17 @@ const Landing = () => {
       const popularMovies = await fetchData(
         `https://api.themoviedb.org/3/trending/movie/day?language=en-US&api_key=bbd89781c7835917a2decb4989b56470`
       );
-      setTrendingMovies(popularMovies);
+      setTrendingMovies(filterResults(popularMovies));
 
       const populartrendingTvShows = await fetchData(
         `https://api.themoviedb.org/3/trending/tv/day?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470`
       );
-      setTrendingTvShows(populartrendingTvShows);
+      setTrendingTvShows(filterResults(populartrendingTvShows));
     }
     populateData();
   }, []);
 
-  async function fetchData(url) {
-    const fetch = require("node-fetch");
 
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-      },
-    };
-
-    let response = await fetch(url, options);
-    let data = await response.json();
-    let filteredData = data.results.filter(
-      (data) => data.media_type !== "person"
-    );
-    return filteredData;
-  }
 
   return (
     <div className="landing-page">
@@ -70,15 +55,17 @@ const Landing = () => {
 
       {queried && queriedMovies.length === 0 && <h2>No results found.</h2>}
       {queried && queriedMovies.length > 0 && (
-        <MovieListView movies={queriedMovies} title={"Search Results"} />
+        <MovieListView contentType='movie' movies={queriedMovies} title={"Search Results"} />
       )}
 
       <MovieListView
+        contentType='movie'
         movies={trendingMovies}
         title={"Popular Movies"}
       ></MovieListView>
 
       <MovieListView
+        contentType='tv'
         movies={trendingTvShows}
         title={"Popular TV Shows"}
       ></MovieListView>

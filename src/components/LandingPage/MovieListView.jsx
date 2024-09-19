@@ -1,11 +1,11 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState } from "react";
-import {Button} from "../ui/button";
-import {MovieCard} from "../ui/MovieCard";
+import { Button } from "../ui/button";
+import { MovieCard } from "../ui/MovieCard";
 
 const MOVIE_DISPLAY_COUNT = 5;
 
-const MovieListView = ({ movies, title }) => {
+const MovieListView = ({ movies, title, contentType }) => {
   const [currMoviesObj, setCurrMoviesObj] = useState({
     start: 0,
     end: MOVIE_DISPLAY_COUNT,
@@ -57,6 +57,7 @@ const MovieListView = ({ movies, title }) => {
               .slice(currMoviesObj.start, currMoviesObj.end)
               .map((movie) => (
                 <MovieCard
+                  contentType={contentType}
                   key={movie.id}
                   id={movie.id}
                   imageUrl={movie.imageUrl}
