@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./Landing.css";
 import MovieListView from "./MovieListView.jsx";
 import LandingSearchForm from "./LandingSearchForm.jsx";
+import { useLanguage } from "../../_utils/LanguageContext.js";
 
 const Landing = () => {
+  const { language } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [queriedMovies, setQueriedMovies] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
@@ -17,7 +19,7 @@ const Landing = () => {
   const handleSearchSubmit = async (event) => {
     event.preventDefault();
     const fetchedMovies = await fetchData(
-      `https://api.themoviedb.org/3/search/multi?query=${searchTerm}&include_adult=false&language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470`
+      `https://api.themoviedb.org/3/search/multi?query=${searchTerm}&include_adult=false&language=${language}&page=1&api_key=bbd89781c7835917a2decb4989b56470`
     );
     setQueriedMovies(fetchedMovies);
     setQueried(true);
@@ -26,17 +28,17 @@ const Landing = () => {
   useEffect(() => {
     async function populateData() {
       const popularMovies = await fetchData(
-        `https://api.themoviedb.org/3/trending/movie/day?language=en-US&api_key=bbd89781c7835917a2decb4989b56470`
+        `https://api.themoviedb.org/3/trending/movie/day?language=${language}&api_key=bbd89781c7835917a2decb4989b56470`
       );
       setTrendingMovies(popularMovies);
 
       const populartrendingTvShows = await fetchData(
-        `https://api.themoviedb.org/3/trending/tv/day?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470`
+        `https://api.themoviedb.org/3/trending/tv/day?language=zh-CN&page=1&api_key=bbd89781c7835917a2decb4989b56470`
       );
       setTrendingTvShows(populartrendingTvShows);
     }
     populateData();
-  }, []);
+  }, [language]);
 
   async function fetchData(url) {
     const fetch = require("node-fetch");
@@ -61,6 +63,8 @@ const Landing = () => {
       <h1 className="text-2xl font-semibold mb-4 text-center">
         Welcome to Movie Recommendation
       </h1>
+
+      <p>Current Language: {language}</p>
 
       <LandingSearchForm
         searchTerm={searchTerm}
