@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '../ui/button';
-import Input from '../ui/input';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
+import Input from "../ui/input";
 import { FaHeart } from "react-icons/fa";
 
-
 const Header = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   const handleSearch = (event) => {
@@ -25,7 +24,7 @@ const Header = () => {
             <li className="text-gray-300 hover:text-white">
               <Link to="/home">Movies</Link>
             </li>
-            <li className="text-gray-300 hover:text-white">
+            <li className="text-gray-300 hover:text-white text-nowrap">
               <Link to="/home">TV Shows</Link>
             </li>
             <li className="text-gray-300 hover:text-white">
@@ -37,26 +36,27 @@ const Header = () => {
           </ul>
         </nav>
       </div>
+      <form onSubmit={handleSearch} className="flex justify-center items-center space-x-2 w-full">
+        <Input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search..."
+          className="bg-gray-800 text-white placeholder-gray-500 rounded-l-md p-2 w-8/12"
+        />
+        <Button type="submit" className="rounded-r-md">
+          Search
+        </Button>
+      </form>
       <div className="flex items-center space-x-2">
-        <form onSubmit={handleSearch} className="flex items-center">
-          <Input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search..."
-            className="bg-gray-800 text-white placeholder-gray-500 rounded-l-md p-2 w-64"
-          />
-          <Button type="submit" className="rounded-r-md">
-            Search
-          </Button>
-        </form>
-
-        <Button asChild className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent">
-          <Link to={'/favourites'}>
-            <FaHeart className='text-red-600 text-xl' />
+        <Button
+          asChild
+          className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent"
+        >
+          <Link to={"/favourites"}>
+            <FaHeart className="text-red-600 text-xl" />
           </Link>
         </Button>
-
         <button className="text-gray-300 hover:text-white">
           <span className="material-icons">notifications</span>
         </button>

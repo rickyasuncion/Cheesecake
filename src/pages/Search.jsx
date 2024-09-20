@@ -7,6 +7,7 @@ const Search = () => {
       <SearchForm></SearchForm>
     </React.Fragment>
   );
+  
 };
 
 export default Search;
