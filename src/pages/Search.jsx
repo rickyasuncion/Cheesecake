@@ -1,10 +1,10 @@
 import React from "react";
-import SearchForm from "../components/SearchPage/SearchForm";
+import SearchPage from "../components/SearchPage/SearchPage";
 
 const Search = () => {
   return (
     <React.Fragment>
-      <SearchForm></SearchForm>
+      <SearchPage></SearchPage>
     </React.Fragment>
   );
   

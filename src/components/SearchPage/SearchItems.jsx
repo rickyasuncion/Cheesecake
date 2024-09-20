@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { fetchData, filterResults } from "../../_utils/utils";
-import SearchCardMovie from "./SearchCardMovie";
+import SearchCardMovie from "./SearchMovieCard";
 
 const SearchItems = ({ searchTerm }) => {
   const [movies, setMovies] = useState([]);
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -15,6 +16,14 @@ const SearchItems = ({ searchTerm }) => {
 
     fetchMovies();
   }, [searchTerm]);
+
+  const handleFilterChange = (type) => {
+    setFilter(type);
+  };
+
+  const filteredMovies = movies.filter((movie) =>
+    filter === "all" ? true : movie.media_type === filter
+  );
 
   return (
     <div className="p-4">
@@ -29,14 +38,24 @@ const SearchItems = ({ searchTerm }) => {
             <span className="text-blue-500">{searchTerm}</span>"
           </h2>
           <div className="flex space-x-4 mb-4">
-            <button className="bg-white border border-gray-300 text-md text-gray-700 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded px-3 py-2 transition duration-200">
+            <button
+              onClick={() => handleFilterChange("movie")}
+              className={`bg-white border border-gray-300 text-md text-gray-700 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded px-3 py-2 transition duration-200 ${
+                filter === "movie" ? "bg-blue-500 text-white" : ""
+              }`}
+            >
               Movies
             </button>
-            <button className="bg-white border border-gray-300 text-md text-gray-700 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded px-3 py-2 transition duration-200">
+            <button
+              onClick={() => handleFilterChange("tv")}
+              className={`bg-white border border-gray-300 text-md text-gray-700 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded px-3 py-2 transition duration-200 ${
+                filter === "tv" ? "bg-blue-500 text-white" : ""
+              }`}
+            >
               TV Shows
             </button>
           </div>
-          {movies.map((movie) => (
+          {filteredMovies.map((movie) => (
             <SearchCardMovie
               key={movie.id}
               id={movie.id}
