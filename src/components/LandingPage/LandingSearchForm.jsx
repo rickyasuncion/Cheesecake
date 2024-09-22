@@ -18,7 +18,7 @@ const LandingSearchForm = ({searchTerm, onSearchSubmit, onSearchChange}) => {
           value={searchTerm}
           onChange={onSearchChange}
           className="mx-auto w-80"
-          placeholder="Type your search here..."
+          placeholder={t('Type your search here...')}
         />
         <Button className="px-10">{t('Search')}</Button>
       </form>

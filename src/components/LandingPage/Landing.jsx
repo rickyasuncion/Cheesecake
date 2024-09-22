@@ -3,6 +3,7 @@ import "./Landing.css";
 import MovieListView from "./MovieListView.jsx";
 import LandingSearchForm from "./LandingSearchForm.jsx";
 import { useLanguage } from "../../_utils/LanguageContext.js";
+import { useTranslation } from "react-i18next";
 
 const Landing = () => {
   const { language } = useLanguage();
@@ -11,6 +12,7 @@ const Landing = () => {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [trendingTvShows, setTrendingTvShows] = useState([]);
   const [queried, setQueried] = useState(false);
+  const { t } = useTranslation();
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -61,7 +63,7 @@ const Landing = () => {
   return (
     <div className="landing-page">
       <h1 className="text-2xl font-semibold mb-4 text-center">
-        Welcome to Movie Recommendation
+        {t('Welcome to Movie Recommendation')}
       </h1>
 
       {/* <p>Current Language: {language}</p> */}
@@ -72,19 +74,23 @@ const Landing = () => {
         onSearchChange={handleSearchChange}
       ></LandingSearchForm>
 
-      {queried && queriedMovies.length === 0 && <h2>No results found.</h2>}
+      {queried && queriedMovies.length === 0 && <h2>{t('No results found.')}</h2>}
       {queried && queriedMovies.length > 0 && (
-        <MovieListView movies={queriedMovies} title={"Search Results"} />
+        <MovieListView movies={queriedMovies} title={"Search Results"} type="movies" />
       )}
 
       <MovieListView
         movies={trendingMovies}
-        title={"Popular Movies"}
+        // title={"Popular Movies"}
+        title={t('Popular Movies')}
+        type="movies"
       ></MovieListView>
 
       <MovieListView
         movies={trendingTvShows}
-        title={"Popular TV Shows"}
+        // title={"Popular TV Shows"}
+        title={t('Popular TV Shows')}
+        type="tv-shows"
       ></MovieListView>
     </div>
   );

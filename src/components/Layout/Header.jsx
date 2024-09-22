@@ -43,8 +43,8 @@ const Header = () => {
           </button>
           {open && (
             <div className="dropdown-menu">
-              <button onClick={() => changeLanguage('en-US')}>English</button>
-              <button onClick={() => changeLanguage('zh-CN')}>中文</button>
+              <button onClick={() => handleLanguageChange('en-US')}>English</button>
+              <button onClick={() => handleLanguageChange('zh-CN')}>中文</button>
             </div>
           )}
         </div>
