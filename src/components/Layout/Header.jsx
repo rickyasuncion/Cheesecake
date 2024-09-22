@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../_utils/LanguageContext';
 import '../LanguageSelector.css';
 // import i18n from '../../i18n';
 
 const Header = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { changeLanguage } = useLanguage();
 
   const [open, setOpen] = React.useState(false);
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
+  const handleLanguageChange = (lng) => {
+    changeLanguage(lng);
     setOpen(false);
   };
 
