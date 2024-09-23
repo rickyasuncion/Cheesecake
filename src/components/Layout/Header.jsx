@@ -1,3 +1,9 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../_utils/LanguageContext';
+import '../LanguageSelector.css';
+// import i18n from '../../i18n';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
@@ -6,6 +12,20 @@ import { FaHeart } from "react-icons/fa";
 
 
 const Header = () => {
+  const { t } = useTranslation();
+  const { changeLanguage } = useLanguage();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleLanguageChange = (lng) => {
+    changeLanguage(lng);
+    setOpen(false);
+  };
+
+  const toggleDropdown = () => {
+    setOpen(!open);
+  };
+
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
@@ -22,6 +42,10 @@ const Header = () => {
         </h1>
         <nav className="ml-10">
           <ul className="flex space-x-6">
+            <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Movies')}</Link></li>
+            <li className="text-gray-300 hover:text-white"><Link to="/home">{t('TV Shows')}</Link></li>
+            <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Genres')}</Link></li>
+            <li className="text-gray-300 hover:text-white"><Link to="/home">{t('More')}</Link></li>
             <li className="text-gray-300 hover:text-white">
               <Link to="/home">Movies</Link>
             </li>
@@ -58,8 +82,22 @@ const Header = () => {
         </Button>
 
         <button className="text-gray-300 hover:text-white">
-          <span className="material-icons">notifications</span>
+          <span className="material-icons">{t('notifications')}</span>
         </button>
+        <div className='relative'>  
+          <button className="text-gray-300 hover:text-white" onClick={toggleDropdown}>
+            <span className="material-icons">{t('Language')}</span>
+          </button>
+          {open && (
+            <div className="dropdown-menu">
+              <button onClick={() => handleLanguageChange('en-US')}>English</button>
+              <button onClick={() => handleLanguageChange('zh-CN')}>中文</button>
+            </div>
+          )}
+        </div>
+        <Link className="text-gray-300 hover:text-white"
+        to="/login">
+          <span className="material-icons">{t('Login')}</span>
         <button className="text-gray-300 hover:text-white">
           <span className="material-icons">language</span>
         </button>
