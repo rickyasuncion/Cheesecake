@@ -26,11 +26,11 @@ const MovieListView = ({ movies, title, contentType }) => {
             <h2 className="text-lg font-medium">{title}</h2>
             <div className="flex gap-2 items-center">
               <span>
-              {currMoviesObj.start + 1} to{" "}
+              {currMoviesObj.start + 1} {t('to')}{" "}
                 {currMoviesObj.end > movies.length
                   ? movies.length
                   : currMoviesObj.end}{" "}
-                of {movies.length} {itemLabel}
+                {t('of')} {movies.length} {itemLabel}
               </span>
               <div>
                 <Button

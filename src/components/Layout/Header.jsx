@@ -99,7 +99,7 @@ const Header = () => {
           <span className="material-icons">language</span>
         </button> */}
         <Link className="text-gray-300 hover:text-white" to="/login">
-          <span className="material-icons">Login</span>
+          <span className="material-icons">{t('Login')}</span>
         </Link>
       </div>
     </header>
