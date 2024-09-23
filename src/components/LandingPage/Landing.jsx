@@ -65,19 +65,15 @@ const Landing = () => {
       )}
 
       <MovieListView
-        contentType='movie'
+        contentType='movies'
         movies={trendingMovies}
-        // title={"Popular Movies"}
         title={t('Popular Movies')}
-        type="movies"
       ></MovieListView>
 
       <MovieListView
-        contentType='tv'
+        contentType='tv-shows'
         movies={trendingTvShows}
-        // title={"Popular TV Shows"}
         title={t('Popular TV Shows')}
-        type="tv-shows"
       ></MovieListView>
     </div>
   );

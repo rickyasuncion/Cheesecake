@@ -14,7 +14,7 @@ const MovieListView = ({ movies, title, contentType }) => {
     end: MOVIE_DISPLAY_COUNT,
   });
 
-  const itemLabel = type === "tv-shows" ? t('TV Shows') : t('Movies');
+  const itemLabel = contentType === "tv-shows" ? t('TV Shows') : t('Movies');
 
   return (
     <div className="container">
