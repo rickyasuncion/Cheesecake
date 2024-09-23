@@ -6,6 +6,7 @@
     "popular_tv_shows": "热门电视剧",
     "Movies": "电影",
     "TV Shows": "电视剧",
+    "Genres:": "类型",
     "Genres": "类型",
     "More": "更多",
     "notifications": "通知",
@@ -16,8 +17,18 @@
     "Search for your favorite Movies below:": "在下面搜索您喜欢的电影",
     "Type your search here...": "在此处输入您的搜索...",
     "Popular Movies": "热门电影",
-    "Popular TV Shows": "热门电视剧"
-
+    "Popular TV Shows": "热门电视剧",
+    "Loading...": "加载中...",
+    "Release Date": "发布日期:",
+    "Runtime": "运行时间:",
+    "minutes": "分钟",
+    "Budget": "预算:",
+    "Revenue": "收入:",
+    "Vote Average": "平均评分:",
+    "votes": "票",
+    "Visit Official Homepage": "访问官方网站",
+    "Trailers": "预告片",
+    "No trailers available.": "没有可用的预告片。"
 
   }
   
