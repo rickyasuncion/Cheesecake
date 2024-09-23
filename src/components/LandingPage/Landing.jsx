@@ -61,17 +61,15 @@ const Landing = () => {
 
       {queried && queriedMovies.length === 0 && <h2>{t('No results found.')}</h2>}
       {queried && queriedMovies.length > 0 && (
-        <MovieListView contentType='movie' movies={queriedMovies} title={"Search Results"} />
+        <MovieListView movies={queriedMovies} title={"Search Results"} />
       )}
 
       <MovieListView
-        contentType='movies'
         movies={trendingMovies}
         title={t('Popular Movies')}
       ></MovieListView>
 
       <MovieListView
-        contentType='tv-shows'
         movies={trendingTvShows}
         title={t('Popular TV Shows')}
       ></MovieListView>
