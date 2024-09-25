@@ -50,49 +50,52 @@ const Movies = () => {
 
 
     return (
-        <div className='bg-[#171c21] text-secondary container py-5'>
-            <div className='pt-48 pb-3 relative overflow-hidden rounded-md  isolate' >
-                <div className='bg-neutral-900/60 absolute top-0 bottom-0 z-10 w-full'>
-                    <h1 className='px-4 font-semibold text-3xl text-white absolute bottom-3'>All Movies</h1>
+        <div className='bg-[#171c21] text-secondary pt-5 pb-16'>
+            <div className='container'>
+
+                <div className='pt-48 pb-3 relative overflow-hidden rounded-md  isolate' >
+                    <div className='bg-neutral-900/60 absolute top-0 bottom-0 z-10 w-full'>
+                        <h1 className='px-4 font-semibold text-3xl text-white absolute bottom-3'>All Movies</h1>
+                    </div>
+                    <img src="/hero.jpg" alt="" className='absolute top-0 bottom-0 z-5' />
                 </div>
-                <img src="/hero.jpg" alt="" className='absolute top-0 bottom-0 z-5' />
-            </div>
 
 
-            <div className='mt-5'>
-                <h2 className='text-lg mb-2 font-medium'>New & Upcoming</h2>
+                <div className='mt-5'>
+                    <h2 className='text-lg mb-2 font-medium'>New & Upcoming</h2>
 
-                <div className='flex gap-3 flex-wrap'>
-                    {upcomingMoviesGeners && upcomingMoviesGeners.map(genre => {
-                        return <Card title={genre.name} href={`/movies/upcoming/genre/${genre.id}`} className={'min-w-56 max-w-60 flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
-                    })}
+                    <div className='flex gap-3 flex-wrap'>
+                        {upcomingMoviesGeners && upcomingMoviesGeners.map(genre => {
+                            return <Card title={genre.name} href={`/movies/upcoming/genre/${genre.id}`} className={'min-w-56 max-w-60 flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
+                        })}
 
+                    </div>
                 </div>
-            </div>
 
-            <Separator className='h-0.5 bg-secondary/5 my-5' />
+                <Separator className='h-0.5 bg-secondary/5 my-5' />
 
-            <div>
-                <h2 className='text-lg mb-2 font-medium'>Popular</h2>
+                <div>
+                    <h2 className='text-lg mb-2 font-medium'>Popular</h2>
 
-                <div className='flex gap-3 flex-wrap'>
-                    {popularMovieGenres && popularMovieGenres.map(genre => {
-                        return <Card title={genre.name} href={`/movies/popular/genre/${genre.id}`} className={'min-w-56 max-w-60  flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
-                    })}
+                    <div className='flex gap-3 flex-wrap'>
+                        {popularMovieGenres && popularMovieGenres.map(genre => {
+                            return <Card title={genre.name} href={`/movies/popular/genre/${genre.id}`} className={'min-w-56 max-w-60  flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
+                        })}
 
+                    </div>
                 </div>
-            </div>
 
-            <Separator className='h-0.5 bg-secondary/5 my-5' />
+                <Separator className='h-0.5 bg-secondary/5 my-5' />
 
-            <div>
-                <h2 className='text-lg mb-2 font-medium'>Top Rated</h2>
+                <div>
+                    <h2 className='text-lg mb-2 font-medium'>Top Rated</h2>
 
-                <div className='flex gap-3 flex-wrap'>
-                    {topRatedMovieGenres && topRatedMovieGenres.map(genre => {
-                        return <Card title={genre.name} href={`/movies/top_rated/genre/${genre.id}`} className={'min-w-56 max-w-60  flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
-                    })}
+                    <div className='flex gap-3 flex-wrap'>
+                        {topRatedMovieGenres && topRatedMovieGenres.map(genre => {
+                            return <Card title={genre.name} href={`/movies/top_rated/genre/${genre.id}`} className={'min-w-56 max-w-60  flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
+                        })}
 
+                    </div>
                 </div>
             </div>
 

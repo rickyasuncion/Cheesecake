@@ -43,35 +43,10 @@ const Header = () => {
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('TV Shows')}</Link></li>
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Genres')}</Link></li>
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('More')}</Link></li>
-            {/* <li className="text-gray-300 hover:text-white">
-              <Link to="/home">Movies</Link>
-            </li>
-            <li className="text-gray-300 hover:text-white text-nowrap">
-              <Link to="/home">TV Shows</Link>
-            </li>
-            <li className="text-gray-300 hover:text-white">
-              <Link to="/home">Genres</Link>
-            </li>
-            <li className="text-gray-300 hover:text-white">
-              <Link to="/home">More</Link>
-            </li> */}
           </ul>
         </nav>
       </div>
-      <form onSubmit={handleSearch} className="flex justify-center items-center space-x-2 w-full">
-        <Input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search..."
-          className="bg-gray-800 text-white placeholder-gray-500 rounded-l-md p-2 w-8/12"
-        />
-        <Button type="submit" className="rounded-r-md">
-          Search
-        </Button>
-      </form>
       <div className="flex items-center space-x-2">
-
         <form onSubmit={handleSearch} className="flex items-center">
           <Input
             type="text"
