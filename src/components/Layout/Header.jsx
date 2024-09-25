@@ -7,6 +7,16 @@ import '../LanguageSelector.css';
 import { Button } from '../ui/button';
 import Input from '../ui/input';
 import { FaHeart } from "react-icons/fa";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet"
+import { TextAlignJustifyIcon } from '@radix-ui/react-icons';
+
 
 const Header = () => {
   const { t } = useTranslation();
@@ -47,7 +57,7 @@ const Header = () => {
         </nav>
       </div>
       <div className="flex items-center space-x-2">
-        <form onSubmit={handleSearch} className="flex items-center">
+        <form onSubmit={handleSearch} className="items-center hidden xl:flex">
           <Input
             type="text"
             value={searchTerm}
@@ -84,9 +94,40 @@ const Header = () => {
 
         </div>
 
+
         <Link className="text-gray-300 hover:text-white" to="/login">
           <span className="material-icons">{t('Login')}</span>
         </Link>
+
+
+        <Sheet>
+          <SheetTrigger className='xl:hidden'>
+            <TextAlignJustifyIcon className='text-white size-8' />
+          </SheetTrigger>
+          <SheetContent>
+            <ul className="space-y-6 mt-10">
+              <li className="text-gray-300 hover:text-white"><Link to="/movies">{t('Movies')}</Link></li>
+              <li className="text-gray-300 hover:text-white"><Link to="/home">{t('TV Shows')}</Link></li>
+              <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Genres')}</Link></li>
+              <li className="text-gray-300 hover:text-white"><Link to="/home">{t('More')}</Link></li>
+            </ul>
+
+            <form onSubmit={handleSearch} className="flex items-center mt-5">
+              <Input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder={t('Search...')}
+                className="bg-gray-800 text-white placeholder-gray-500 rounded-l-md p-2 w-64"
+              />
+              <Button type="submit" className="rounded-r-md">
+                {t('Search')}
+              </Button>
+            </form>
+          </SheetContent>
+        </Sheet>
+
+
       </div>
     </header>
   );
