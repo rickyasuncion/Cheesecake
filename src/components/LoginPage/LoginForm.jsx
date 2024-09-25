@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserAuth } from "../../_utils/auth-context";
+import { auth } from "../../_utils/firebase";
+import { createUserWithProfile } from "../../_utils/firestore";
 
 
 const LoginForm = () => {
@@ -7,6 +9,17 @@ const LoginForm = () => {
   const { gitHubSignIn, googleSignIn, facebookSignIn, emailSignIn } = useUserAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userEmail, setUserEmail] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        createUserWithProfile(user, "test");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
   //
 
   const handleLogin = (provider) => {
@@ -99,6 +112,7 @@ const LoginForm = () => {
         >
           Facebook
         </button>
+        {userEmail && <p>Logged in as: {userEmail}</p>}
       </div>
     </div>
   );
