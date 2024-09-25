@@ -37,7 +37,7 @@ const Header = () => {
         <h1 className="text-white text-2xl font-bold">
           <Link to="/home">Cheesecake</Link>
         </h1>
-        <nav className="ml-10">
+        <nav className="ml-10 hidden xl:block">
           <ul className="flex space-x-6">
             <li className="text-gray-300 hover:text-white"><Link to="/movies">{t('Movies')}</Link></li>
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('TV Shows')}</Link></li>
@@ -59,32 +59,31 @@ const Header = () => {
             {t('Search')}
           </Button>
         </form>
-
         <Button asChild className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent">
           <Link to={'/favourites'}>
             <FaHeart className='text-red-600 text-xl' />
           </Link>
         </Button>
-        <button className="text-gray-300 hover:text-white">
-          <span className="material-icons">{t('notifications')}</span>
-        </button>
-        <div className='relative'>
-          <button className="text-gray-300 hover:text-white" onClick={toggleDropdown}>
-            <span className="material-icons">{t('Language')}</span>
+
+
+        <div className=' hidden xl:flex '>
+          <button className="text-gray-300 hover:text-white">
+            <span className="material-icons">{t('notifications')}</span>
           </button>
-          {open && (
-            <div className="dropdown-menu">
-              <button onClick={() => handleLanguageChange('en-US')}>English</button>
-              <button onClick={() => handleLanguageChange('zh-CN')}>中文</button>
-            </div>
-          )}
+          <div className='relative'>
+            <button className="text-gray-300 hover:text-white" onClick={toggleDropdown}>
+              <span className="material-icons">{t('Language')}</span>
+            </button>
+            {open && (
+              <div className="dropdown-menu">
+                <button onClick={() => handleLanguageChange('en-US')}>English</button>
+                <button onClick={() => handleLanguageChange('zh-CN')}>中文</button>
+              </div>
+            )}
+          </div>
+
         </div>
-        {/* <Link className="text-gray-300 hover:text-white"
-        to="/login">
-          <span className="material-icons">{t('Login')}</span> */}
-        {/* <button className="text-gray-300 hover:text-white">
-          <span className="material-icons">language</span>
-        </button> */}
+
         <Link className="text-gray-300 hover:text-white" to="/login">
           <span className="material-icons">{t('Login')}</span>
         </Link>
