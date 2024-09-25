@@ -13,7 +13,7 @@ const Header = () => {
   const { changeLanguage } = useLanguage();
 
   const [open, setOpen] = React.useState(false);
-  
+
   const handleLanguageChange = (lng) => {
     changeLanguage(lng);
     setOpen(false);
@@ -25,7 +25,7 @@ const Header = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
-  
+
   const handleSearch = (event) => {
     event.preventDefault();
     navigate(`/search/${searchTerm}`);
@@ -39,7 +39,7 @@ const Header = () => {
         </h1>
         <nav className="ml-10">
           <ul className="flex space-x-6">
-            <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Movies')}</Link></li>
+            <li className="text-gray-300 hover:text-white"><Link to="/movies">{t('Movies')}</Link></li>
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('TV Shows')}</Link></li>
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Genres')}</Link></li>
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('More')}</Link></li>
@@ -93,7 +93,7 @@ const Header = () => {
         <button className="text-gray-300 hover:text-white">
           <span className="material-icons">{t('notifications')}</span>
         </button>
-        <div className='relative'>  
+        <div className='relative'>
           <button className="text-gray-300 hover:text-white" onClick={toggleDropdown}>
             <span className="material-icons">{t('Language')}</span>
           </button>
