@@ -39,6 +39,7 @@ const Landing = () => {
         `https://api.themoviedb.org/3/trending/tv/day?language=${language}&page=1&api_key=bbd89781c7835917a2decb4989b56470`
       );
       setTrendingTvShows(filterResults(populartrendingTvShows));
+      // setTrendingTvShows(filterResults(popularTvShows));
     }
     populateData();
   }, [language]);
