@@ -54,6 +54,18 @@ const MovieDetails = ({ id }) => {
     fetchMovieVideos();
   }, [id, i18n.language]);
 
+  useEffect(() => {
+    if (isTrailerOn) {
+      // Ensure only one video plays at a time
+      const trailerVideo = videos.find(video => video.site === 'YouTube' && video.type === 'Trailer');
+      if (trailerVideo) {
+        videoRef.current.src = `https://www.youtube.com/embed/${trailerVideo.key}?modestbranding=1&controls=0&showinfo=0&listType=playlist&rel=0&autoplay=1`;
+      }
+    } else if (videoRef.current) {
+      // Stop the video when trailer is off
+      videoRef.current.src = '';
+    }
+  }, [isTrailerOn, videos]);
 
   if (!movie) {
     return <div className="min-h-screen flex items-center justify-center text-white">{t('Loading...')}</div>;
@@ -71,24 +83,16 @@ const MovieDetails = ({ id }) => {
           />
 
 
-          {videos.length > 0 && isTrailerOn ? (
-            videos
-              .filter(video => video.site === 'YouTube' && video.type === 'Trailer') // Only YouTube trailers
-              .map(video => (
-                <iframe
+          {videos.length > 0 && (
+            <iframe
                   ref={videoRef}
                   width="100%"
-                  src={`https://www.youtube.com/embed/${video.key}?modestbranding=1&controls=0&showinfo=0&listType=playlist&rel=0&autoplay=1`} // Embed YouTube video
-                  title={video.name}
+                  title="Movie Trailer"
                   style={{ border: 'none' }}
                   frameBorder={0}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   className="absolute top-0 bottom-0 h-full"
-                ></iframe>
-
-              ))
-          ) : (
-            <p>{t('No trailers available.')}</p>
+                ></iframe>             
           )}
 
 
@@ -102,13 +106,15 @@ const MovieDetails = ({ id }) => {
             <div className="flex gap-2 my-2">
 
               {movie.genres.map((genre, index) => {
-                return <div className=" h-7 flex gap-2">
+                return (
+                <div className=" h-7 flex gap-2" key={index}>
                   <span className="opacity-70">{genre.name}</span>
 
-                  {movie.genres.length - 1 !== index &&
+                  {movie.genres.length - 1 !== index && (
                     <Separator orientation='vertical' className="opacity-40" />
-                  }
+              )}
                 </div>
+              );
               })}
 
 
