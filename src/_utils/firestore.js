@@ -8,26 +8,19 @@ import {
   getDocs,
   where,
   collection,
-  query
+  query,
 } from "firebase/firestore";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 import { auth } from "./firebase";
 const db = getFirestore();
 
-async function createUserWithProfile(user, displayName) {
+async function createUser(email, displayName, uid) {
   try {
-    // const userCredential = await createUserWithEmailAndPassword(
-    //   auth,
-    //   email,
-    //   password
-    // );
-    // const user = userCredential.user;
-
-    const userDocRef = doc(db, "users", user.uid);
+    const userDocRef = doc(db, "users", uid);
     await setDoc(userDocRef, {
-      uid: user.uid,
-      email: user.email,
+      uid: uid,
+      email: email,
       displayName: displayName,
       favourites: [{}],
       reviews: [{}],
@@ -35,16 +28,17 @@ async function createUserWithProfile(user, displayName) {
 
     console.log("User created successfully!");
   } catch (error) {
-    if (error.code === 'auth/operation-not-allowed') {
-      console.error('Email/Password authentication is not enabled or your Firestore database is in Test Mode.');
-    } else if (error.code === 'auth/email-already-in-use') {
-      console.error('The email address is already in use.');
+    if (error.code === "auth/operation-not-allowed") {
+      console.error(
+        "Email/Password authentication is not enabled or your Firestore database is in Test Mode."
+      );
+    } else if (error.code === "auth/email-already-in-use") {
+      console.error("The email address is already in use.");
     } else {
-      console.error('Error creating user:', error);
+      console.error("Error creating user:", error);
     }
   }
 }
-
 
 async function createReview(content, media_type, media_id, uid, displayName) {
   try {
@@ -115,10 +109,7 @@ async function getReviewsByMedia(mediaType, mediaId = null) {
         where("media_id", "==", mediaId)
       );
     } else {
-      q = query(
-        reviewsCollectionRef,
-        where("media_type", "==", mediaType)
-      );
+      q = query(reviewsCollectionRef, where("media_type", "==", mediaType));
     }
 
     const querySnapshot = await getDocs(q);
@@ -147,4 +138,4 @@ async function updateUser(uid, updatedData) {
   }
 }
 
-export { createUserWithProfile, createReview, getReviewsByMedia, updateUser };
+export { createUser, createReview, getReviewsByMedia, updateUser };

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useUserAuth } from "../../_utils/auth-context";
 import { auth } from "../../_utils/firebase";
-import { createUserWithProfile } from "../../_utils/firestore";
+import { createUser } from "../../_utils/firestore";
+import { getAuth } from "firebase/auth";
 
 
 const LoginForm = () => {
@@ -9,18 +10,8 @@ const LoginForm = () => {
   const { gitHubSignIn, googleSignIn, facebookSignIn, emailSignIn } = useUserAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userEmail, setUserEmail] = useState(null);
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        createUserWithProfile(user, "test");
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-  //
+  const user = auth.currentUser;
 
   const handleLogin = (provider) => {
     console.log(`Logging in with ${provider}...`);
@@ -51,7 +42,9 @@ const LoginForm = () => {
     // }
     if (provider === "EmailPassword") {
       try {
-        emailSignIn(email, password); 
+        // emailSignIn(email, password); 
+        console.log(user.uid, user.email)
+        createUser(user.email, "test", user.uid)
         console.log("Successfully logged in with Email and Password!");
       } catch (error) {
         console.log("Error during Email/Password login:", error.message);
@@ -112,7 +105,6 @@ const LoginForm = () => {
         >
           Facebook
         </button>
-        {userEmail && <p>Logged in as: {userEmail}</p>}
       </div>
     </div>
   );
