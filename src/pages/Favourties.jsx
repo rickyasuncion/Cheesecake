@@ -12,6 +12,10 @@ const Favourties = () => {
     async function fetchAndSetFavouriteMovies() {
         const favMovies = JSON.parse(localStorage.getItem("favouriteMovies"));
 
+        if (!favMovies) {
+            return;
+        }
+
         // try to find ids in movies
         const moviePromises = favMovies.map(movieId => {
             const moviePromise = fetchData(
@@ -33,6 +37,10 @@ const Favourties = () => {
 
     async function fetchAndSetFavouriteTv() {
         const favTv = JSON.parse(localStorage.getItem("favouriteTv"));
+
+        if (!favTv) {
+            return;
+        }
 
         const tvPromises = favTv.map((tvId) => {
             const tvShow = fetchData(
