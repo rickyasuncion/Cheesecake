@@ -1,17 +1,12 @@
 import React, { useState } from "react";
 import { useUserAuth } from "../../_utils/auth-context";
-import { auth } from "../../_utils/firebase";
-import { createReview, createUser } from "../../_utils/firestore";
-import { getAuth } from "firebase/auth";
-
+import { getFavouritesByUser, getMediaReviews, getReview, getReviewsByMedia } from "../../_utils/firestore";
 
 const LoginForm = () => {
   //
   const { gitHubSignIn, googleSignIn, facebookSignIn, emailSignIn } = useUserAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const user = auth.currentUser;
 
   const handleLogin = (provider) => {
     console.log(`Logging in with ${provider}...`);
@@ -42,21 +37,12 @@ const LoginForm = () => {
     // }
     if (provider === "EmailPassword") {
       try {
-        // emailSignIn(email, password); 
-        console.log(user.uid, user.email)
-        const content = "This movie was absolutely fantastic! The storyline was gripping and the characters were well-developed. Highly recommend!";
-        const media_type = "movie";
-        const media_id = "12345";
-        const uid = "user123";
-        const displayName = "JohnDoe";
-        createReview(content, media_type, media_id, uid, displayName)
-        // createUser("test");
+        emailSignIn(email, password); 
         console.log("Successfully logged in with Email and Password!");
       } catch (error) {
         console.log("Error during Email/Password login:", error.message);
       }
     }
-    //
   };
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#1c1c1e] text-white">

@@ -13,9 +13,9 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 import { auth } from "./firebase";
+import { db } from "./firebase";
 
 const user = auth.currentUser;
-const db = getFirestore();
 
 async function createUser(displayName) {
   try {
@@ -71,9 +71,9 @@ async function getUserData(uid) {
   }
 }
 
-async function getFavouritesByUser(uid) {
+async function getFavouritesUser() {
   try {
-    const userDocRef = doc(db, "users", uid);
+    const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
 
     if (userDoc.exists()) {
@@ -90,32 +90,42 @@ async function getFavouritesByUser(uid) {
   }
 }
 
-async function getReviewsByMedia(mediaType, mediaId = null) {
+async function getReview(media_type, media_id) {
   try {
-    const reviewsCollectionRef = collection(db, "reviews");
-    let q;
+    const userDocRef = doc(db, "reviews", "type", media_type, media_id);
+    const docSnap = await getDoc(userDocRef);
 
-    if (mediaId) {
-      q = query(
-        reviewsCollectionRef,
-        where("media_type", "==", mediaType),
-        where("media_id", "==", mediaId)
-      );
+    if (docSnap.exists()) {
+      console.log("Review data:", docSnap.data());
+      return docSnap.data();
     } else {
-      q = query(reviewsCollectionRef, where("media_type", "==", mediaType));
+      console.log("No such review!");
+      return null;
     }
+  } catch (error) {
+    console.error("Error getting review:", error);
+  }
+}
 
-    const querySnapshot = await getDocs(q);
-    const reviews = [];
 
-    querySnapshot.forEach((doc) => {
-      reviews.push({ id: doc.id, ...doc.data() });
-    });
+async function getMediaReviews(media_type) {
+  try {
+    const userCollectionRef = collection(db, "reviews", "type", media_type);
+    const querySnapshot = await getDocs(userCollectionRef);
 
-    return reviews;
+    if (!querySnapshot.empty) {
+      const reviews = [];
+      querySnapshot.forEach((doc) => {
+        reviews.push(doc.data());
+      });
+      return reviews;
+    } else {
+      console.log("No such documents!");
+      return null;
+    }
   } catch (error) {
     console.error("Error getting reviews:", error);
-    return [];
+    return null;
   }
 }
 
@@ -131,4 +141,4 @@ async function updateUser(uid, updatedData) {
   }
 }
 
-export { createUser, createReview, getReviewsByMedia, updateUser };
+export { createUser, createReview, getFavouritesUser, getReview, getMediaReviews, updateUser };

@@ -12,7 +12,6 @@ import {
   FacebookAuthProvider,
 } from "firebase/auth";
 import { auth } from "./firebase";
-import { createReview, createUserWithProfile, getReviewsByMedia } from "./firestore";
 
 const AuthContext = createContext();
 
