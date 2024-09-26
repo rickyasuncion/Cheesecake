@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useUserAuth } from "../../_utils/auth-context";
 import { auth } from "../../_utils/firebase";
-import { createUser } from "../../_utils/firestore";
+import { createReview, createUser } from "../../_utils/firestore";
 import { getAuth } from "firebase/auth";
 
 
@@ -44,7 +44,13 @@ const LoginForm = () => {
       try {
         // emailSignIn(email, password); 
         console.log(user.uid, user.email)
-        createUser(user.email, "test", user.uid)
+        const content = "This movie was absolutely fantastic! The storyline was gripping and the characters were well-developed. Highly recommend!";
+        const media_type = "movie";
+        const media_id = "12345";
+        const uid = "user123";
+        const displayName = "JohnDoe";
+        createReview(content, media_type, media_id, uid, displayName)
+        // createUser("test");
         console.log("Successfully logged in with Email and Password!");
       } catch (error) {
         console.log("Error during Email/Password login:", error.message);

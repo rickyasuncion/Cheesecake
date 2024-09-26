@@ -13,14 +13,16 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 import { auth } from "./firebase";
+
+const user = auth.currentUser;
 const db = getFirestore();
 
-async function createUser(email, displayName, uid) {
+async function createUser(displayName) {
   try {
-    const userDocRef = doc(db, "users", uid);
+    const userDocRef = doc(db, "users", user.uid);
     await setDoc(userDocRef, {
-      uid: uid,
-      email: email,
+      uid: user.uid,
+      email: user.email,
       displayName: displayName,
       favourites: [{}],
       reviews: [{}],
@@ -28,22 +30,13 @@ async function createUser(email, displayName, uid) {
 
     console.log("User created successfully!");
   } catch (error) {
-    if (error.code === "auth/operation-not-allowed") {
-      console.error(
-        "Email/Password authentication is not enabled or your Firestore database is in Test Mode."
-      );
-    } else if (error.code === "auth/email-already-in-use") {
-      console.error("The email address is already in use.");
-    } else {
-      console.error("Error creating user:", error);
-    }
+    console.error("Error creating user:", error);
   }
 }
 
 async function createReview(content, media_type, media_id, uid, displayName) {
   try {
-    const reviewId = uuidv4(); // Generate a unique ID
-    const userDocRef = doc(db, "reviews", reviewId); // Use the unique ID as the document ID
+    const userDocRef = doc(db, "reviews", "type", media_type, media_id);
     await setDoc(userDocRef, {
       media_type: media_type,
       media_id: media_id,
