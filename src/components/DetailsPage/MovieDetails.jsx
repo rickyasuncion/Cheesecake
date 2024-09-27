@@ -19,7 +19,7 @@ const MovieDetails = ({ id }) => {
   const [movie, setMovie] = useState(null);
   const [trailerVideo, setTrailerVideo] = useState(null);
   const { t, i18n } = useTranslation();
-  const [isTrailerOn, setIsTrailerOn] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -59,18 +59,25 @@ const MovieDetails = ({ id }) => {
     fetchMovieVideos();
   }, [id, i18n.language]);
 
-  const handlePlayPause = () => {
-    setIsTrailerOn((prev) => {
-      const isPlaying = !prev;
-      if (videoRef.current) {
-        if (isPlaying) {
-          videoRef.current.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        } else {
-          videoRef.current.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-        }
-      }
-      return isPlaying;
-    });
+  useEffect(() => {
+    if (trailerVideo && videoRef.current) {
+      videoRef.current.src = `https://www.youtube.com/embed/${trailerVideo.key}?enablejsapi=1&modestbranding=1&controls=1&showinfo=0&listType=playlist&rel=0&autoplay=0`;
+    }
+  }, [trailerVideo]);
+
+  const handlePlayPause = (event) => {
+    event.preventDefault(); // Prevent default action
+
+    if (videoRef.current && videoRef.current.contentWindow) {
+      const action = isPlaying ? 'pauseVideo' : 'playVideo';
+      videoRef.current.contentWindow.postMessage(
+        `{"event":"command","func":"${action}","args":""}`,
+        '*'
+      );
+      setIsPlaying(!isPlaying);
+    } else {
+      console.error("Video reference is null or contentWindow is undefined");
+    }
   };
 
   if (!movie) {
@@ -81,7 +88,7 @@ const MovieDetails = ({ id }) => {
     <div className="mx-auto bg-zinc-900 text-secondary">
       <div className="relative container p-0 overflow-hidden border border-zinc-700 rounded-md">
         <div className="relative">
-          {!isTrailerOn && (
+          {!isPlaying && (
             <img
               src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
               alt={movie.title}
@@ -89,66 +96,54 @@ const MovieDetails = ({ id }) => {
             />
           )}
 
-          {isTrailerOn && trailerVideo && (
+          {trailerVideo && (
             <iframe
-              ref={videoRef}
-              src={`https://www.youtube.com/embed/${trailerVideo.key}?autoplay=1&modestbranding=1&controls=0&showinfo=0&listType=playlist&rel=0`}
-              width="100%"
-              height="100%" // Ensures the iframe occupies the full height
-              title="Movie Trailer"
-              style={{ 
-                border: 'none', 
-                position: 'relative', 
-                zIndex: 2, // Ensure the iframe is on top
-                height: '500px', // Set a height to ensure visibility
-              }}
-              frameBorder={0}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            ></iframe>
-          )}
+            ref={videoRef}
+            width="100%"
+            height="500px" // 16:9 aspect ratio
+            title="Movie Trailer"
+            style={{ 
+              border: 'none', 
+              position: 'relative', 
+              zIndex: 1,
+            }}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          ></iframe>
+        )}
 
-          <div className="container w-full absolute bottom-0 bg-gradient-to-t to-transparent from-50% from-zinc-900" style={{ zIndex: 1 }}>
-            <h1 className="text-3xl font-medium">{movie.title}</h1>
-            <div className="flex gap-2 my-2">
-              {movie.genres.map((genre, index) => (
-                <div className="h-7 flex gap-2" key={index}>
-                  <span className="opacity-70">{genre.name}</span>
-                  {movie.genres.length - 1 !== index && (
-                    <Separator orientation="vertical" className="opacity-40" />
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-3 mt-4">
-              <Button
-                className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
-                asChild
-              >
-                <Link to={movie.homepage} target="__blank">
-                  Visit Website <ArrowRight className="size-5" />
-                </Link>
-              </Button>
+          <div 
+            className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t to-transparent from-zinc-900 flex gap-4" 
+            style={{ zIndex: 2 }} // Ensure this stays on top of the iframe
+          >
+            <Button
+              className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+              asChild
+            >
+              <Link to={movie.homepage} target="__blank">
+                Visit Website <ArrowRight className="size-5" />
+              </Link>
+            </Button>
 
-              <TooltipProvider delayDuration={100}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0">
-                      <RiHeartFill />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Add to favourites</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            <TooltipProvider delayDuration={100}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0">
+                    <RiHeartFill />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add to favourites</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
-              <button
-                onClick={handlePlayPause}
-                className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0"
-              >
-                {isTrailerOn ? <BsPauseFill /> : <BiPlay />}
-              </button>
-            </div>
+            <button
+              onClick={handlePlayPause}
+              className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0"
+            >
+              {isPlaying ? <BsPauseFill /> : <BiPlay />}
+            </button>
           </div>
         </div>
         <h2 className="text-xl italic mb-4">{movie.tagline}</h2>
@@ -187,3 +182,5 @@ const MovieDetails = ({ id }) => {
 };
 
 export default MovieDetails;
+
+
