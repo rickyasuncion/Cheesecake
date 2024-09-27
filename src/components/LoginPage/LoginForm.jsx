@@ -28,14 +28,14 @@ const LoginForm = () => {
         console.log("Error during Google login:", error.message);
       }
     }
-    // if (provider === "Facebook") {
-    //   try {
-    //     facebookSignIn();  
-    //     console.log("Successfully logged in with Facebook!");
-    //   } catch (error) {
-    //     console.log("Error during Facebook login:", error.message);
-    //   }
-    // }
+     if (provider === "Facebook") {
+      try {
+        facebookSignIn();  
+        console.log("Successfully logged in with Facebook!");
+      } catch (error) {
+        console.log("Error during Facebook login:", error.message);
+    }
+     }
     if (provider === "EmailPassword") {
       try {
         emailSignIn(email, password); 
