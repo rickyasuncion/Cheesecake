@@ -1,16 +1,12 @@
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import {
   doc,
   setDoc,
-  getFirestore,
   updateDoc,
   getDoc,
   getDocs,
-  where,
   collection,
-  query,
+  addDoc,
 } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
 
 import { auth } from "./firebase";
 import { db } from "./firebase";
@@ -24,8 +20,8 @@ async function createUser(displayName) {
       uid: user.uid,
       email: user.email,
       displayName: displayName,
-      favourites: [{}],
-      reviews: [{}],
+      favourites: [],
+      reviews: [],
     });
 
     console.log("User created successfully!");
@@ -34,13 +30,14 @@ async function createUser(displayName) {
   }
 }
 
-async function createReview(content, media_type, media_id, uid, displayName) {
+async function createReview(content, media_type, media_id, displayName) {
   try {
-    const userDocRef = doc(db, "reviews", "type", media_type, media_id);
-    await setDoc(userDocRef, {
+    const userDocRef = collection(db, "reviews", media_type, media_id);
+
+    await addDoc(userDocRef, {
       media_type: media_type,
       media_id: media_id,
-      uid: uid,
+      uid: user.uid,
       displayName: displayName,
       content: content,
       date: Date.now(),
@@ -52,9 +49,9 @@ async function createReview(content, media_type, media_id, uid, displayName) {
   }
 }
 
-async function getUserData(uid) {
+async function getUserData() {
   try {
-    const userDocRef = doc(db, "users", uid);
+    const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
 
     if (userDoc.exists()) {
@@ -71,7 +68,7 @@ async function getUserData(uid) {
   }
 }
 
-async function getFavouritesUser() {
+async function getUserFavourites() {
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
@@ -90,48 +87,88 @@ async function getFavouritesUser() {
   }
 }
 
-async function getReview(media_type, media_id) {
+async function getUserReviews() {
   try {
-    const userDocRef = doc(db, "reviews", "type", media_type, media_id);
-    const docSnap = await getDoc(userDocRef);
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
 
-    if (docSnap.exists()) {
-      console.log("Review data:", docSnap.data());
-      return docSnap.data();
-    } else {
-      console.log("No such review!");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error getting review:", error);
-  }
-}
-
-
-async function getMediaReviews(media_type) {
-  try {
-    const userCollectionRef = collection(db, "reviews", "type", media_type);
-    const querySnapshot = await getDocs(userCollectionRef);
-
-    if (!querySnapshot.empty) {
-      const reviews = [];
-      querySnapshot.forEach((doc) => {
-        reviews.push(doc.data());
-      });
+    if (userDoc.exists()) {
+      const reviews = userDoc.data().reviews;
+      console.log("Reviews:", reviews);
       return reviews;
     } else {
-      console.log("No such documents!");
+      console.log("No user found!");
       return null;
     }
   } catch (error) {
-    console.error("Error getting reviews:", error);
+    console.error("Error getting favourites:", error);
     return null;
   }
 }
 
-async function updateUser(uid, updatedData) {
+async function getReviews(media_type, media_id) {
   try {
-    const userDocRef = doc(db, "users", uid);
+    const reviewsRef = collection(db, "reviews", media_type, media_id);
+    const querySnapshot = await getDocs(reviewsRef);
+    const reviews = querySnapshot.docs.map((doc) => doc.data());
+
+    console.log(reviews);
+    return reviews;
+  } catch (error) {
+    console.error("Error retrieving reviews:", error);
+    return [];
+  }
+}
+
+// async function getReviewsMedia(media_type) {
+//   try {
+//     const reviewsRef = doc(db, "reviews", media_type);
+//     const querySnapshot = await getDocs(reviewsRef);
+//     const reviews = querySnapshot.docs.map((doc) => doc.data());
+
+//     console.log(reviews);
+//     return reviews;
+//   } catch (error) {
+//     console.error("Error retrieving reviews:", error);
+//     return [];
+//   }
+// }
+
+async function updateUserFavourites(favouriteObject) {
+  try {
+    const favourites = await getUserFavourites();
+    if (favourites) {
+      console.log(favourites);
+      const data = { favourites: [...favourites, favouriteObject] };
+
+      await updateUser(data);
+    } else {
+      console.log("No favourites found!");
+    }
+  } catch (error) {
+    console.error("Error updating favourites:", error);
+  }
+}
+
+async function updateUserReviews(reviewObject) {
+  try {
+    const reviews = await getUserReviews();
+    if (reviews) {
+      console.log(reviews);
+      const data = { reviews: [...reviews, reviewObject] };
+
+      await updateUser(data);
+    } else {
+      console.log("No reviews found!");
+    }
+  } catch (error) {
+    console.error("Error updating reviews:", error);
+  }
+}
+
+async function updateUser(updatedData) {
+  try {
+    const userDocRef = doc(db, "users", user.uid);
 
     await updateDoc(userDocRef, updatedData);
 
@@ -141,4 +178,13 @@ async function updateUser(uid, updatedData) {
   }
 }
 
-export { createUser, createReview, getFavouritesUser, getReview, getMediaReviews, updateUser };
+export {
+  createUser,
+  createReview,
+  getUserData,
+  getUserFavourites,
+  getUserReviews,
+  getReviews,
+  updateUserFavourites,
+  updateUserReviews,
+};

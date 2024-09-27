@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useUserAuth } from "../../_utils/auth-context";
-import { getFavouritesByUser, getMediaReviews, getReview, getReviewsByMedia } from "../../_utils/firestore";
 
 const LoginForm = () => {
   //
-  const { gitHubSignIn, googleSignIn, facebookSignIn, emailSignIn } = useUserAuth();
+  const { gitHubSignIn, googleSignIn, facebookSignIn, emailSignIn } =
+    useUserAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,7 +17,7 @@ const LoginForm = () => {
         console.log("Successfully logged in with GitHub!");
       } catch (error) {
         console.log("Error during GitHub login:", error.message);
-      }      
+      }
     }
     if (provider === "Google") {
       try {
@@ -29,7 +29,7 @@ const LoginForm = () => {
     }
     // if (provider === "Facebook") {
     //   try {
-    //     facebookSignIn();  
+    //     facebookSignIn();
     //     console.log("Successfully logged in with Facebook!");
     //   } catch (error) {
     //     console.log("Error during Facebook login:", error.message);
@@ -37,7 +37,7 @@ const LoginForm = () => {
     // }
     if (provider === "EmailPassword") {
       try {
-        emailSignIn(email, password); 
+        emailSignIn(email, password);
         console.log("Successfully logged in with Email and Password!");
       } catch (error) {
         console.log("Error during Email/Password login:", error.message);
@@ -66,8 +66,9 @@ const LoginForm = () => {
         //
         className="p-2 mb-4 rounded bg-gray-800 text-white placeholder-gray-500 w-80"
       />
-      <button className="bg-blue-600 text-white p-2 rounded w-80"
-      onClick={() => handleLogin("EmailPassword")}
+      <button
+        className="bg-blue-600 text-white p-2 rounded w-80"
+        onClick={() => handleLogin("EmailPassword")}
       >
         Login
       </button>
