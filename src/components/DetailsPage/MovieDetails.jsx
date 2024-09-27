@@ -188,3 +188,4 @@ const MovieDetails = ({ id }) => {
 };
 
 export default MovieDetails;
+
