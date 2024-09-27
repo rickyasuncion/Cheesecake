@@ -16,6 +16,20 @@ const MovieListView = ({ movies, title, contentType }) => {
 
   const itemLabel = contentType === "tv-shows" ? t('TV Shows') : t('Movies');
 
+  const handleNext = () => {
+    setCurrMoviesObj((curr) => ({
+      start: Math.min(curr.start + MOVIE_DISPLAY_COUNT, movies.length - MOVIE_DISPLAY_COUNT),
+      end: Math.min(curr.end + MOVIE_DISPLAY_COUNT, movies.length),
+    }));
+  };
+
+  const handlePrev = () => {
+    setCurrMoviesObj((curr) => ({
+      start: Math.max(curr.start - MOVIE_DISPLAY_COUNT, 0),
+      end: Math.max(curr.end - MOVIE_DISPLAY_COUNT, MOVIE_DISPLAY_COUNT),
+    }));
+  };
+
   return (
     <div className="container">
       {movies.length === 0 ? (
@@ -36,24 +50,14 @@ const MovieListView = ({ movies, title, contentType }) => {
                 <Button
                   className="text-xs p-1"
                   disabled={currMoviesObj.start <= 0}
-                  onClick={() =>
-                    setCurrMoviesObj((curr) => ({
-                      start: curr.start - MOVIE_DISPLAY_COUNT,
-                      end: curr.end - MOVIE_DISPLAY_COUNT,
-                    }))
-                  }
+                  onClick={handlePrev}
                 >
                   <ChevronLeft />
                 </Button>
                 <Button
                   className="text-xs p-1"
                   disabled={currMoviesObj.end >= movies.length}
-                  onClick={() =>
-                    setCurrMoviesObj((curr) => ({
-                      start: curr.start + MOVIE_DISPLAY_COUNT,
-                      end: curr.end + MOVIE_DISPLAY_COUNT,
-                    }))
-                  }
+                  onClick={handleNext}
                 >
                   <ChevronRight />
                 </Button>
