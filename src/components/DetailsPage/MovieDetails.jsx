@@ -119,21 +119,19 @@ const MovieDetails = ({ id }) => {
           )}
         </div>
 
-        {/* Controls are placed outside of the video area */}
         <div 
           className="p-4 flex gap-4 items-center" 
           style={{ zIndex: 2, justifyContent: "flex-start" }}
         >
-          <Button
-            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
-            asChild
-          >
-            <Link to={movie.homepage} target="__blank">
-              Visit Website <ArrowRight className="size-5" />
-            </Link>
-          </Button>
+              <Button className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base" asChild>
 
-          <TooltipProvider delayDuration={100}>
+                <Link to={movie.homepage} target="__blank">
+                  {t('Visit Website')} <ArrowRight className="size-5" />
+                </Link>
+
+              </Button>
+        
+              <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <button className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0">
@@ -176,14 +174,14 @@ const MovieDetails = ({ id }) => {
             <strong>{t('Vote Average')}</strong> {movie.vote_average} ({movie.vote_count} {t('votes')})
           </p>
         </div>
-        <a
+        {/* <a
           href={movie.homepage}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-400 underline mt-4 inline-block"
         >
           {t('Visit Official Homepage')}
-        </a>
+        </a> */}
       </div>
     </div>
   );
