@@ -31,7 +31,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/movies" element={<Movies />} />
-            <Route path="/search" element={<Search />} />
+            <Route path="/search/:searched" element={<Search />} />
             <Route path="/details/:type/:id" element={<MovieDetails />} />
             <Route path="/favourites" element={<Favourties />} /> 
             <Route path="*" element={<NotFound />} />
