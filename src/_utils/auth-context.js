@@ -9,7 +9,6 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  FacebookAuthProvider,
 } from "firebase/auth";
 import { auth } from "./firebase";
 
@@ -28,10 +27,11 @@ export const AuthContextProvider = ({ children }) => {
     return signInWithPopup(auth, provider);
   };
 
-  const facebookSignIn = () => {
-    const provider = new FacebookAuthProvider();
-    return signInWithPopup(auth, provider);
-  };
+
+  // const facebookSignIn = () => {
+  //   const provider = new FacebookAuthProvider(); 
+  //   return signInWithPopup(auth, provider);
+  // };
 
   const emailSignUp = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -50,20 +50,11 @@ export const AuthContextProvider = ({ children }) => {
       setUser(currentUser);
     });
     return () => unsubscribe();
-  }, [user]);
 
+  }, []);
+ 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        gitHubSignIn,
-        googleSignIn,
-        facebookSignIn,
-        emailSignUp,
-        emailSignIn,
-        firebaseSignOut,
-      }}
-    >
+    <AuthContext.Provider value={{ user, gitHubSignIn, googleSignIn, emailSignUp, emailSignIn, firebaseSignOut }}>
       {children}
     </AuthContext.Provider>
   );
