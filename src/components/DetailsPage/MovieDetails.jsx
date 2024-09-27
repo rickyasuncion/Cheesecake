@@ -139,7 +139,7 @@ const MovieDetails = ({ id }) => {
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Add to favourites</p>
+                <p>{t('Add to favourites')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
