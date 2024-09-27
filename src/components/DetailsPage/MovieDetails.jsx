@@ -20,6 +20,7 @@ const MovieDetails = ({ id }) => {
   const [trailerVideo, setTrailerVideo] = useState(null);
   const { t, i18n } = useTranslation();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showTrailer, setShowTrailer] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -60,23 +61,28 @@ const MovieDetails = ({ id }) => {
   }, [id, i18n.language]);
 
   useEffect(() => {
-    if (trailerVideo && videoRef.current) {
-      videoRef.current.src = `https://www.youtube.com/embed/${trailerVideo.key}?enablejsapi=1&modestbranding=1&controls=1&showinfo=0&listType=playlist&rel=0&autoplay=0`;
+    if (showTrailer && trailerVideo && videoRef.current) {
+      videoRef.current.src = `https://www.youtube.com/embed/${trailerVideo.key}?enablejsapi=1&modestbranding=1&controls=1&showinfo=0&rel=0&autoplay=1`;
     }
-  }, [trailerVideo]);
+  }, [showTrailer, trailerVideo]);
 
   const handlePlayPause = (event) => {
     event.preventDefault(); // Prevent default action
 
-    if (videoRef.current && videoRef.current.contentWindow) {
-      const action = isPlaying ? 'pauseVideo' : 'playVideo';
-      videoRef.current.contentWindow.postMessage(
-        `{"event":"command","func":"${action}","args":""}`,
-        '*'
-      );
-      setIsPlaying(!isPlaying);
+    if (!showTrailer) {
+      setShowTrailer(true); // Show the trailer
+      setIsPlaying(true);
     } else {
-      console.error("Video reference is null or contentWindow is undefined");
+      if (videoRef.current && videoRef.current.contentWindow) {
+        const action = isPlaying ? 'pauseVideo' : 'playVideo';
+        videoRef.current.contentWindow.postMessage(
+          `{"event":"command","func":"${action}","args":""}`,
+          '*'
+        );
+        setIsPlaying(!isPlaying);
+      } else {
+        console.error("Video reference is null or contentWindow is undefined");
+      }
     }
   };
 
@@ -88,7 +94,7 @@ const MovieDetails = ({ id }) => {
     <div className="mx-auto bg-zinc-900 text-secondary">
       <div className="relative container p-0 overflow-hidden border border-zinc-700 rounded-md">
         <div className="relative">
-          {!isPlaying && (
+          {!showTrailer && (
             <img
               src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
               alt={movie.title}
@@ -96,56 +102,58 @@ const MovieDetails = ({ id }) => {
             />
           )}
 
-          {trailerVideo && (
+          {showTrailer && trailerVideo && (
             <iframe
-            ref={videoRef}
-            width="100%"
-            height="500px" // 16:9 aspect ratio
-            title="Movie Trailer"
-            style={{ 
-              border: 'none', 
-              position: 'relative', 
-              zIndex: 1,
-            }}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          ></iframe>
-        )}
-
-          <div 
-            className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t to-transparent from-zinc-900 flex gap-4" 
-            style={{ zIndex: 2 }} // Ensure this stays on top of the iframe
-          >
-            <Button
-              className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
-              asChild
-            >
-              <Link to={movie.homepage} target="__blank">
-                Visit Website <ArrowRight className="size-5" />
-              </Link>
-            </Button>
-
-            <TooltipProvider delayDuration={100}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0">
-                    <RiHeartFill />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Add to favourites</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-
-            <button
-              onClick={handlePlayPause}
-              className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0"
-            >
-              {isPlaying ? <BsPauseFill /> : <BiPlay />}
-            </button>
-          </div>
+              ref={videoRef}
+              width="100%"
+              height="500px" // Adjust this to match your layout needs
+              title="Movie Trailer"
+              style={{ 
+                border: 'none', 
+                position: 'relative', 
+                zIndex: 1,
+              }}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            ></iframe>
+          )}
         </div>
+
+        {/* Controls are placed outside of the video area */}
+        <div 
+          className="p-4 flex gap-4 items-center" 
+          style={{ zIndex: 2, justifyContent: "flex-start" }}
+        >
+          <Button
+            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+            asChild
+          >
+            <Link to={movie.homepage} target="__blank">
+              Visit Website <ArrowRight className="size-5" />
+            </Link>
+          </Button>
+
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0">
+                  <RiHeartFill />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Add to favourites</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <button
+            onClick={handlePlayPause}
+            className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0"
+          >
+            {isPlaying ? <BsPauseFill /> : <BiPlay />}
+          </button>
+        </div>
+        
         <h2 className="text-xl italic mb-4">{movie.tagline}</h2>
         <p className="mb-4">{movie.overview}</p>
         <div className="mb-4">
@@ -182,5 +190,3 @@ const MovieDetails = ({ id }) => {
 };
 
 export default MovieDetails;
-
-
