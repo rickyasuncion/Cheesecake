@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import Search from "./pages/Search";
 import Favourties from './pages/Favourties'; 
 import Header from "./components/Layout/Header";
+import Footer from "./components/Layout/Footer";
 import Movies from "./pages/Movies";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       <LanguageProvider>
         <BrowserRouter>
           <Header />
+          <main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
@@ -36,6 +38,8 @@ function App() {
             <Route path="/favourites" element={<Favourties />} /> 
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </main>
+          <Footer/>
         </BrowserRouter>
       </LanguageProvider>
     </AuthContextProvider>
