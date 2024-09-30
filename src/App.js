@@ -13,6 +13,8 @@ import Favourties from './pages/Favourties';
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import Movies from "./pages/Movies";
+import AboutUs from './pages/AboutUs';
+
 
 function App() {
   const { i18n } = useTranslation();
@@ -37,6 +39,7 @@ function App() {
             <Route path="/details/:type/:id" element={<MovieDetails />} />
             <Route path="/favourites" element={<Favourties />} /> 
             <Route path="*" element={<NotFound />} />
+            <Route path="/Aboutus" element={<AboutUs />} /> {/* Add this route */}
           </Routes>
           </main>
           <Footer/>
