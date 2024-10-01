@@ -15,7 +15,7 @@ const MoviesWIthGenre = () => {
         for (let i = 1; i <= 5; i++) {
             fetch(url + `&page=${i}`).then(res => res.json()).then(data => {
                 const requiredMovies = data.results.filter(movie => movie.genre_ids.includes(Number(genreId)))
-                setMovies(prev => [...prev, ...requiredMovies])
+                setMovies(prev => [...prev, ...(requiredMovies.filter(movie => !prev.find(m => m.id === movie.id)))])
             });
         }
 
@@ -38,7 +38,7 @@ const MoviesWIthGenre = () => {
 
                 <div className='flex gap-3 flex-wrap mt-10'>
                     {movies && movies.map(movie => {
-                        return <MovieCard key={movie.id} id={movie.id} media_type={'movie'} title={movie.title} name={movie.name} poster_path={movie.poster_path} href={`/details/movie/${movie.id}`} className=' flex-1 min-w-44 max-w-none' />
+                        return <MovieCard key={movie.id} id={movie.id} media_type={'movie'} title={movie.title} name={movie.name} poster_path={movie.poster_path} href={`/details/movie/${movie.id}`} className=' flex-1 min-w-44 max-w-60' />
                     })}
 
                 </div>
