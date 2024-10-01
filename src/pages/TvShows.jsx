@@ -5,7 +5,7 @@ import { Separator } from '@radix-ui/react-separator'
 
 const TvShows = () => {
     const [trendingTvShows, setTrendingTvShows] = useState([]);
-    const [topRatedTvShowGenres, setTopRatedTvShowGenres] = useState([])
+    const [topRateTvShows, setTopRateTvShows] = useState([])
     const [tvShowsToday, setTvShowsToday] = useState([]);
 
     function fetchTvShows(url, callback) {
@@ -18,7 +18,7 @@ const TvShows = () => {
 
     useEffect(() => {
 
-        fetchTvShows('https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1&api_key=021d1a1f14e24ac19694e6363bc04b76', setTopRatedTvShowGenres)
+        fetchTvShows('https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1&api_key=021d1a1f14e24ac19694e6363bc04b76', setTopRateTvShows)
         fetchTvShows('https://api.themoviedb.org/3/trending/tv/day?language=en-US&api_key=021d1a1f14e24ac19694e6363bc04b76', setTrendingTvShows)
         fetchTvShows('https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1&api_key=021d1a1f14e24ac19694e6363bc04b76', setTvShowsToday)
     }, [])
@@ -41,8 +41,8 @@ const TvShows = () => {
                     <h2 className='text-lg mb-2 font-medium'>Trending</h2>
 
                     <div className='flex gap-3 flex-wrap'>
-                        {trendingTvShows && trendingTvShows.map(genre => {
-                            return <Card title={genre.name} href={`/tvShows/${genre.id}`} className={'min-w-56 max-w-60  flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
+                        {trendingTvShows && trendingTvShows.map(tvShow => {
+                            return <Card title={tvShow.name} href={`/details/tv/${tvShow.id}`} className={'min-w-56 max-w-60  flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${tvShow.backdrop_path}`} />
                         })}
 
                     </div>
@@ -54,8 +54,8 @@ const TvShows = () => {
                     <h2 className='text-lg mb-2 font-medium'>Top Rated</h2>
 
                     <div className='flex gap-3 flex-wrap'>
-                        {topRatedTvShowGenres && topRatedTvShowGenres.map(genre => {
-                            return <Card title={genre.name} href={`/tvShows/${genre.id}`} className={'min-w-56 max-w-60  flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
+                        {topRateTvShows && topRateTvShows.map(tvShow => {
+                            return <Card title={tvShow.name} href={`/details/tv/${tvShow.id}`} className={'min-w-56 max-w-60  flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${tvShow.backdrop_path}`} />
                         })}
 
                     </div>
@@ -67,8 +67,8 @@ const TvShows = () => {
                     <h2 className='text-lg mb-2 font-medium'>Airing Today</h2>
 
                     <div className='flex gap-3 flex-wrap'>
-                        {tvShowsToday && tvShowsToday.map(genre => {
-                            return <Card title={genre.name} href={`/tvShows/${genre.id}`} className={'min-w-56 max-w-60  flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
+                        {tvShowsToday && tvShowsToday.map(tvShow => {
+                            return <Card title={tvShow.name} href={`/details/tv/${tvShow.id}`} className={'min-w-56 max-w-60  flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${tvShow.backdrop_path}`} />
                         })}
 
                     </div>
