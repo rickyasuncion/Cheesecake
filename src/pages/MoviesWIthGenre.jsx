@@ -6,7 +6,7 @@ import { MovieCard } from '../components/ui/MovieCard';
 const MoviesWIthGenre = () => {
     const { type, genreId } = useParams();
     const [movies, setMovies] = useState([]);
-
+    const [genreList, setGenreList] = useState([])
 
     useEffect(() => {
         const url = `https://api.themoviedb.org/3/movie/${type}?language=en-US&api_key=bbd89781c7835917a2decb4989b56470`
@@ -18,6 +18,8 @@ const MoviesWIthGenre = () => {
                 setMovies(prev => [...prev, ...requiredMovies])
             });
         }
+
+        fetch('https://api.themoviedb.org/3/genre/movie/list?language=en&api_key=bbd89781c7835917a2decb4989b56470').then(res => res.json()).then(data => setGenreList(data.genres));
     }, [])
 
 
@@ -27,7 +29,7 @@ const MoviesWIthGenre = () => {
 
                 <div className='pt-48 pb-3 relative overflow-hidden rounded-md  isolate' >
                     <div className='bg-neutral-900/60 absolute top-0 bottom-0 z-10 w-full'>
-                        <h1 className='px-4 font-semibold text-3xl text-white absolute bottom-3'>{type}</h1>
+                        <h1 className='px-4 font-semibold text-3xl text-white absolute bottom-3 capitalize'>{type === 'top_rated' ? "top rated" : type} - {genreList.find(genre => genre.id.toString() === genreId)?.name}</h1>
                     </div>
                     <img src="/hero.jpg" alt="" className='absolute top-0 bottom-0 z-5' />
                 </div>
