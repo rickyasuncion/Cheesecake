@@ -13,6 +13,7 @@ import Favourties from "./pages/Favourties";
 import Header from "./components/Layout/Header";
 import Movies from "./pages/Movies";
 import MoviesWIthGenre from "./pages/MoviesWIthGenre";
+import TvShows from "./pages/TvShows";
 
 function App() {
     const { i18n } = useTranslation();
@@ -36,6 +37,7 @@ function App() {
                             path="/movies/:type/genre/:genreId"
                             element={<MoviesWIthGenre />}
                         />
+                        <Route path="/tvShows" element={<TvShows />} />
                         <Route path="/search/:searched" element={<Search />} />
                         <Route
                             path="/details/:type/:id"
