@@ -9,37 +9,45 @@ import MovieDetails from "./pages/Details";
 import { LanguageProvider } from "./_utils/LanguageContext";
 import { useTranslation } from "react-i18next";
 import Search from "./pages/Search";
-import Favourties from './pages/Favourties'; 
+import Favourties from "./pages/Favourties";
 import Header from "./components/Layout/Header";
 import Movies from "./pages/Movies";
+import MoviesWIthGenre from "./pages/MoviesWIthGenre";
 
 function App() {
-  const { i18n } = useTranslation();
+    const { i18n } = useTranslation();
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-  };
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
+    };
 
-  return (
-    <AuthContextProvider>
-      <LanguageProvider>
-        <BrowserRouter>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/movies" element={<Movies />} />
-            <Route path="/search/:searched" element={<Search />} />
-            <Route path="/details/:type/:id" element={<MovieDetails />} />
-            <Route path="/favourites" element={<Favourties />} /> 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </LanguageProvider>
-    </AuthContextProvider>
-  );
+    return (
+        <AuthContextProvider>
+            <LanguageProvider>
+                <BrowserRouter>
+                    <Header />
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/home" element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<SignUp />} />
+                        <Route path="/movies" element={<Movies />} />
+                        <Route
+                            path="/movies/:type/genre/:genreId"
+                            element={<MoviesWIthGenre />}
+                        />
+                        <Route path="/search/:searched" element={<Search />} />
+                        <Route
+                            path="/details/:type/:id"
+                            element={<MovieDetails />}
+                        />
+                        <Route path="/favourites" element={<Favourties />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </BrowserRouter>
+            </LanguageProvider>
+        </AuthContextProvider>
+    );
 }
 
 export default App;
