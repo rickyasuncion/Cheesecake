@@ -1,10 +1,16 @@
+body, html {
+  height: 100%; /* Make sure the body and html take the full height */
+  margin: 0; /* Remove default margin */
+}
+
+
 .footer {
     background-color: #333;
     color: #fff;
     text-align: center;
     padding: 20px;
     width: 100%;
-    margin-top: 20px;
+    
   }
   
   .privacy-policy-btn {

@@ -14,6 +14,7 @@ import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import Movies from "./pages/Movies";
 import AboutUs from './pages/AboutUs';
+import TermsOfUse from './pages/TermsOfUse';
 
 
 function App() {
@@ -39,7 +40,8 @@ function App() {
             <Route path="/details/:type/:id" element={<MovieDetails />} />
             <Route path="/favourites" element={<Favourties />} /> 
             <Route path="*" element={<NotFound />} />
-            <Route path="/Aboutus" element={<AboutUs />} /> {/* Add this route */}
+            <Route path="/Aboutus" element={<AboutUs />} /> 
+            <Route path="/terms-of-use" element={<TermsOfUse/>} />
           </Routes>
           </main>
           <Footer/>

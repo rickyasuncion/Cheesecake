@@ -57,11 +57,14 @@ const Header = () => {
             <li className="text-gray-300 hover:text-white relative" onClick={toggleMoreDropdown}>
               {t('More')}
               {openMore && (
-                <ul className="absolute left-0 mt-2 bg-gray-700 p-2 rounded shadow-lg">
-                  <li className="text-gray-300 hover:text-white"><Link to="/aboutus">{t('About Us')}</Link></li>
-                  <li className="text-gray-300 hover:text-white"><Link to="/privacy-policy">{t('Privacy Policy')}</Link></li>
-                </ul>
+                <div className="dropdown-menu">
+                  <button onClick={() => navigate('/AboutUs')}>{t('About Us')}</button>
+                  <button onClick={() => navigate('/terms-of-use')}>{t('Terms of Use')}</button>
+                  <button onClick={() => navigate('/Contact Us')}>{t('Contact Us')}</button>
+                </div>
               )}
+
+                
             </li>
           </ul>
         </nav>
