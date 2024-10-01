@@ -47,7 +47,7 @@ const LoginForm = () => {
         className="bg-blue-600 text-white p-2 rounded w-80"
         onClick={() => handleLogin("EmailPassword")}
       >
-        Login
+        {t('Login')}
       </button>
       <div className="my-4 text-gray-400">{t('or login with')}</div>
       <div className="flex space-x-4">
@@ -65,7 +65,7 @@ const LoginForm = () => {
         </button>
       </div>
       <div className="mt-4 text-gray-400">
-        Don't have an account?{" "}
+        {t("Don't have an account?")}{" "}
         <button onClick={() => navigate("/signup")} className="text-blue-400">
           {t('Sign Up')}
         </button>
