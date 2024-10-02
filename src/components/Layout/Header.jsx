@@ -268,6 +268,7 @@ import Input from "../ui/input";
 import { FaHeart } from "react-icons/fa";
 import { TextAlignJustifyIcon } from "@radix-ui/react-icons"; // Make sure Radix UI is installed
 import { fetchData } from "../../_utils/utils";
+import "./Header.css";
 
 // Import Sheet, SheetTrigger, SheetContent from your UI library, or replace them if not needed
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"; // Assuming this is where the components are located
@@ -397,7 +398,7 @@ const Header = () => {
                 Genres
               </button>
               {genresDropdownOpen && (
-                <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
+                <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
                   {genres.length > 0 ? (
                     genres.map((genre) => (
                       <div key={genre.id} className="flex items-center mb-2">
@@ -496,26 +497,23 @@ const Header = () => {
                 <Link to="/home">{t("TV Shows")}</Link>
               </li>
 
-              {/* Genres Dropdown for Mobile */}
-              <li className="text-gray-300 hover:text-white">
-                <div className="bg-gray-800 text-white p-4 rounded shadow-lg">
-                  {genres.length > 0 ? (
-                    genres.map((genre) => (
-                      <div key={genre.id} className="flex items-center mb-2">
-                        <input
-                          type="checkbox"
-                          id={genre.id}
-                          value={genre.id}
-                          checked={selectedGenres.includes(genre.id)}
-                          onChange={() => handleCheckboxChange(genre.id)}
-                          className="mr-2"
-                        />
-                        <label htmlFor={genre.id}>{genre.name}</label>
-                      </div>
-                    ))
-                  ) : (
-                    <p>Loading genres...</p>
-                  )}
+              {/* Genres Dropdown Menu */}
+              <li className="text-gray-300 hover:text-white relative">
+                <button className="hover:text-white">Genres</button>
+                <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
+                  {genres.map((genre) => (
+                    <div key={genre.id} className="genres-dropdown-item">
+                      <input
+                        type="checkbox"
+                        id={genre.id}
+                        value={genre.id}
+                        checked={selectedGenres.includes(genre.id)}
+                        onChange={() => handleCheckboxChange(genre.id)}
+                        className="mr-2"
+                      />
+                      <label htmlFor={genre.id}>{genre.name}</label>
+                    </div>
+                  ))}
                   <button
                     className="mt-4 p-2 bg-yellow-500 text-white rounded"
                     onClick={handleSubmitGenres}

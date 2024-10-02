@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 
 const MOVIE_DISPLAY_COUNT = 5;
 
-
 const MovieListView = ({ movies, title, contentType }) => {
   const { t } = useTranslation();
   const [currMoviesObj, setCurrMoviesObj] = useState({
@@ -14,11 +13,14 @@ const MovieListView = ({ movies, title, contentType }) => {
     end: MOVIE_DISPLAY_COUNT,
   });
 
-  const itemLabel = contentType === "tv-shows" ? t('TV Shows') : t('Movies');
+  const itemLabel = contentType === "tv-shows" ? t("TV Shows") : t("Movies");
 
   const handleNext = () => {
     setCurrMoviesObj((curr) => ({
-      start: Math.min(curr.start + MOVIE_DISPLAY_COUNT, movies.length - MOVIE_DISPLAY_COUNT),
+      start: Math.min(
+        curr.start + MOVIE_DISPLAY_COUNT,
+        movies.length - MOVIE_DISPLAY_COUNT
+      ),
       end: Math.min(curr.end + MOVIE_DISPLAY_COUNT, movies.length),
     }));
   };
@@ -33,18 +35,18 @@ const MovieListView = ({ movies, title, contentType }) => {
   return (
     <div className="container">
       {movies.length === 0 ? (
-        <h2>{t('No results found')}</h2>
+        <h2>{t("No results found")}</h2>
       ) : (
         <React.Fragment>
           <div className="flex gap-2 items-center justify-between mt-10">
             <h2 className="text-lg font-medium">{title}</h2>
             <div className="flex gap-2 items-center">
               <span>
-              {currMoviesObj.start + 1} {t('to')}{" "}
+                {currMoviesObj.start + 1} {t("to")}{" "}
                 {currMoviesObj.end > movies.length
                   ? movies.length
                   : currMoviesObj.end}{" "}
-                {t('of')} {movies.length} {itemLabel}
+                {t("of")} {movies.length} {itemLabel}
               </span>
               <div>
                 <Button

@@ -43,12 +43,10 @@ const Landing = () => {
     populateData();
   }, [language]);
 
-
-
   return (
     <div className="landing-page">
       <h1 className="text-2xl font-semibold mb-4 text-center">
-        {t('Welcome to Movie Recommendation')}
+        {t("Welcome to Movie Recommendation")}
       </h1>
 
       {/* <p>Current Language: {language}</p> */}
@@ -59,20 +57,26 @@ const Landing = () => {
         onSearchChange={handleSearchChange}
       ></LandingSearchForm>
 
-      {queried && queriedMovies.length === 0 && <h2>{t('No results found.')}</h2>}
+      {queried && queriedMovies.length === 0 && (
+        <h2>{t("No results found.")}</h2>
+      )}
       {queried && queriedMovies.length > 0 && (
-        <MovieListView movies={queriedMovies} title={"Search Results"} contentType="movies"/>
+        <MovieListView
+          movies={queriedMovies}
+          title={"Search Results"}
+          contentType="movies"
+        />
       )}
 
       <MovieListView
         movies={trendingMovies}
-        title={t('Popular Movies')}
+        title={t("Popular Movies")}
         contentType="movies"
       ></MovieListView>
 
       <MovieListView
         movies={trendingTvShows}
-        title={t('Popular TV Shows')}
+        title={t("Popular TV Shows")}
         contentType="tv-shows"
       ></MovieListView>
     </div>
