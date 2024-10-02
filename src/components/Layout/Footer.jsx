@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <p>© 2024 Cheesecake. All rights reserved.</p>
-      <button className="privacy-policy-btn">Privacy Policy</button>
+      <button className="privacy-policy-btn">Contact Us</button>
     </footer>
   );
 };

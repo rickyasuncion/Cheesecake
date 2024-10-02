@@ -60,7 +60,7 @@ const Header = () => {
                 <div className="dropdown-menu">
                   <button onClick={() => navigate('/AboutUs')}>{t('About Us')}</button>
                   <button onClick={() => navigate('/terms-of-use')}>{t('Terms of Use')}</button>
-                  <button onClick={() => navigate('/Contact Us'  )}>{t('Contact Us')}</button>
+                  <button onClick={() => navigate('/privacy-policy'  )}>{t('Privacy Policy')}</button>
                 </div>
               )}
 

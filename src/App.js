@@ -15,6 +15,7 @@ import Footer from "./components/Layout/Footer";
 import Movies from "./pages/Movies";
 import AboutUs from './pages/AboutUs';
 import TermsOfUse from './pages/TermsOfUse';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/Aboutus" element={<AboutUs />} /> 
             <Route path="/terms-of-use" element={<TermsOfUse/>} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
           </Routes>
           </main>
           <Footer/>
