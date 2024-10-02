@@ -11,11 +11,11 @@ const Questions = ({ topic, options, setQuestions, question, setter }) => {
     <React.Fragment>
       <h1>{topic}</h1>
       {options.map((option, index) => {
-        const [mainText, subtitle] = option.split(" .");
+        const [mainText, subtitle] = option.text.split(" .");
         return (
           <Button
             key={index}
-            onClick={() => btnHandler(option)}
+            onClick={() => btnHandler(option.value)}
             className="text-white text-xl font-semibold p-4 rounded w-1/4 h-11"
           >
             <div>
@@ -48,66 +48,178 @@ const RecommendMovieForm = () => {
   const question = [
     {
       topic: "I'm watching with...",
-      options: ["Netflix", "Amazon Prime", "Disney+", "Paramount Plus", "Hulu"],
+      options: [
+        {
+          text: "Netflix",
+          value: "Netflix",
+        },
+        {
+          text: "Amazon Prime",
+          value: "Amazon Prime",
+        },
+        {
+          text: "Disney+",
+          value: "Disney+",
+        },
+        {
+          text: "Paramount Plus",
+          value: "Paramount Plus",
+        },
+        {
+          text: "Hulu",
+          value: "Hulu",
+        },
+      ],
     },
     {
       topic: "I feel like...",
       options: [
-        "Dramatic .Action, Adventure, Drama",
-        "Intense .Horror, Thriller",
-        "Gentle .Comedy, Family, Romance",
-        "Curious .Comedy, Family, Romance",
-        "Out of this world .Fantasy, Science-Fiction",
-        "Realistic .Documentary",
+        {
+          text: "Dramatic .Action, Adventure, Drama",
+          value: ["Action", "Adventure", "Drama"],
+        },
+        {
+          text: "Intense .Horror, Thriller",
+          value: ["Horror", "Thriller"],
+        },
+        {
+          text: "Gentle .Comedy, Family, Romance",
+          value: ["Comedy", "Family", "Romance"],
+        },
+        {
+          text: "Curious .Comedy, Family, Romance",
+          value: ["Comedy", "Family", "Romance"],
+        },
+        {
+          text: "Out of this world .Fantasy, Science-Fiction",
+          value: ["Fantasy", "Science-Fiction"],
+        },
+        {
+          text: "Realistic .Documentary",
+          value: ["Documentary"],
+        },
       ],
     },
     {
       topic: "Released...",
       options: [
-        "This year",
-        "Last few years",
-        "Last 10 years",
-        "Last 25 years",
-        "Last 100 years",
+        {
+          text: "This year",
+          value: 0,
+        },
+        {
+          text: "Last few years",
+          value: 5,
+        },
+        {
+          text: "Last 10 years",
+          value: 10,
+        },
+        {
+          text: "Last 25 years",
+          value: 25,
+        },
+        {
+          text: "Last 100 years",
+          value: 100,
+        },
       ],
     },
     {
       topic: "With a budget of...",
       options: [
-        "Blockbuster budget .Over $100 million",
-        "Big-time budget .Around $50 million",
-        "Decent budget .Around $10 million",
-        "Small-time budget .A few million",
-        "Tiny budget .Under $500,000",
+        {
+          text: "Blockbuster budget .Over $100 million",
+          value: 100000000,
+        },
+        {
+          text: "Big-time budget .Around $50 million",
+          value: 50000000,
+        },
+        {
+          text: "Decent budget .Around $10 million",
+          value: 10000000,
+        },
+        {
+          text: "Small-time budget .A few million",
+          value: 3000000,
+        },
+        {
+          text: "Tiny budget .Under $500,000",
+          value: 500000,
+        },
       ],
     },
     {
       topic: "Part of a series?",
-      options: ["Yes", "No", "Doesn't matter"],
+      options: [
+        {
+          text: "Yes",
+          value: true,
+        },
+        {
+          text: "No",
+          value: false,
+        },
+        {
+          text: "Doesn't matter",
+          value: null,
+        },
+      ],
     },
     {
       topic: "How popular...",
       options: [
-        "A household name .Over 50,000 votes",
-        "Well-known .Over 10,000 votes",
-        "I don't care about popularity",
+        {
+          text: "A household name .Over 50,000 votes",
+          value: 50000,
+        },
+        {
+          text: "Well-known .Over 10,000 votes",
+          value: 10000,
+        },
+        {
+          text: "I don't care about popularity",
+          value: null,
+        },
       ],
     },
     {
       topic: "And is...",
       options: [
-        "Highly rated .Over 7/10 rated",
-        "At least average .Over 5/10 rated",
-        "I don't mind",
+        {
+          text: "Highly rated .Over 7/10 rated",
+          value: 7,
+        },
+        {
+          text: "At least average .Over 5/10 rated",
+          value: 5,
+        },
+        {
+          text: "I don't mind",
+          value: null,
+        },
       ],
     },
     {
       topic: "How long...",
       options: [
-        "Short and sweet .~90 minutes",
-        "Average length .1.5 to 2.5 hours",
-        "Epic length .2.5 hours+",
-        "Time flies when you're having fun",
+        {
+          text: "Short and sweet .~90 minutes",
+          value: 90,
+        },
+        {
+          text: "Average length .1.5 to 2.5 hours",
+          value: 150,
+        },
+        {
+          text: "Epic length .2.5 hours+",
+          value: 151,
+        },
+        {
+          text: "Time flies when you're having fun",
+          value: null,
+        },
       ],
     },
   ];
