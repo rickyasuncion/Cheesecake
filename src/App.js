@@ -9,9 +9,11 @@ import MovieDetails from "./pages/Details";
 import { LanguageProvider } from "./_utils/LanguageContext";
 import { useTranslation } from "react-i18next";
 import Search from "./pages/Search";
-import Favourties from './pages/Favourties'; 
+import Favourties from "./pages/Favourties";
 import Header from "./components/Layout/Header";
 import Movies from "./pages/Movies";
+import Landing from "./components/LandingPage/Landing";
+import FilteredContent from "./pages/FilteredContent";
 
 function App() {
   const { i18n } = useTranslation();
@@ -33,8 +35,10 @@ function App() {
             <Route path="/movies" element={<Movies />} />
             <Route path="/search/:searched" element={<Search />} />
             <Route path="/details/:type/:id" element={<MovieDetails />} />
-            <Route path="/favourites" element={<Favourties />} /> 
+            <Route path="/favourites" element={<Favourties />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/home" element={<Landing />} />
+            <Route path="/filtered-content" element={<FilteredContent />} />
           </Routes>
         </BrowserRouter>
       </LanguageProvider>
