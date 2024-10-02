@@ -16,7 +16,7 @@ const Questions = ({ topic, options, setQuestions, question, setter }) => {
           <Button
             key={index}
             onClick={() => btnHandler(option)}
-            className="text-white text-xl font-semibold p-4 rounded w-1/4 h-11 transition duration-200 ease-in-out"
+            className="text-white text-xl font-semibold p-4 rounded w-1/4 h-11"
           >
             <div>
               {mainText}
@@ -31,8 +31,12 @@ const Questions = ({ topic, options, setQuestions, question, setter }) => {
   );
 };
 
+const MovieReccomendation = ({genre}) => {
+
+}
+
 const RecommendMovieForm = () => {
-  const [questions, setQuestions] = useState(1);
+  const [questions, setQuestions] = useState(0);
   const [provider, setProvider] = useState();
   const [genre, setGenre] = useState();
   const [date, setDate] = useState();
@@ -41,77 +45,86 @@ const RecommendMovieForm = () => {
   const [popularity, setPopularity] = useState();
   const [rating, setRating] = useState();
 
-  const question1 = {
-    topic: "I'm watching with...",
-    options: ["Netflix", "Amazon Prime", "Disney+", "Paramount Plus"],
-  };
-  const question2 = {
-    topic: "I feel like...",
-    options: [
-      "Dramatic .Action, Adventure, Drama",
-      "Intense .Horror, Thriller",
-      "Gentle .Comedy, Family, Romance",
-      "Curious .Comedy, Family, Romance",
-      "Out of this world .Fantasy, Science-Fiction",
-      "Realistic .Documentary",
-    ],
-  };
-  const question3 = {
-    topic: "Released...",
-    options: [
-      "This year",
-      "Last few years",
-      "Last 10 years",
-      "Last 25 years",
-      "Last 100 years",
-    ],
-  };
-  const question4 = {
-    topic: "With a budget of...",
-    options: [
-      "Blockbuster budget .Over $100 million",
-      "Big-time budget .Around $50 million",
-      "Decent budget .Around $10 million",
-      "Small-time budget .A few million",
-      "Tiny budget .Under $500,000",
-    ],
-  };
-  const question5 = {
-    topic: "Part of a series?",
-    options: ["Yes", "No", "Doesn't matter"],
-  };
-  const question6 = {
-    topic: "How popular...",
-    options: [
-      "A household name .Over 50,000 votes",
-      "Well-known .Over 10,000 votes",
-      "I don't care about popularity",
-    ],
-  };
-  const question7 = {
-    topic: "And is...",
-    options: [
-      "Highly rated .Over 7/10 rated",
-      "At least average .Over 5/10 rated",
-      "I don't mind",
-    ],
-  };
-  const question8 = {
-    topic: "How long...",
-    options: [
-      "Short and sweet .~90 minutes",
-      "Average length .1.5 to 2.5 hours",
-      "Epic length .2.5 hours+",
-      "Time flies when you're having fun",
-    ],
-  };
+  const question = [
+    {
+      topic: "I'm watching with...",
+      options: ["Netflix", "Amazon Prime", "Disney+", "Paramount Plus", "Hulu"],
+    },
+    {
+      topic: "I feel like...",
+      options: [
+        "Dramatic .Action, Adventure, Drama",
+        "Intense .Horror, Thriller",
+        "Gentle .Comedy, Family, Romance",
+        "Curious .Comedy, Family, Romance",
+        "Out of this world .Fantasy, Science-Fiction",
+        "Realistic .Documentary",
+      ],
+    },
+    {
+      topic: "Released...",
+      options: [
+        "This year",
+        "Last few years",
+        "Last 10 years",
+        "Last 25 years",
+        "Last 100 years",
+      ],
+    },
+    {
+      topic: "With a budget of...",
+      options: [
+        "Blockbuster budget .Over $100 million",
+        "Big-time budget .Around $50 million",
+        "Decent budget .Around $10 million",
+        "Small-time budget .A few million",
+        "Tiny budget .Under $500,000",
+      ],
+    },
+    {
+      topic: "Part of a series?",
+      options: ["Yes", "No", "Doesn't matter"],
+    },
+    {
+      topic: "How popular...",
+      options: [
+        "A household name .Over 50,000 votes",
+        "Well-known .Over 10,000 votes",
+        "I don't care about popularity",
+      ],
+    },
+    {
+      topic: "And is...",
+      options: [
+        "Highly rated .Over 7/10 rated",
+        "At least average .Over 5/10 rated",
+        "I don't mind",
+      ],
+    },
+    {
+      topic: "How long...",
+      options: [
+        "Short and sweet .~90 minutes",
+        "Average length .1.5 to 2.5 hours",
+        "Epic length .2.5 hours+",
+        "Time flies when you're having fun",
+      ],
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-2 text-lg font-semibold font-mono items-center justify-center min-h-screen bg-gray-100">
+      {questions === 0 && (
+        <React.Fragment>
+          <h1>Looking to find something to wathc?</h1>
+          <h2>Take this quick quiz to find the best movie.</h2>
+          <Button onClick={() => setQuestions(questions + 1)}>Start</Button>
+        </React.Fragment>
+      )}
       {questions === 1 && (
         <Questions
-          topic={question1.topic}
-          options={question1.options}
+          topic={question[0].topic}
+          options={question[0].options}
           setQuestions={setQuestions}
           question={questions}
           setter={setProvider}
@@ -119,8 +132,8 @@ const RecommendMovieForm = () => {
       )}
       {questions === 2 && (
         <Questions
-          topic={question2.topic}
-          options={question2.options}
+          topic={question[1].topic}
+          options={question[1].options}
           setQuestions={setQuestions}
           question={questions}
           setter={setGenre}
@@ -128,8 +141,8 @@ const RecommendMovieForm = () => {
       )}
       {questions === 3 && (
         <Questions
-          topic={question3.topic}
-          options={question3.options}
+          topic={question[2].topic}
+          options={question[2].options}
           setQuestions={setQuestions}
           question={questions}
           setter={setDate}
@@ -137,8 +150,8 @@ const RecommendMovieForm = () => {
       )}
       {questions === 4 && (
         <Questions
-          topic={question4.topic}
-          options={question4.options}
+          topic={question[3].topic}
+          options={question[3].options}
           setQuestions={setQuestions}
           question={questions}
           setter={setBudget}
@@ -146,8 +159,8 @@ const RecommendMovieForm = () => {
       )}
       {questions === 5 && (
         <Questions
-          topic={question5.topic}
-          options={question5.options}
+          topic={question[4].topic}
+          options={question[4].options}
           setQuestions={setQuestions}
           question={questions}
           setter={setIsSeries}
@@ -155,8 +168,8 @@ const RecommendMovieForm = () => {
       )}
       {questions === 6 && (
         <Questions
-          topic={question6.topic}
-          options={question6.options}
+          topic={question[5].topic}
+          options={question[5].options}
           setQuestions={setQuestions}
           question={questions}
           setter={setPopularity}
@@ -164,12 +177,24 @@ const RecommendMovieForm = () => {
       )}
       {questions === 7 && (
         <Questions
-          topic={question7.topic}
-          options={question7.options}
+          topic={question[6].topic}
+          options={question[6].options}
           setQuestions={setQuestions}
           question={questions}
           setter={setRating}
         />
+      )}
+      {questions === 8 && (
+        <Questions
+          topic={question[7].topic}
+          options={question[7].options}
+          setQuestions={setQuestions}
+          question={questions}
+          setter={setRating}
+        />
+      )}
+      {questions === 9 && (
+        <h1>hi</h1>
       )}
     </div>
   );
