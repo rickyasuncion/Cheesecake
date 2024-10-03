@@ -20,6 +20,7 @@ import ContactUs from './pages/ContactUs';
 
 
 
+
 function App() {
   const { i18n } = useTranslation();
 
@@ -50,6 +51,7 @@ function App() {
            </Routes>
            
           </main>
+          
           <Footer/>
         </BrowserRouter>
       </LanguageProvider>

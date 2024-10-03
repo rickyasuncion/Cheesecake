@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import Card from '../components/ui/card'
-import { Separator } from '@radix-ui/react-separator'
+import React, { useEffect, useState } from 'react';
+import Card from '../components/ui/card';
+import { Separator } from '@radix-ui/react-separator';
+import EmailSubscription from '../components/EmailSubscription';
 
 
 const Movies = () => {
@@ -93,7 +94,7 @@ const Movies = () => {
                <div className='container'>
                 {/* Your existing content */}
 
-                {/* Place EmailSubscription here */}
+                <EmailSubscription />
                 
                 </div>
             </div>  
