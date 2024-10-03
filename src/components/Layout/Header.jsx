@@ -387,7 +387,7 @@ const Header = () => {
               <Link to="/movies">{t("Movies")}</Link>
             </li>
             <li className="text-gray-300 hover:text-white">
-              <Link to="/home">{t("TV Shows")}</Link>
+              <Link to="/tvShows">{t("TV Shows")}</Link>
             </li>
 
             <li
