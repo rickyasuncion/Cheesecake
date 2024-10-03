@@ -42,7 +42,7 @@ const MovieReccomendation = ({
   rating,
   runtime,
 }) => {
-    const[movies, setMovies] = useState();
+    const[movies, setMovies] = useState([]);
     const[movie, setMovie] = useState();
 
   const currentYear = new Date().getFullYear();
@@ -77,18 +77,23 @@ const MovieReccomendation = ({
         const fetchMovies = async () => {
             const fetchedMovies = await fetchData(url);
             setMovies(filterResults(fetchedMovies));
-          };
-
-          fetchMovies();
-    }, []);
+        };
+        
+        fetchMovies();
+    }, [queryString]);
 
 
     return (
-        <MovieListView
-        movies={movies}
-        title={"reccommended movies"}
-        contentType="movies"
-      ></MovieListView>
+        <div className="w-1/2">
+        {movies.length > 1 ? (
+          <MovieListView
+            movies={movies}
+            title={"Recommended Movies"}
+            contentType="movies"
+            MOVIE_DISPLAY_COUNT={1}
+          />
+        ) : null}
+      </div>
     )
 };
 

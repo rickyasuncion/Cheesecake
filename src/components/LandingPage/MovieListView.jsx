@@ -4,10 +4,7 @@ import { Button } from "../ui/button";
 import { MovieCard } from "../ui/MovieCard";
 import { useTranslation } from "react-i18next";
 
-const MOVIE_DISPLAY_COUNT = 5;
-
-
-const MovieListView = ({ movies, title, contentType }) => {
+const MovieListView = ({ movies, title, contentType, MOVIE_DISPLAY_COUNT=5 }) => {
   const { t } = useTranslation();
   const [currMoviesObj, setCurrMoviesObj] = useState({
     start: 0,
