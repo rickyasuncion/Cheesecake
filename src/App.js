@@ -44,8 +44,8 @@ function App() {
             <Route path="/favourties" element={<Favourties />} /> 
             <Route path="*" element={<NotFound />} />
             <Route path="/AboutUs" element={<AboutUs />} /> 
-            <Route path="/terms-of-use" element={<TermsOfUse/>} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
+            <Route path="/TermsOfUse" element={<TermsOfUse/>} />
+            <Route path="/PrivacyPolicy" element={<PrivacyPolicy/>} />
             <Route path="/contact-us" element={<ContactUs/>} />
            </Routes>
            

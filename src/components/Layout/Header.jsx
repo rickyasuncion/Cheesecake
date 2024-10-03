@@ -68,9 +68,9 @@ const Header = () => {
               <button onClick={toggleMoreDropdown}>{t('More')}</button>
               {moreDropdownOpen && (
                 <ul className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 space-y-2">
-                  <li><Link to="/aboutus">{t('About Us')}</Link></li>
-                  <li><Link to="/privacypolicy">{t('Privacy Policy')}</Link></li>
-                  <li><Link to="/termsofuse">{t('Terms of Use')}</Link></li>
+                  <li><Link to="/AboutUs">{t('About Us')}</Link></li>
+                  <li><Link to="/PrivacyPolicy">{t('Privacy Policy')}</Link></li>
+                  <li><Link to="/TermsOfUse">{t('Terms of Use')}</Link></li>
                 </ul>
               )}
             </li>
