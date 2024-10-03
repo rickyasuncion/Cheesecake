@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import Card from '../components/ui/card';
-import { Separator } from '@radix-ui/react-separator';
-import EmailSubscription from '../components/EmailSubscription'; // Make sure the path is correct
+import React, { useEffect, useState } from 'react'
+import Card from '../components/ui/card'
+import { Separator } from '@radix-ui/react-separator'
+
 
 const Movies = () => {
     const [upcomingMoviesGeners, setUpcomingMoviesGeners] = useState([]);
     const [popularMovieGenres, setPopularMovieGenres] = useState([]);
-    const [topRatedMovieGenres, setTopRatedMovieGenres] = useState([]);
+    const [topRatedMovieGenres, setTopRatedMovieGenres] = useState([])
+
 
     function fetchUpcomingMovies(url, callback) {
         fetch(url)
@@ -49,13 +50,14 @@ const Movies = () => {
             <div className='container'>
                 <div className='pt-48 pb-3 relative overflow-hidden rounded-md isolate'>
                     <div className='bg-neutral-900/60 absolute top-0 bottom-0 z-10 w-full'>
-                        <h1 className='px-4 font-semibold text-3xl text-white absolute bottom-3'>All Movies</h1>
+                        <h1 className='px-4 font-semibold text-3xl text-white absolute bottom-3'>{t('All Movies')}</h1>
                     </div>
                     <img src="/hero.jpg" alt="" className='absolute top-0 bottom-0 z-5' />
                 </div>
 
                 <div className='mt-5'>
                     <h2 className='text-lg mb-2 font-medium'>New & Upcoming</h2>
+
                     <div className='flex gap-3 flex-wrap'>
                         {upcomingMoviesGeners && upcomingMoviesGeners.map(genre => (
                             <Card key={genre.id} title={genre.name} href={`/movies/upcoming/genre/${genre.id}`} className={'min-w-56 max-w-60 flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
@@ -67,6 +69,7 @@ const Movies = () => {
 
                 <div>
                     <h2 className='text-lg mb-2 font-medium'>Popular</h2>
+
                     <div className='flex gap-3 flex-wrap'>
                         {popularMovieGenres && popularMovieGenres.map(genre => (
                             <Card key={genre.id} title={genre.name} href={`/movies/popular/genre/${genre.id}`} className={'min-w-56 max-w-60 flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />
@@ -78,6 +81,7 @@ const Movies = () => {
 
                 <div>
                     <h2 className='text-lg mb-2 font-medium'>Top Rated</h2>
+
                     <div className='flex gap-3 flex-wrap'>
                         {topRatedMovieGenres && topRatedMovieGenres.map(genre => (
                             <Card key={genre.id} title={genre.name} href={`/movies/top_rated/genre/${genre.id}`} className={'min-w-56 max-w-60 flex-1'} bgImage={`https://image.tmdb.org/t/p/w500/${genre.backdrop_path}`} />

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -9,28 +10,26 @@ import { FaHeart } from "react-icons/fa";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
-} from "../ui/sheet";
+} from "../ui/sheet"
 import { TextAlignJustifyIcon } from '@radix-ui/react-icons';
 
+
 const Header = () => {
-  const { t } = useTranslation();
-  const { changeLanguage } = useLanguage();
+  const { t, i18n } = useTranslation();
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+  const { language, changeLanguage } = useLanguage();
 
   const [open, setOpen] = React.useState(false);
-  const [openMore, setOpenMore] = React.useState(false);  // Control More dropdown
 
   const handleLanguageChange = (lng) => {
     changeLanguage(lng);
-    setOpen(false);
-  };
-
-  const toggleDropdown = () => {
-    setOpen(!open);
-  };
-
-  const toggleMoreDropdown = () => {
-    setOpenMore(!openMore);  // Toggle "More" dropdown
+    setLanguageOpen(false);
+    i18n.changeLanguage(lng);
   };
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,9 +40,33 @@ const Header = () => {
     navigate(`/search/${searchTerm}`);
   };
 
+  const toggleLanguageDropdown = () => {
+    setLanguageOpen(!languageOpen);
+    setGenresDropdownOpen(false);
+  };
+
+  const toggleGenresDropdown = () => {
+    setGenresDropdownOpen(!genresDropdownOpen);
+    setLanguageOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (genresRef.current && !genresRef.current.contains(event.target)) {
+        setGenresDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [genresRef]);
+
   return (
     <header className="bg-[#1c1c1e] p-4 flex justify-between items-center">
-      <div className="flex items-center">
+      {/* 左边部分 */}
+      <div className="header-left">
         <h1 className="text-white text-2xl font-bold">
           <Link to="/home">Cheesecake</Link>
         </h1>
@@ -52,92 +75,71 @@ const Header = () => {
             <li className="text-gray-300 hover:text-white"><Link to="/movies">{t('Movies')}</Link></li>
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('TV Shows')}</Link></li>
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Genres')}</Link></li>
-            
-            {/* Toggle More Dropdown */}
-            <li className="text-gray-300 hover:text-white relative" onClick={toggleMoreDropdown}>
-              {t('More')}
-              {openMore && (
-                <div className="dropdown-menu">
-                  <button onClick={() => navigate('/AboutUs')}>{t('About Us')}</button>
-                  <button onClick={() => navigate('/terms-of-use')}>{t('Terms of Use')}</button>
-                  <button onClick={() => navigate('/privacy-policy'  )}>{t('Privacy Policy')}</button>
-                </div>
-              )}
-
-                
-            </li>
+            <li className="text-gray-300 hover:text-white"><Link to="/home">{t('More')}</Link></li>
           </ul>
         </nav>
       </div>
-      
       <div className="flex items-center space-x-2">
         <form onSubmit={handleSearch} className="items-center hidden xl:flex">
           <Input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder={t('Search...')}
+            placeholder={t("Search...")}
             className="bg-gray-800 text-white placeholder-gray-500 rounded-l-md p-2 w-64"
           />
           <Button type="submit" className="rounded-r-md">
-            {t('Search')}
+            {t("Search")}
           </Button>
         </form>
-        
         <Button asChild className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent">
           <Link to={'/favourites'}>
             <FaHeart className='text-red-600 text-xl' />
           </Link>
         </Button>
 
-        {/* Language and Notifications */}
+
         <div className=' hidden xl:flex '>
           <button className="text-gray-300 hover:text-white">
-            <span className="material-icons">{t('notifications')}</span>
+            <span className="material-icons">{t("notifications")}</span>
           </button>
-          <div className='relative'>
-            <button className="text-gray-300 hover:text-white" onClick={toggleDropdown}>
-              <span className="material-icons">{t('Language')}</span>
+          <div className="relative">
+            <button
+              className="text-gray-300 hover:text-white"
+              onClick={toggleLanguageDropdown}
+            >
+              <span className="material-icons">{t("Language")}</span>
             </button>
-            {open && (
-              <div className="dropdown-menu">
-                <button onClick={() => handleLanguageChange('en-US')}>English</button>
-                <button onClick={() => handleLanguageChange('zh-CN')}>中文</button>
+            {languageOpen && (
+              <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
+                <button onClick={() => handleLanguageChange("en-US")}>
+                  English
+                </button>
+                <button onClick={() => handleLanguageChange("zh-CN")}>
+                  中文
+                </button>
               </div>
             )}
           </div>
         </div>
 
-        {/* Login */}
+
         <Link className="text-gray-300 hover:text-white" to="/login">
-          <span className="material-icons">{t('Login')}</span>
+          <span className="material-icons">{t("Login")}</span>
         </Link>
 
-        {/* Mobile Menu */}
+
         <Sheet>
-          <SheetTrigger className='xl:hidden'>
-            <TextAlignJustifyIcon className='text-white size-8' />
+          <SheetTrigger className="xl:hidden">
+            <TextAlignJustifyIcon className="text-white size-8" />
           </SheetTrigger>
           <SheetContent>
             <ul className="space-y-6 mt-10">
               <li className="text-gray-300 hover:text-white"><Link to="/movies">{t('Movies')}</Link></li>
               <li className="text-gray-300 hover:text-white"><Link to="/home">{t('TV Shows')}</Link></li>
               <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Genres')}</Link></li>
-              <li className="text-gray-300 hover:text-white"><Link to="/aboutus">{t('About Us')}</Link></li>
+              <li className="text-gray-300 hover:text-white"><Link to="/home">{t('More')}</Link></li>
             </ul>
-
-            <form onSubmit={handleSearch} className="flex items-center mt-5">
-              <Input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={t('Search...')}
-                className="bg-gray-800 text-white placeholder-gray-500 rounded-l-md p-2 w-64"
-              />
-              <Button type="submit" className="rounded-r-md">
-                {t('Search')}
-              </Button>
-            </form>
           </SheetContent>
         </Sheet>
       </div>
