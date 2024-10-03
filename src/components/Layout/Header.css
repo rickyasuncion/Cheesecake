@@ -1,15 +1,26 @@
-.genres-dropdown {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Creates 3 equal columns */
-    gap: 10px; /* Adjust the gap between genres */
-    padding: 10px;
-    background-color: #1c1c1e; /* Background color */
-  }
-  
-  .genres-dropdown-item {
-    display: flex;
-    align-items: center;
-    padding: 5px;
-  }
-  
-  
+.header-nav-list {
+  display: flex;
+  gap: 2rem; 
+  list-style: none; 
+  margin: 0; 
+  padding: 0; 
+  align-items: center; 
+}
+
+.header-nav-list li {
+  display: inline-block;
+  white-space: nowrap; 
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  flex-grow: 1; 
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem; 
+}
+
