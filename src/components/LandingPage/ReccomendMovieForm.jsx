@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { MovieCard } from "../ui/MovieCard";
+import { fetchData, filterResults } from "../../_utils/utils";
+import MovieListView from "./MovieListView";
 
 const Questions = ({ topic, options, setQuestions, question, setter }) => {
   const btnHandler = (option) => {
@@ -31,19 +34,72 @@ const Questions = ({ topic, options, setQuestions, question, setter }) => {
   );
 };
 
-const MovieReccomendation = ({genre}) => {
+const MovieReccomendation = ({
+  provider,
+  genres,
+  date,
+  popularity,
+  rating,
+  runtime,
+}) => {
+    const[movies, setMovies] = useState();
+    const[movie, setMovie] = useState();
 
-}
+  const currentYear = new Date().getFullYear();
+  const yearDifference = currentYear - date;
+  const newDate = new Date(currentYear - yearDifference, 0, 1).toISOString().split('T')[0];
+  const currentDate = new Date().toISOString().split('T');
+
+  let movieLength;
+  if (runtime == null) {
+    movieLength = null;
+  } else if (runtime == "short") {
+    movieLength = { with_runtime_lte: 90 };
+  } else if (runtime == "average") {
+    movieLength = { with_runtime_gte: 90, with_runtime_lte: 150 };
+  } else if (runtime == "epic") {
+    movieLength = { with_runtime_gte: 150 };
+  }
+
+    const queryString = new URLSearchParams({
+      with_watch_providers: provider,
+      with_genres: genres.join(","),
+      primary_release_date_gte: newDate,
+      primary_release_date_lte: currentDate[0],
+      "vote_average.gte": rating,
+      "vote_count.lte": popularity,
+      ...movieLength
+    }).toString();
+
+    
+    useEffect(() => {
+        const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&${queryString}&api_key=bbd89781c7835917a2decb4989b56470`;
+        const fetchMovies = async () => {
+            const fetchedMovies = await fetchData(url);
+            setMovies(filterResults(fetchedMovies));
+          };
+
+          fetchMovies();
+    }, []);
+
+
+    return (
+        <MovieListView
+        movies={movies}
+        title={"reccommended movies"}
+        contentType="movies"
+      ></MovieListView>
+    )
+};
 
 const RecommendMovieForm = () => {
   const [questions, setQuestions] = useState(0);
   const [provider, setProvider] = useState();
   const [genre, setGenre] = useState();
   const [date, setDate] = useState();
-  const [budget, setBudget] = useState();
-  const [isSeries, setIsSeries] = useState();
   const [popularity, setPopularity] = useState();
   const [rating, setRating] = useState();
+  const [runtime, setRuntime] = useState();
 
   const question = [
     {
@@ -51,23 +107,23 @@ const RecommendMovieForm = () => {
       options: [
         {
           text: "Netflix",
-          value: "Netflix",
+          value: 8,
         },
         {
           text: "Amazon Prime",
-          value: "Amazon Prime",
+          value: 9,
         },
         {
           text: "Disney+",
-          value: "Disney+",
+          value: 337,
         },
         {
           text: "Paramount Plus",
-          value: "Paramount Plus",
+          value: 582,
         },
         {
           text: "Hulu",
-          value: "Hulu",
+          value: 15,
         },
       ],
     },
@@ -75,29 +131,29 @@ const RecommendMovieForm = () => {
       topic: "I feel like...",
       options: [
         {
-          text: "Dramatic .Action, Adventure, Drama",
-          value: ["Action", "Adventure", "Drama"],
-        },
-        {
-          text: "Intense .Horror, Thriller",
-          value: ["Horror", "Thriller"],
-        },
-        {
-          text: "Gentle .Comedy, Family, Romance",
-          value: ["Comedy", "Family", "Romance"],
-        },
-        {
-          text: "Curious .Comedy, Family, Romance",
-          value: ["Comedy", "Family", "Romance"],
-        },
-        {
-          text: "Out of this world .Fantasy, Science-Fiction",
-          value: ["Fantasy", "Science-Fiction"],
-        },
-        {
-          text: "Realistic .Documentary",
-          value: ["Documentary"],
-        },
+            text: "Dramatic .Action, Adventure, Drama",
+            value: [28, 12, 18], // Action, Adventure, Drama
+          },
+          {
+            text: "Intense .Horror, Thriller",
+            value: [27, 53], // Horror, Thriller
+          },
+          {
+            text: "Gentle .Comedy, Family, Romance",
+            value: [35, 10751, 10749], // Comedy, Family, Romance
+          },
+          {
+            text: "Curious .Comedy, Family, Romance",
+            value: [35, 10751, 10749], // Comedy, Family, Romance
+          },
+          {
+            text: "Out of this world .Fantasy, Science-Fiction",
+            value: [14, 878], // Fantasy, Science-Fiction
+          },
+          {
+            text: "Realistic .Documentary",
+            value: [99] // Documentary
+          }
       ],
     },
     {
@@ -122,48 +178,6 @@ const RecommendMovieForm = () => {
         {
           text: "Last 100 years",
           value: 100,
-        },
-      ],
-    },
-    {
-      topic: "With a budget of...",
-      options: [
-        {
-          text: "Blockbuster budget .Over $100 million",
-          value: 100000000,
-        },
-        {
-          text: "Big-time budget .Around $50 million",
-          value: 50000000,
-        },
-        {
-          text: "Decent budget .Around $10 million",
-          value: 10000000,
-        },
-        {
-          text: "Small-time budget .A few million",
-          value: 3000000,
-        },
-        {
-          text: "Tiny budget .Under $500,000",
-          value: 500000,
-        },
-      ],
-    },
-    {
-      topic: "Part of a series?",
-      options: [
-        {
-          text: "Yes",
-          value: true,
-        },
-        {
-          text: "No",
-          value: false,
-        },
-        {
-          text: "Doesn't matter",
-          value: null,
         },
       ],
     },
@@ -206,15 +220,15 @@ const RecommendMovieForm = () => {
       options: [
         {
           text: "Short and sweet .~90 minutes",
-          value: 90,
+          value: "short",
         },
         {
           text: "Average length .1.5 to 2.5 hours",
-          value: 150,
+          value: "average",
         },
         {
           text: "Epic length .2.5 hours+",
-          value: 151,
+          value: "epic",
         },
         {
           text: "Time flies when you're having fun",
@@ -266,7 +280,7 @@ const RecommendMovieForm = () => {
           options={question[3].options}
           setQuestions={setQuestions}
           question={questions}
-          setter={setBudget}
+          setter={setPopularity}
         />
       )}
       {questions === 5 && (
@@ -275,7 +289,7 @@ const RecommendMovieForm = () => {
           options={question[4].options}
           setQuestions={setQuestions}
           question={questions}
-          setter={setIsSeries}
+          setter={setRating}
         />
       )}
       {questions === 6 && (
@@ -284,29 +298,18 @@ const RecommendMovieForm = () => {
           options={question[5].options}
           setQuestions={setQuestions}
           question={questions}
-          setter={setPopularity}
+          setter={setRuntime}
         />
       )}
       {questions === 7 && (
-        <Questions
-          topic={question[6].topic}
-          options={question[6].options}
-          setQuestions={setQuestions}
-          question={questions}
-          setter={setRating}
+        <MovieReccomendation
+          provider={provider}
+          genres={genre}
+          date={date}
+          popularity={popularity}
+          rating={rating}
+          runtime={runtime}
         />
-      )}
-      {questions === 8 && (
-        <Questions
-          topic={question[7].topic}
-          options={question[7].options}
-          setQuestions={setQuestions}
-          question={questions}
-          setter={setRating}
-        />
-      )}
-      {questions === 9 && (
-        <h1>hi</h1>
       )}
     </div>
   );

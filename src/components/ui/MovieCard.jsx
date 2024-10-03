@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "./button";
 import { FaHeart } from "react-icons/fa";
 
-const MovieCard = ({ id, imageUrl, media_type, title, name, poster_path, showFavButton = true }) => {
+const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = true }) => {
 
   const detailPath = `/details/${media_type}/${id}`;
   const [isFavourite, setIsFavourite] = useState(false);
