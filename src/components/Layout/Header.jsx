@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../_utils/LanguageContext';
@@ -10,13 +9,9 @@ import { FaHeart } from "react-icons/fa";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
-} from "../ui/sheet"
+} from "../ui/sheet";
 import { TextAlignJustifyIcon } from '@radix-ui/react-icons';
-
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -24,7 +19,12 @@ const Header = () => {
   const navigate = useNavigate();
   const { language, changeLanguage } = useLanguage();
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const [genresDropdownOpen, setGenresDropdownOpen] = useState(false);
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
+
+  const moreRef = useRef(null);
 
   const handleLanguageChange = (lng) => {
     changeLanguage(lng);
@@ -32,40 +32,29 @@ const Header = () => {
     i18n.changeLanguage(lng);
   };
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
-
   const handleSearch = (event) => {
     event.preventDefault();
     navigate(`/search/${searchTerm}`);
   };
 
-  const toggleLanguageDropdown = () => {
-    setLanguageOpen(!languageOpen);
-    setGenresDropdownOpen(false);
-  };
-
-  const toggleGenresDropdown = () => {
-    setGenresDropdownOpen(!genresDropdownOpen);
-    setLanguageOpen(false);
+  const toggleMoreDropdown = () => {
+    setMoreDropdownOpen(!moreDropdownOpen);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (genresRef.current && !genresRef.current.contains(event.target)) {
-        setGenresDropdownOpen(false);
+      if (moreRef.current && !moreRef.current.contains(event.target)) {
+        setMoreDropdownOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [genresRef]);
+  }, []);
 
   return (
     <header className="bg-[#1c1c1e] p-4 flex justify-between items-center">
-      {/* 左边部分 */}
       <div className="header-left">
         <h1 className="text-white text-2xl font-bold">
           <Link to="/home">Cheesecake</Link>
@@ -73,9 +62,18 @@ const Header = () => {
         <nav className="ml-10 hidden xl:block">
           <ul className="flex space-x-6">
             <li className="text-gray-300 hover:text-white"><Link to="/movies">{t('Movies')}</Link></li>
-            <li className="text-gray-300 hover:text-white"><Link to="/home">{t('TV Shows')}</Link></li>
-            <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Genres')}</Link></li>
-            <li className="text-gray-300 hover:text-white"><Link to="/home">{t('More')}</Link></li>
+            <li className="text-gray-300 hover:text-white"><Link to="/shows">{t('TV Shows')}</Link></li>
+            <li className="text-gray-300 hover:text-white"><Link to="/genres">{t('Genres')}</Link></li>
+            <li className="text-gray-300 hover:text-white relative" ref={moreRef}>
+              <button onClick={toggleMoreDropdown}>{t('More')}</button>
+              {moreDropdownOpen && (
+                <ul className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 space-y-2">
+                  <li><Link to="/aboutus">{t('About Us')}</Link></li>
+                  <li><Link to="/privacypolicy">{t('Privacy Policy')}</Link></li>
+                  <li><Link to="/termsofuse">{t('Terms of Use')}</Link></li>
+                </ul>
+              )}
+            </li>
           </ul>
         </nav>
       </div>
@@ -98,7 +96,6 @@ const Header = () => {
           </Link>
         </Button>
 
-
         <div className=' hidden xl:flex '>
           <button className="text-gray-300 hover:text-white">
             <span className="material-icons">{t("notifications")}</span>
@@ -106,7 +103,7 @@ const Header = () => {
           <div className="relative">
             <button
               className="text-gray-300 hover:text-white"
-              onClick={toggleLanguageDropdown}
+              onClick={() => setLanguageOpen(!languageOpen)}
             >
               <span className="material-icons">{t("Language")}</span>
             </button>
@@ -123,11 +120,9 @@ const Header = () => {
           </div>
         </div>
 
-
         <Link className="text-gray-300 hover:text-white" to="/login">
           <span className="material-icons">{t("Login")}</span>
         </Link>
-
 
         <Sheet>
           <SheetTrigger className="xl:hidden">
@@ -136,9 +131,11 @@ const Header = () => {
           <SheetContent>
             <ul className="space-y-6 mt-10">
               <li className="text-gray-300 hover:text-white"><Link to="/movies">{t('Movies')}</Link></li>
-              <li className="text-gray-300 hover:text-white"><Link to="/home">{t('TV Shows')}</Link></li>
-              <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Genres')}</Link></li>
-              <li className="text-gray-300 hover:text-white"><Link to="/home">{t('More')}</Link></li>
+              <li className="text-gray-300 hover:text-white"><Link to="/shows">{t('TV Shows')}</Link></li>
+              <li className="text-gray-300 hover:text-white"><Link to="/genres">{t('Genres')}</Link></li>
+              <li className="text-gray-300 hover:text-white"><Link to="/aboutus">{t('About Us')}</Link></li>
+              <li className="text-gray-300 hover:text-white"><Link to="/privacypolicy">{t('Privacy Policy')}</Link></li>
+              <li className="text-gray-300 hover:text-white"><Link to="/termsofuse">{t('Terms of Use')}</Link></li>
             </ul>
           </SheetContent>
         </Sheet>

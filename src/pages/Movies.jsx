@@ -50,7 +50,7 @@ const Movies = () => {
             <div className='container'>
                 <div className='pt-48 pb-3 relative overflow-hidden rounded-md isolate'>
                     <div className='bg-neutral-900/60 absolute top-0 bottom-0 z-10 w-full'>
-                        <h1 className='px-4 font-semibold text-3xl text-white absolute bottom-3'>{t('All Movies')}</h1>
+                        <h1 className='px-4 font-semibold text-3xl text-white absolute bottom-3'>{('All Movies')}</h1>
                     </div>
                     <img src="/hero.jpg" alt="" className='absolute top-0 bottom-0 z-5' />
                 </div>
@@ -94,7 +94,7 @@ const Movies = () => {
                 {/* Your existing content */}
 
                 {/* Place EmailSubscription here */}
-                <EmailSubscription />
+                
                 </div>
             </div>  
 
