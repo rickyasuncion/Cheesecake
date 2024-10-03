@@ -19,6 +19,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import ContactUs from './pages/ContactUs';
 
 
+
 function App() {
   const { i18n } = useTranslation();
 
@@ -42,7 +43,7 @@ function App() {
             <Route path="/details/:type/:id" element={<MovieDetails />} />
             <Route path="/favourties" element={<Favourties />} /> 
             <Route path="*" element={<NotFound />} />
-            <Route path="/About-us" element={<AboutUs />} /> 
+            <Route path="/AboutUs" element={<AboutUs />} /> 
             <Route path="/terms-of-use" element={<TermsOfUse/>} />
             <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
             <Route path="/contact-us" element={<ContactUs/>} />
