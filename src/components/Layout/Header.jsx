@@ -50,7 +50,7 @@ const Header = () => {
         <nav className="ml-10 hidden xl:block">
           <ul className="flex space-x-6">
             <li className="text-gray-300 hover:text-white"><Link to="/movies">{t('Movies')}</Link></li>
-            <li className="text-gray-300 hover:text-white"><Link to="/home">{t('TV Shows')}</Link></li>
+            <li className="text-gray-300 hover:text-white"><Link to="/tvShows">{t('TV Shows')}</Link></li>
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('Genres')}</Link></li>
             <li className="text-gray-300 hover:text-white"><Link to="/home">{t('More')}</Link></li>
           </ul>
