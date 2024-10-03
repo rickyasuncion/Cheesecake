@@ -4,6 +4,7 @@ import { Button } from "./button";
 import { FaHeart } from "react-icons/fa";
 import { cn } from "./lib/utils";
 
+
 const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = true, className }) => {
 
   const detailPath = `/details/${media_type}/${id}`;
