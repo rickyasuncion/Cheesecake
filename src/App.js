@@ -40,9 +40,9 @@ function App() {
             <Route path="/movies" element={<Movies />} />
             <Route path="/search/:searched" element={<Search />} />
             <Route path="/details/:type/:id" element={<MovieDetails />} />
-            <Route path="/favourites" element={<Favourties />} /> 
+            <Route path="/favourties" element={<Favourties />} /> 
             <Route path="*" element={<NotFound />} />
-            <Route path="/Aboutus" element={<AboutUs />} /> 
+            <Route path="/About-us" element={<AboutUs />} /> 
             <Route path="/terms-of-use" element={<TermsOfUse/>} />
             <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
             <Route path="/contact-us" element={<ContactUs/>} />
