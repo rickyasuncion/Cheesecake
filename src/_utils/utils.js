@@ -1,21 +1,34 @@
 export async function fetchData(url) {
-    const fetch = require("node-fetch");
-
+  try {
     const options = {
-        method: "GET",
-        headers: {
-            accept: "application/json",
-        },
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
     };
 
-    let response = await fetch(url, options);
-    let data = await response.json();
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+      throw new Error(`An error occurred: ${response.status}`);
+    }
+
+    const data = await response.json();
     return data;
+  } catch (error) {
+    console.error("Fetch Error:", error.message);
+    return null;
+  }
 }
 
 export function filterResults(data) {
-    let filteredData = data.results.filter(
-        (data) => data.media_type !== "person"
-    );
-    return filteredData;
+  if (!data || !data.results) {
+    return [];
+  }
+
+  const filteredData = data.results.filter(
+    (data) => data.media_type !== "person"
+  );
+
+  return filteredData;
 }

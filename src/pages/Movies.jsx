@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Card from '../components/ui/card'
 import { Separator } from '@radix-ui/react-separator'
+import { useTranslation } from 'react-i18next'
 
 
 const Movies = () => {
     const [upcomingMoviesGeners, setUpcomingMoviesGeners] = useState([]);
     const [popularMovieGenres, setPopularMovieGenres] = useState([]);
-    const [topRatedMovieGenres, setTopRatedMovieGenres] = useState([])
+    const [topRatedMovieGenres, setTopRatedMovieGenres] = useState([]);
+    const { t } = useTranslation();
+
 
 
     function fetchUpcomingMovies(url, callback) {
@@ -55,14 +58,14 @@ const Movies = () => {
 
                 <div className='pt-48 pb-3 relative overflow-hidden rounded-md  isolate' >
                     <div className='bg-neutral-900/60 absolute top-0 bottom-0 z-10 w-full'>
-                        <h1 className='px-4 font-semibold text-3xl text-white absolute bottom-3'>All Movies</h1>
+                        <h1 className='px-4 font-semibold text-3xl text-white absolute bottom-3'>{t('All Movies')}</h1>
                     </div>
                     <img src="/hero.jpg" alt="" className='absolute top-0 bottom-0 z-5' />
                 </div>
 
 
                 <div className='mt-5'>
-                    <h2 className='text-lg mb-2 font-medium'>New & Upcoming</h2>
+                    <h2 className='text-lg mb-2 font-medium'>{t('New & Upcoming')}</h2>
 
                     <div className='flex gap-3 flex-wrap'>
                         {upcomingMoviesGeners && upcomingMoviesGeners.map(genre => {
@@ -75,7 +78,7 @@ const Movies = () => {
                 <Separator className='h-0.5 bg-secondary/5 my-5' />
 
                 <div>
-                    <h2 className='text-lg mb-2 font-medium'>Popular</h2>
+                    <h2 className='text-lg mb-2 font-medium'>{t('Popular')}</h2>
 
                     <div className='flex gap-3 flex-wrap'>
                         {popularMovieGenres && popularMovieGenres.map(genre => {
@@ -88,7 +91,7 @@ const Movies = () => {
                 <Separator className='h-0.5 bg-secondary/5 my-5' />
 
                 <div>
-                    <h2 className='text-lg mb-2 font-medium'>Top Rated</h2>
+                    <h2 className='text-lg mb-2 font-medium'>{t('Top Rated')}</h2>
 
                     <div className='flex gap-3 flex-wrap'>
                         {topRatedMovieGenres && topRatedMovieGenres.map(genre => {

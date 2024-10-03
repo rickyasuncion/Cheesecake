@@ -12,6 +12,8 @@ import Search from "./pages/Search";
 import Favourties from "./pages/Favourties";
 import Header from "./components/Layout/Header";
 import Movies from "./pages/Movies";
+import Landing from "./components/LandingPage/Landing";
+import FilteredContent from "./pages/FilteredContent";
 import MoviesWIthGenre from "./pages/MoviesWIthGenre";
 import TvShows from "./pages/TvShows";
 
@@ -44,6 +46,7 @@ function App() {
                             element={<MovieDetails />}
                         />
                         <Route path="/favourites" element={<Favourties />} />
+            <Route path="/filtered-content" element={<FilteredContent />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </BrowserRouter>

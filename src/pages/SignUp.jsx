@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useUserAuth } from "../_utils/auth-context";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const SignUp = () => {
   const { emailSignUp } = useUserAuth();
@@ -8,6 +9,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSignUp = async () => {
     try {
@@ -21,17 +23,17 @@ const SignUp = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#1c1c1e] text-white">
-      <h1 className="text-4xl font-bold mb-6">Sign Up for Cheesecake</h1>
+      <h1 className="text-4xl font-bold mb-6">{t('Sign Up for Cheesecake')}</h1>
       <input
         type="email"
-        placeholder="Email"
+        placeholder={t('Email')}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="p-2 mb-4 rounded bg-gray-800 text-white placeholder-gray-500 w-80"
       />
       <input
         type={passwordVisible ? "text" : "password"}
-        placeholder="Password"
+        placeholder={t('Password')}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className="p-2 mb-4 rounded bg-gray-800 text-white placeholder-gray-500 w-80"
@@ -44,14 +46,14 @@ const SignUp = () => {
             onChange={() => setPasswordVisible(!passwordVisible)}
             className="mr-2"
           />
-          Show Password
+          {t('Show Password')}
         </label>
       </div>
       <button
         className="bg-blue-600 text-white p-2 rounded w-80"
         onClick={handleSignUp}
       >
-        Sign Up
+        {t('Sign Up')}
       </button>
     </div>
   );
