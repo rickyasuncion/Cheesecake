@@ -1,7 +1,10 @@
 
 
 .App {
-  text-align: center;
+  
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -84,4 +87,13 @@ h1 {
   font-weight: bold;
   margin-bottom: 1.5rem;
   text-align: center;
+}
+
+.footer {
+  background-color: #333; /* Background color for footer */
+  color: #fff; /* Text color */
+  text-align: center; /* Center align text */
+  padding: 20px; /* Padding inside footer */
+  width: 100%; /* Full width */
+  position: relative; /* Position footer */
 }

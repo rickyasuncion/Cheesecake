@@ -32,7 +32,7 @@ function App() {
         <BrowserRouter>
           <Header />
           <main>
-          <Routes>
+           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -46,7 +46,7 @@ function App() {
             <Route path="/terms-of-use" element={<TermsOfUse/>} />
             <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
             <Route path="/contact-us" element={<ContactUs/>} />
-          </Routes>
+           </Routes>
           </main>
           <Footer/>
         </BrowserRouter>

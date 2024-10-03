@@ -1,6 +1,12 @@
 body, html {
-  height: 100%; /* Make sure the body and html take the full height */
-  margin: 0; /* Remove default margin */
+  height: 100%; 
+  margin: 0; 
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
 }
 
 
@@ -10,20 +16,7 @@ body, html {
     text-align: center;
     padding: 20px;
     width: 100%;
+    position: relative;
     
-  }
-  
-  .privacy-policy-btn {
-    margin-top: 10px;
-    background-color: #444;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .privacy-policy-btn:hover {
-    background-color: #555;
-  }
+}
   
