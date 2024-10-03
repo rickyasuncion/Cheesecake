@@ -85,9 +85,19 @@ const Movies = () => {
                     </div>
                 </div>
 
-                {/* Email Subscription Component */}
+            <div className='bg-[#171c21] text-secondary pt-4 pb-0'>
+               <div className='container'>
+                {/* Your existing content */}
+
+                {/* Place EmailSubscription here */}
                 <EmailSubscription />
-            </div>
+                </div>
+            </div>  
+
+            </div>  
+                    
+                
+            
         </div>
     );
 };
