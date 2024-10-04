@@ -1,0 +1,45 @@
+.email-subscription {
+    background-color: #282c34;
+    padding: 20px;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    margin: 50px auto;
+    max-width: 400px;
+    text-align: center;
+}  
+  
+  .email-input {
+    width: 70%;
+    padding: 10px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    margin: 10px;
+    background-color: white;
+    color: black;
+   
+  }
+  
+  .subscribe-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #61dafb;
+    color: Black;
+    cursor: pointer;
+    margin: 10px;
+  }
+  
+  .subscribe-button:hover {
+    background-color: #52c9e9;
+  }
+  
+  .success-message {
+    color: #4caf50; /* Green for success message */
+  }
+  
+  .error-message {
+    color: #f44336; /* Red for error message */
+  }
+  

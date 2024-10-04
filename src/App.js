@@ -9,50 +9,54 @@ import MovieDetails from "./pages/Details";
 import { LanguageProvider } from "./_utils/LanguageContext";
 import { useTranslation } from "react-i18next";
 import Search from "./pages/Search";
-import Favourties from "./pages/Favourties";
+import Favourties from './pages/Favourties'; 
 import Header from "./components/Layout/Header";
+import Footer from "./components/Layout/Footer";
 import Movies from "./pages/Movies";
-import Landing from "./components/LandingPage/Landing";
-import FilteredContent from "./pages/FilteredContent";
-import MoviesWIthGenre from "./pages/MoviesWIthGenre";
-import TvShows from "./pages/TvShows";
+import AboutUs from './pages/AboutUs';
+import TermsOfUse from './pages/TermsOfUse';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import ContactUs from './pages/ContactUs';
+
+
+
 
 function App() {
-    const { i18n } = useTranslation();
+  const { i18n } = useTranslation();
 
-    const changeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
-    };
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
-    return (
-        <AuthContextProvider>
-            <LanguageProvider>
-                <BrowserRouter>
-                    <Header />
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/home" element={<Home />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/signup" element={<SignUp />} />
-                        <Route path="/movies" element={<Movies />} />
-                        <Route
-                            path="/movies/:type/genre/:genreId"
-                            element={<MoviesWIthGenre />}
-                        />
-                        <Route path="/tvShows" element={<TvShows />} />
-                        <Route path="/search/:searched" element={<Search />} />
-                        <Route
-                            path="/details/:type/:id"
-                            element={<MovieDetails />}
-                        />
-                        <Route path="/favourites" element={<Favourties />} />
-            <Route path="/filtered-content" element={<FilteredContent />} />
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                </BrowserRouter>
-            </LanguageProvider>
-        </AuthContextProvider>
-    );
+  return (
+    <AuthContextProvider>
+      <LanguageProvider>
+        <BrowserRouter>
+          <Header />
+          <main>
+           <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/movies" element={<Movies />} />
+            <Route path="/search/:searched" element={<Search />} />
+            <Route path="/details/:type/:id" element={<MovieDetails />} />
+            <Route path="/favourties" element={<Favourties />} /> 
+            <Route path="*" element={<NotFound />} />
+            <Route path="/AboutUs" element={<AboutUs />} /> 
+            <Route path="/TermsOfUse" element={<TermsOfUse/>} />
+            <Route path="/PrivacyPolicy" element={<PrivacyPolicy/>} />
+            <Route path="/contact-us" element={<ContactUs/>} />
+           </Routes>
+           
+          </main>
+          
+          <Footer/>
+        </BrowserRouter>
+      </LanguageProvider>
+    </AuthContextProvider>
+  );
 }
 
 export default App;

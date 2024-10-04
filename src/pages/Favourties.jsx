@@ -64,12 +64,12 @@ const Favourties = () => {
 
         if (contentType === 'movie') {
             const data = JSON.parse(localStorage.getItem("favouriteMovies"));
-            localStorage.setItem('favouriteMovies', JSON.stringify(data.filter(fav => fav != id)))
+            localStorage.setItem('favouriteMovies', JSON.stringify(data.filter(fav => fav !== id)))
             fetchAndSetFavouriteMovies()
         }
         if (contentType === 'tv') {
             const data = JSON.parse(localStorage.getItem("favouriteTv"));
-            localStorage.setItem('favouriteTv', JSON.stringify(data.filter(fav => fav != id)))
+            localStorage.setItem('favouriteTv', JSON.stringify(data.filter(fav => fav !== id)))
             fetchAndSetFavouriteTv()
         }
 
