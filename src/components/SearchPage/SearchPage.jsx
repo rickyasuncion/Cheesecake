@@ -12,7 +12,7 @@ const SearchPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen text-white">
       <div className="p-4">
         <h1 className="text-2xl font-semibold text-center mb-4">
           Search Movies and TV Shows
