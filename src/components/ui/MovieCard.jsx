@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./button";
 import { FaHeart } from "react-icons/fa";
+import { cn } from "./lib/utils";
 
-const MovieCard = ({ id, imageUrl, media_type, title, name, poster_path, showFavButton = true }) => {
+
+const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = true, className }) => {
 
   const detailPath = `/details/${media_type}/${id}`;
   const [isFavourite, setIsFavourite] = useState(false);
@@ -49,7 +51,7 @@ const MovieCard = ({ id, imageUrl, media_type, title, name, poster_path, showFav
   }
 
   return (
-    <Link to={detailPath} className="isolate relative max-w-[200px] group">
+    <Link to={detailPath} className={cn("isolate relative max-w-[200px] group", className)}>
       <div className="rounded-md overflow-hidden">
         <img
           src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
