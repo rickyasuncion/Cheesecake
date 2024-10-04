@@ -1,10 +1,7 @@
 
 
 .App {
-  
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  text-align: center;
 }
 
 .App-logo {
@@ -40,60 +37,4 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-
-.relative {
-  position: relative; /* Ensure dropdown positions correctly */
-}
-
-.dropdown-menu {
-  position: absolute; /* Position it absolutely within the parent */
-  background-color: #1c1c1e; /* Set a background color */
-  border: 1px solid #444; /* Border around the dropdown */
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px; /* Padding inside the dropdown */
-  z-index: 1000; /* Ensure it appears above other elements */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
-  width: 150px; /* Width of the dropdown */
-}
-
-.dropdown-menu button {
-  display: block; /* Block display for vertical stacking */
-  width: 100%; /* Full width of the dropdown */
-  background: transparent; /* Transparent background for buttons */
-  color: #ccc; /* Text color */
-  border: none; /* No border */
-  padding: 12px; /* Padding for buttons */
-  text-align: left; /* Align text to the left */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background 0.3s; 
-  font-family:Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  margin-bottom:4px;/* Smooth transition for hover */
-}
-
-.dropdown-menu button:last-child {
- margin-bottom:0;
-}
-
-dropdown-menu button:hover {
-  background-color: #444; /* Background color on hover */
-  color: #fff; /* Change text color on hover */
-}
-
-h1 {
-  font-size: 2.5rem; /* Adjust to desired size */
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.footer {
-  background-color: #333; /* Background color for footer */
-  color: #fff; /* Text color */
-  text-align: center; /* Center align text */
-  padding: 20px; /* Padding inside footer */
-  width: 100%; /* Full width */
-  position: relative; /* Position footer */
 }
