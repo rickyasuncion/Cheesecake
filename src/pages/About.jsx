@@ -6,6 +6,13 @@ import { Button } from '../components/ui/button'
 import { Link } from 'react-router-dom'
 import { GoArrowUpRight } from "react-icons/go";
 import { GoHeartFill } from "react-icons/go";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+  } from "../components/ui/accordian"
+  
 
 
 
@@ -84,6 +91,46 @@ const About = () => {
         <Link to='/contact' className='flex gap-2 items-center'> <GoArrowUpRight className='size-6' /> Contact us</Link>
     </Button>
 </div>
+
+<div className='flex justify-center flex-col text-center'>
+    <h2 className='text-4xl font-medium'>FAQ</h2>
+
+
+<Accordion type="single" collapsible className='text-start  px-10 bg-neutral-50 my-5 rounded-md'>
+
+  <AccordionItem value="item-1">
+    <AccordionTrigger className="ml-0 pl-0">How cheescake makes finding a movie or tv show easier?</AccordionTrigger>
+    <AccordionContent>
+      Cheescake provides the user with a list of movies and tvshows to choose from. If that's not enough; we have a dedicated section on <Link to={'/home'} className='underline'>Home</Link> page to make things even easier. If that's also not enought, you can browse a list of movies and tvshows based on genres on the website. Hence, making the hasle of searching through movies a breeze for the user.
+    </AccordionContent>
+  </AccordionItem>
+
+
+  <AccordionItem value="item-2">
+    <AccordionTrigger className="ml-0 pl-0 ">How much does cheescake cost?</AccordionTrigger>
+    <AccordionContent>
+      None. That's the value that we provide to our customers. No payments, no subscription. All there for free
+    </AccordionContent>
+  </AccordionItem>
+
+
+  <AccordionItem value="item-3">
+    <AccordionTrigger className="ml-0 pl-0 ">What can I watch on cheesecake?</AccordionTrigger>
+    <AccordionContent>
+        Cheesecake have an extensive library of movies, tv shows, genres and much more.
+    </AccordionContent>
+  </AccordionItem>
+
+
+  <AccordionItem value="item-4">
+    <AccordionTrigger className="ml-0 pl-0 ">Is cheesecake good for kids?</AccordionTrigger>
+    <AccordionContent>
+        Yes, it is. Kids can select movies falling under animation category, making the movies suitable for kids to watch
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+</div>
+
 
 
     </div>
