@@ -75,6 +75,17 @@ const About = () => {
 
     </div>
 
+
+
+
+<div className='py-10'>
+    <p className=' text-2xl font-medium text-center'>We've been blown away by the support from our customers. <br/>Any suggestions for improvements? Give a follow up contact request and we will make a change in a few days!</p>
+    <Button asChild className='mx-auto block max-w-fit mt-5 h-auto text-lg'>
+        <Link to='/contact' className='flex gap-2 items-center'> <GoArrowUpRight className='size-6' /> Contact us</Link>
+    </Button>
+</div>
+
+
     </div>
   )
 }
