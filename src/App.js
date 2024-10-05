@@ -16,6 +16,7 @@ import Landing from "./components/LandingPage/Landing";
 import FilteredContent from "./pages/FilteredContent";
 import MoviesWIthGenre from "./pages/MoviesWIthGenre";
 import TvShows from "./pages/TvShows";
+import About from "./pages/About";
 
 function App() {
     const { i18n } = useTranslation();
@@ -32,6 +33,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/home" element={<Home />} />
+                        <Route path="/about" element={<About />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<SignUp />} />
                         <Route path="/movies" element={<Movies />} />
