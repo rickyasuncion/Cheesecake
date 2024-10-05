@@ -10,8 +10,12 @@ const Footer = () => {
   return (
     <footer className="footer">
       <p>© 2024 Cheesecake. All rights reserved.</p>
-      <button className="contact-us-btn" onClick={()=> navigate('/contact-us')}>
+      <button className="contact-us-button" onClick={()=> navigate('/contact-us')}>
         Contact Us
+        </button>
+        
+      <button className="about-us-button" onClick={()=> navigate('/about-us')}>
+        About Us
         </button>
     </footer>
   );
