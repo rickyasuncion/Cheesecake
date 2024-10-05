@@ -273,7 +273,7 @@
 // export default Header;
 
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../_utils/LanguageContext";
 import "../LanguageSelector.css";
@@ -290,6 +290,7 @@ const Header = () => {
   const { t, i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const { language, changeLanguage } = useLanguage();
 
   const [genresDropdownOpen, setGenresDropdownOpen] = useState(false);
@@ -297,7 +298,12 @@ const Header = () => {
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const genresRef = useRef(null);
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
 
+
+  
+
+  
   useEffect(() => {
     const fetchGenres = async () => {
       try {
@@ -360,6 +366,18 @@ const Header = () => {
     setGenresDropdownOpen(!genresDropdownOpen);
     setLanguageOpen(false);
   };
+
+
+  const toggleMoreDropdownOpen = () => {
+    setMoreDropdownOpen(!moreDropdownOpen);
+  };
+
+  useEffect(() =>{
+    if (location.pathname === "/PrivacyPolicy") {
+      setMoreDropdownOpen(false);
+    }
+  },[location.pathname]);
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -425,12 +443,22 @@ const Header = () => {
                   >
                     {t("Filter")}
                   </button>
+                  
                 </div>
               )}
             </li>
+            <li className="relative">
 
-            <li className="text-gray-300 hover:text-white">
-              <Link to="/home">{t("More")}</Link>
+            <button className="text-gray-300 hover:text-white" onClick={toggleMoreDropdownOpen}>
+              {t("More")}
+            </button>
+            {moreDropdownOpen && (
+                <ul className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 space-y-2 more-dropdownopen">
+                  <li><
+                    Link to="/PrivacyPolicy">{t('Privacy Policy')}</Link>
+                    </li>
+                </ul>
+              )}
             </li>
           </ul>
         </nav>
@@ -532,6 +560,7 @@ const Header = () => {
             </ul>
           </SheetContent>
         </Sheet>
+
       </div>
     </header>
   );

@@ -19,6 +19,7 @@ import TvShows from "./pages/TvShows";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
     const { i18n } = useTranslation();
@@ -51,6 +52,7 @@ function App() {
                         />
                         <Route path="/favourites" element={<Favourties />} />
             <Route path="/filtered-content" element={<FilteredContent />} />
+                        <Route path="/PrivacyPolicy" element= {<PrivacyPolicy/>} />
                         <Route path="*" element={<NotFound />} />
                         <Route path="/contact-us" element={<ContactUs/>}/>
                         <Route path="/about-us" element= {<AboutUs/>} />
