@@ -1,62 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { fetchData } from '../_utils/utils';
+import { fetchAndSetFavouriteMovies, fetchAndSetFavouriteTv, fetchData } from '../_utils/utils';
 import { MovieCard } from '../components/ui/MovieCard';
 import { Button } from '../components/ui/button';
 import { IoIosRemoveCircle } from "react-icons/io";
+import { Link } from 'react-router-dom';
 
 
 const Favourties = () => {
     const [favouriteMovies, setFavouritesMovies] = useState([]);
     const [favouriteTv, setFavouriteTv] = useState([]);
 
-    async function fetchAndSetFavouriteMovies() {
-        const favMovies = JSON.parse(localStorage.getItem("favouriteMovies"));
-
-        if (!favMovies) {
-            return;
-        }
-
-        // try to find ids in movies
-        const moviePromises = favMovies.map(movieId => {
-            const moviePromise = fetchData(
-                `https://api.themoviedb.org/3/movie/${movieId}?api_key=bbd89781c7835917a2decb4989b56470`
-            );
-            return moviePromise;
-        })
-
-        const movies = await Promise.all(moviePromises);
-
-
-
-
-        const filteredMovies = movies.map(res => ({ id: res.id, title: res.title, name: res.name, poster_path: res.poster_path }))
-
-
-        setFavouritesMovies(filteredMovies)
-    }
-
-    async function fetchAndSetFavouriteTv() {
-        const favTv = JSON.parse(localStorage.getItem("favouriteTv"));
-
-        if (!favTv) {
-            return;
-        }
-
-        const tvPromises = favTv.map((tvId) => {
-            const tvShow = fetchData(
-                `https://api.themoviedb.org/3/tv/${tvId}?api_key=bbd89781c7835917a2decb4989b56470`
-            )
-            return tvShow;
-        })
-        const tvShows = await Promise.all(tvPromises);
-        const filteredTv = tvShows.map(res => ({ id: res.id, title: res.title, name: res.name, poster_path: res.poster_path }))
-        setFavouriteTv(filteredTv)
-    }
-
 
     useEffect(() => {
-        fetchAndSetFavouriteMovies()
-        fetchAndSetFavouriteTv();
+        fetchAndSetFavouriteMovies(setFavouritesMovies)
+        fetchAndSetFavouriteTv(setFavouriteTv);
     }, [])
 
 
@@ -65,12 +22,12 @@ const Favourties = () => {
         if (contentType === 'movie') {
             const data = JSON.parse(localStorage.getItem("favouriteMovies"));
             localStorage.setItem('favouriteMovies', JSON.stringify(data.filter(fav => fav != id)))
-            fetchAndSetFavouriteMovies()
+            fetchAndSetFavouriteMovies(setFavouritesMovies)
         }
         if (contentType === 'tv') {
             const data = JSON.parse(localStorage.getItem("favouriteTv"));
             localStorage.setItem('favouriteTv', JSON.stringify(data.filter(fav => fav != id)))
-            fetchAndSetFavouriteTv()
+            fetchAndSetFavouriteTv(setFavouriteTv)
         }
 
     }
@@ -78,6 +35,9 @@ const Favourties = () => {
     return (
 
         <div className='container py-4'>
+            <Button asChild className="mb-3">
+                <Link to={'/favourites/similar'}>Browse Similar Movies/TvShows</Link>
+            </Button>
             <h1 className='text-lg font-semibold underline'>
                 Favourite Movies
             </h1>
