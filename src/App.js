@@ -16,9 +16,9 @@ import Landing from "./components/LandingPage/Landing";
 import FilteredContent from "./pages/FilteredContent";
 import MoviesWIthGenre from "./pages/MoviesWIthGenre";
 import TvShows from "./pages/TvShows";
+import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
-import AboutUs from "./pages/AboutUs";
 
 function App() {
     const { i18n } = useTranslation();
@@ -36,6 +36,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/home" element={<Home />} />
+                        <Route path="/about" element={<About />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<SignUp />} />
                         <Route path="/movies" element={<Movies />} />
@@ -53,7 +54,6 @@ function App() {
             <Route path="/filtered-content" element={<FilteredContent />} />
                         <Route path="*" element={<NotFound />} />
                         <Route path="/contact-us" element={<ContactUs/>}/>
-                        <Route path="/about-us" element= {<AboutUs/>} />
                     </Routes>
                     </main>
 
