@@ -51,8 +51,8 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
   }
 
   return (
-    <div className="isolate relative max-w-[200px] group">
-      <Link to={detailPath} className={className}>
+    <div className={`isolate relative max-w-[200px] group ${cn(className)}`}>
+      <Link to={detailPath}>
         <div className="rounded-md overflow-hidden">
           <img
             src={`https://image.tmdb.org/t/p/w500/${poster_path}`}

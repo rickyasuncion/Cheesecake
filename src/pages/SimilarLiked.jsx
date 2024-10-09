@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { fetchAndSetFavouriteMovies, fetchAndSetFavouriteTv } from '../_utils/utils';
+import { MovieCard } from '../components/ui/MovieCard';
+import MovieListView from '../components/LandingPage/MovieListView';
+import { t } from 'i18next';
 
 const SimilarLiked = () => {
     const [favouriteMovies, setFavouritesMovies] = useState([]);
@@ -27,9 +30,14 @@ const SimilarLiked = () => {
 
 
     return (
-        <div>
+        <div className='container'>
             <h2 className='text-lg font-medium underline'>Similar favourite movies</h2>
-
+            <div className='space-y-4 py-2'>
+                {Object.keys(similarFavMovies).map(key => {
+                    return similarFavMovies[key].length === 0 ? <div className='container'> <h2 className="text-lg font-medium">{t(key)}</h2><h4>No Similar movies found</h4></div> :
+                        <MovieListView movies={similarFavMovies[key]} title={t(key)} contentType={'movies'} />
+                })}
+            </div>
         </div>
     )
 }
