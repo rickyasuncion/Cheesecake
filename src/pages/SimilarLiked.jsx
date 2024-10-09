@@ -35,7 +35,7 @@ const SimilarLiked = () => {
             <div className='space-y-4 py-2'>
                 {Object.keys(similarFavMovies).map(key => {
                     return similarFavMovies[key].length === 0 ? <div className='container'> <h2 className="text-lg font-medium">{t(key)}</h2><h4>No Similar movies found</h4></div> :
-                        <MovieListView movies={similarFavMovies[key]} title={t(key)} contentType={'movies'} />
+                        <MovieListView movies={similarFavMovies[key].map(movie => ({ ...movie, media_type: 'movie' }))} title={t(key)} contentType='movies' />
                 })}
             </div>
         </div>
