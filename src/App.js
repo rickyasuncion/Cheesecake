@@ -12,13 +12,13 @@ import Search from "./pages/Search";
 import Favourties from "./pages/Favourties";
 import Header from "./components/Layout/Header";
 import Movies from "./pages/Movies";
-import Landing from "./components/LandingPage/Landing";
 import FilteredContent from "./pages/FilteredContent";
 import MoviesWIthGenre from "./pages/MoviesWIthGenre";
 import TvShows from "./pages/TvShows";
 import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
+import SimilarLiked from "./pages/SimilarLiked";
 
 function App() {
     const { i18n } = useTranslation();
@@ -33,31 +33,44 @@ function App() {
                 <BrowserRouter>
                     <Header />
                     <main>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/home" element={<Home />} />
-                        <Route path="/about" element={<About />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/signup" element={<SignUp />} />
-                        <Route path="/movies" element={<Movies />} />
-                        <Route
-                            path="/movies/:type/genre/:genreId"
-                            element={<MoviesWIthGenre />}
-                        />
-                        <Route path="/tvShows" element={<TvShows />} />
-                        <Route path="/search/:searched" element={<Search />} />
-                        <Route
-                            path="/details/:type/:id"
-                            element={<MovieDetails />}
-                        />
-                        <Route path="/favourites" element={<Favourties />} />
-            <Route path="/filtered-content" element={<FilteredContent />} />
-                        <Route path="*" element={<NotFound />} />
-                        <Route path="/contact-us" element={<ContactUs/>}/>
-                    </Routes>
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/home" element={<Home />} />
+                            <Route path="/about" element={<About />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/signup" element={<SignUp />} />
+                            <Route path="/movies" element={<Movies />} />
+                            <Route
+                                path="/favourites/similar"
+                                element={<SimilarLiked />}
+                            />
+                            <Route
+                                path="/movies/:type/genre/:genreId"
+                                element={<MoviesWIthGenre />}
+                            />
+                            <Route path="/tvShows" element={<TvShows />} />
+                            <Route
+                                path="/search/:searched"
+                                element={<Search />}
+                            />
+                            <Route
+                                path="/details/:type/:id"
+                                element={<MovieDetails />}
+                            />
+                            <Route
+                                path="/favourites"
+                                element={<Favourties />}
+                            />
+                            <Route
+                                path="/filtered-content"
+                                element={<FilteredContent />}
+                            />
+                            <Route path="*" element={<NotFound />} />
+                            <Route path="/contact-us" element={<ContactUs />} />
+                        </Routes>
                     </main>
 
-                    <Footer/>
+                    <Footer />
                 </BrowserRouter>
             </LanguageProvider>
         </AuthContextProvider>

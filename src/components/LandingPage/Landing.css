@@ -1,34 +1,33 @@
 .landing-page {
     margin: 50px;
-  }
-  
-  button {
+}
+
+.landing-page button {
     padding: 10px 15px;
     font-size: 16px;
     margin-left: 10px;
     cursor: pointer;
-  }
-  
-  .movie-list {
+}
+
+.movie-list {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
     margin-top: 20px;
-  }
-  
-  .movie-card {
+}
+
+.movie-card {
     border: 1.5px solid hsl(var(--border));
     border-radius: 5px;
     padding: 10px;
     flex: 1;
     min-width: 200px;
     text-align: start;
+}
 
-  }
-  
-  .movie-card img {
+.movie-card img {
     width: 100%;
     height: auto;
     border-radius: 5px;
-  }
+}

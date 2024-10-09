@@ -51,20 +51,23 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
   }
 
   return (
-    <Link to={detailPath} className={cn("isolate relative max-w-[200px] group", className)}>
-      <div className="rounded-md overflow-hidden">
-        <img
-          src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
-          alt={media_type === "movie" ? title : name}
-          className="group-hover:scale-110 transition-transform duration-200"
-        />
+    <div className={`isolate relative max-w-[200px] group ${cn(className)}`}>
+      <Link to={detailPath}>
+        <div className="rounded-md overflow-hidden">
+          <img
+            src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
+            alt={media_type === "movie" ? title : name}
+            className="group-hover:scale-110 transition-transform duration-200"
+          />
 
-      </div>
-      <h3 className="font-medium  text-sm">{title || name}</h3>
+        </div>
+        <h3 className="font-medium  text-sm">{title || name}</h3>
+      </Link>
+
       {showFavButton &&
-        <Button onClick={() => addToFavourites(id)} className={`z-10 absolute top-2 right-2 p-1 h-fit  shadow shadow-black text-red-900 ${isFavourite ? 'bg-green-600' : 'bg-red-400'}`}><FaHeart /></Button>
+        <Button onClick={() => addToFavourites(id)} className={`z-30 absolute top-2 right-2 p-1 h-fit  shadow shadow-black text-red-900 ${isFavourite ? 'bg-green-600' : 'bg-red-400'}`}><FaHeart /></Button>
       }
-    </Link>
+    </div>
 
   );
 };
