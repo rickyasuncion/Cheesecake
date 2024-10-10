@@ -1,3 +1,4 @@
+//01
 import {
   Tooltip,
   TooltipContent,
@@ -5,16 +6,20 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import React, { useEffect, useRef, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { RiHeartFill } from "react-icons/ri";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import { BiPlay } from "react-icons/bi";
 import { BsPauseFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
 
-const MovieDetails = ({ id }) => {
+const MovieDetails = ({ id: propId }) => {
   const videoRef = useRef(null);
+
+  const { type, id: movieId } = useParams();
+  const id = propId || movieId;
+
   const [movie, setMovie] = useState(null);
   const [trailerVideo, setTrailerVideo] = useState(null);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
@@ -211,17 +216,22 @@ const MovieDetails = ({ id }) => {
         </div>
 
         <div className="mt-8">
-          <h3 className="text-lg mb-4">{t("Similar Movies")}</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <h3 className="text-lg mb-4">
+            {type === "tv-shows" ? t("TV Shows") : t("Movies")}
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {recommendedMovies.map((recMovie) => (
-              <Link to={`/movie/${recMovie.id}`} key={recMovie.id}>
-                <div className="text-center">
+              <Link to={`/details/${type}/${recMovie.id}`} key={recMovie.id}>
+                <div className="flex flex-col items-center">
                   <img
-                    src={`https://image.tmdb.org/t/p/w500${recMovie.poster_path}`}
-                    alt={recMovie.title}
+                    src={`https://image.tmdb.org/t/p/w154${recMovie.poster_path}`}
+                    alt={recMovie.title || recMovie.name}
                     className="w-full rounded-md mb-2"
+                    style={{ maxWidth: "154px" }}
                   />
-                  <p>{recMovie.title}</p>
+                  <p className="text-sm mt-2 text-center">
+                    {recMovie.title || recMovie.name}
+                  </p>
                 </div>
               </Link>
             ))}
