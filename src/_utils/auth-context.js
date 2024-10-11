@@ -9,6 +9,7 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "./firebase";
 
@@ -33,8 +34,24 @@ export const AuthContextProvider = ({ children }) => {
   //   return signInWithPopup(auth, provider);
   // };
 
-  const emailSignUp = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const emailSignUp = (email, password, displayName) => {
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        updateProfile(user, {
+          displayName: displayName,
+        })
+          .then(() => {
+            console.log("Display name set successfully!");
+          })
+          .catch((error) => {
+            console.error("Error updating profile:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error signing up:", error);
+      });
   };
 
   const emailSignIn = (email, password) => {
