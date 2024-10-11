@@ -37,7 +37,7 @@ try {
 }
 
 
-async function createReview(content, media_type, media_id, displayName) {
+async function createReview(content, media_type, media_id) {
   const user = auth.currentUser;
   try {
     const userDocRef = collection(db, "reviews", media_type, media_id);
@@ -46,7 +46,7 @@ async function createReview(content, media_type, media_id, displayName) {
       media_type: media_type,
       media_id: media_id,
       uid: user.uid,
-      displayName: displayName,
+      displayName: user.displayName,
       content: content,
       date: Date.now(),
     });
@@ -54,6 +54,24 @@ async function createReview(content, media_type, media_id, displayName) {
     console.log("Review created successfully!");
   } catch (error) {
     console.error("Error creating review:", error);
+  }
+}
+
+async function createContact(content) {
+  const user = auth.currentUser;
+  try {
+    const userDocRef = collection(db, "contact");
+
+    await addDoc(userDocRef, {
+      uid: user.uid,
+      displayName: user.displayName,
+      content: content,
+      date: Date.now(),
+    });
+
+    console.log("Contact created successfully!");
+  } catch (error) {
+    console.error("Error creating contact:", error);
   }
 }
 
@@ -193,6 +211,7 @@ async function updateUser(updatedData) {
 export {
   createUser,
   createReview,
+  createContact,
   getUserData,
   getUserFavourites,
   getUserReviews,
