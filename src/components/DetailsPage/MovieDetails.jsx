@@ -1,4 +1,4 @@
-//01
+//03
 import {
   Tooltip,
   TooltipContent,
@@ -37,7 +37,17 @@ const MovieDetails = ({ id: propId }) => {
           `https://api.themoviedb.org/3/movie/${id}?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
         const data = await response.json();
-        setMovie(data);
+
+        const creditsResponse = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
+        );
+        const creditsData = await creditsResponse.json();
+
+        setMovie({
+          ...data,
+          cast: creditsData.cast,
+          crew: creditsData.crew,
+        });
 
         // Fetch the English version of the movie details to always have the homepage link
         const englishResponse = await fetch(
@@ -193,24 +203,36 @@ const MovieDetails = ({ id: propId }) => {
         <p className="mb-4">{movie.overview}</p>
         <div className="mb-4">
           <p>
-            <strong>{t("Release Date")}</strong>{" "}
+            <strong>{t("Release Date")}:</strong>{" "}
             {new Date(movie.release_date).toLocaleDateString()}
           </p>
           <p>
-            <strong>{t("Runtime")}</strong> {movie.runtime} {t("minutes")}
+            <strong>{t("Runtime")}:</strong> {movie.runtime} {t("minutes")}
           </p>
           <p>
-            <strong>{t("Genres")}</strong>{" "}
+            <strong>{t("Genres")}:</strong>{" "}
             {movie.genres.map((genre) => genre.name).join(", ")}
           </p>
           <p>
-            <strong>{t("Budget")}</strong> ${movie.budget.toLocaleString()}
+            <strong>{t("Director")}:</strong>{" "}
+            {movie.crew?.find((member) => member.job === "Director")?.name ||
+              "N/A"}
           </p>
           <p>
-            <strong>{t("Revenue")}</strong> ${movie.revenue.toLocaleString()}
+            <strong>{t("Cast")}:</strong>{" "}
+            {movie.cast
+              ?.slice(0, 5)
+              .map((actor) => actor.name)
+              .join(", ") || "N/A"}
           </p>
           <p>
-            <strong>{t("Vote Average")}</strong> {movie.vote_average} (
+            <strong>{t("Budget")}:</strong> ${movie.budget.toLocaleString()}
+          </p>
+          <p>
+            <strong>{t("Revenue")}:</strong> ${movie.revenue.toLocaleString()}
+          </p>
+          <p>
+            <strong>{t("Vote Average")}:</strong> {movie.vote_average} (
             {movie.vote_count} {t("votes")})
           </p>
         </div>
