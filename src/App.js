@@ -18,6 +18,7 @@ import TvShows from "./pages/TvShows";
 import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
+import Test from "./components/DetailsPage/Reviews";
 
 function App() {
   const { i18n } = useTranslation();
@@ -51,6 +52,7 @@ function App() {
               <Route path="/filtered-content" element={<FilteredContent />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/contact-us" element={<ContactUs />} />
+              <Route path="/test" element={<Test />} />
             </Routes>
           </main>
 
