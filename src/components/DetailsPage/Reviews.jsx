@@ -3,36 +3,42 @@ import { Button } from "../ui/button";
 import { createReview, getReviews } from "../../_utils/firestore";
 
 const Reviews = () => {
-    <div>
-
-    </div>
-}
+  <div></div>;
+};
 
 const rev = {
-    content: "it was pretty cool",
-    media_type: "test",
-    media_id: "1"
-}
+  content: "it was pretty cool",
+  media_type: "movie",
+  media_id: "1",
+};
 
-const Test = ({media_type, media_id}) => {
-    const [reviews, setReviews] = useState([])
+const Test = ({ media_type = "movie", media_id }) => {
+  const [reviews, setReviews] = useState([]);
 
-    useEffect(()=>{
-        setReviews(getReviews("test", "1"))
-    }, [media_type, media_id])
+  useEffect(() => {
+    const fetchReviews = async () => {
+      const reviewsData = await getReviews(media_type, "1");
+      setReviews(reviewsData);
+    };
+
+    fetchReviews();
+  }, [media_type, media_id]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    createReview(rev);
+  };
 
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <h1>reviews</h1>
         <input></input>
-        <Button onClick={(event)=>{
-            event.preventDefault();
-            createReview(rev);}}>submit</Button>
+        <Button type="submit">submit</Button>
       </form>
-        {reviews > 0 ?? 
-        reviews.map((review)=>{
-            return <p>asda</p>
+      {reviews.length > 0 &&
+        reviews.map((review) => {
+          return <p key={review.id}>{review.content}</p>;
         })}
     </div>
   );
