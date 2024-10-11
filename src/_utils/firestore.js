@@ -16,6 +16,13 @@ const user = auth.currentUser;
 async function createUser(displayName) {
   try {
     const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      console.log("User already exists!");
+      return;
+    }
+
     await setDoc(userDocRef, {
       uid: user.uid,
       email: user.email,
@@ -29,6 +36,7 @@ async function createUser(displayName) {
     console.error("Error creating user:", error);
   }
 }
+
 
 async function createReview(content, media_type, media_id, displayName) {
   try {
