@@ -285,6 +285,7 @@ import { fetchData } from "../../_utils/utils";
 import "./Header.css";
 
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { useUserAuth } from "../../_utils/auth-context";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -296,6 +297,7 @@ const Header = () => {
   const [languageOpen, setLanguageOpen] = useState(false);
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
+  const { user, firebaseSignOut } = useUserAuth();
   const genresRef = useRef(null);
 
   useEffect(() => {
@@ -487,9 +489,21 @@ const Header = () => {
           </div>
         </div>
 
-        <Link className="text-gray-300 hover:text-white" to="/login">
-          <span className="material-icons">{t("Login")}</span>
-        </Link>
+        {user ? (
+          <Button
+            onClick={() => {
+              firebaseSignOut();
+            }}
+          >
+            Logout
+          </Button>
+        ) : (
+          <Button>
+            <Link className="text-gray-300 hover:text-white" to="/login">
+              <span className="material-icons">{t("Login")}</span>
+            </Link>
+          </Button>
+        )}
 
         <Sheet>
           <SheetTrigger className="xl:hidden">

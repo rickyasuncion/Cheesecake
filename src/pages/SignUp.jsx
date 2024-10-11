@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 const SignUp = () => {
   const { emailSignUp } = useUserAuth();
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
@@ -15,7 +16,6 @@ const SignUp = () => {
     try {
       await emailSignUp(email, password);
       console.log("Successfully signed up!");
-      navigate("/login");
     } catch (error) {
       console.log("Error during sign up:", error.message);
     }
@@ -24,6 +24,13 @@ const SignUp = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#1c1c1e] text-white">
       <h1 className="text-4xl font-bold mb-6">{t('Sign Up for Cheesecake')}</h1>
+      <input
+        type="text"
+        placeholder={t('Username')}
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        className="p-2 mb-4 rounded bg-gray-800 text-white placeholder-gray-500 w-80"
+      />
       <input
         type="email"
         placeholder={t('Email')}

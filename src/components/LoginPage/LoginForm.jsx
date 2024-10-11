@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserAuth } from "../../_utils/auth-context";
-
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const LoginForm = () => {
-  const { gitHubSignIn, googleSignIn, emailSignIn } = useUserAuth();
+  const { user, gitHubSignIn, googleSignIn, emailSignIn } = useUserAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -19,12 +18,18 @@ const LoginForm = () => {
         await googleSignIn();
       } else if (provider === "EmailPassword") {
         await emailSignIn(email, password);
-        navigate("/home");
       }
     } catch (error) {
       console.error(`Error during ${provider} login:`, error.message);
     }
   };
+
+  useEffect(()=>{
+    console.log(user);
+    // if (user) {
+    //   navigate("/");
+    // }
+  },[user, navigate])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#1c1c1e] text-white">
