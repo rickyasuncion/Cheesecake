@@ -18,7 +18,7 @@ const Test = ({media_type, media_id}) => {
     const [reviews, setReviews] = useState([])
 
     useEffect(()=>{
-        // setReviews(getReviews(media_type, id))
+        setReviews(getReviews("test", "1"))
     }, [media_type, media_id])
 
   return (
