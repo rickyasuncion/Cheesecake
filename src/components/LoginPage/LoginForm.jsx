@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useUserAuth } from "../../_utils/auth-context";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { createUser } from "../../_utils/firestore";
 
 const LoginForm = () => {
   const { user, gitHubSignIn, googleSignIn, emailSignIn } = useUserAuth();
@@ -19,16 +20,17 @@ const LoginForm = () => {
       } else if (provider === "EmailPassword") {
         await emailSignIn(email, password);
       }
+      createUser()
+      console.log("Succesfully logged in")
     } catch (error) {
       console.error(`Error during ${provider} login:`, error.message);
     }
   };
-
+  
   useEffect(()=>{
-    console.log(user);
-    // if (user) {
-    //   navigate("/");
-    // }
+    if (user) {
+      navigate("/");
+    }
   },[user, navigate])
 
   return (

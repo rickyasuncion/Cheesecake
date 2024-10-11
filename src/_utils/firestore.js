@@ -8,25 +8,24 @@ import {
   addDoc,
 } from "firebase/firestore";
 
-import { auth } from "./firebase";
 import { db } from "./firebase";
+import { auth } from "./firebase";
 
-const user = auth.currentUser;
-
-async function createUser(displayName) {
-  try {
+async function createUser() {
+  const user = auth.currentUser;
+  console.log(auth.currentUser);
+try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
 
     if (userDoc.exists()) {
-      console.log("User already exists!");
       return;
     }
 
     await setDoc(userDocRef, {
       uid: user.uid,
       email: user.email,
-      displayName: displayName,
+      displayName: user.displayName,
       favourites: [],
       reviews: [],
     });
@@ -39,6 +38,7 @@ async function createUser(displayName) {
 
 
 async function createReview(content, media_type, media_id, displayName) {
+  const user = auth.currentUser;
   try {
     const userDocRef = collection(db, "reviews", media_type, media_id);
 
@@ -58,6 +58,7 @@ async function createReview(content, media_type, media_id, displayName) {
 }
 
 async function getUserData() {
+  const user = auth.currentUser;
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
@@ -77,6 +78,7 @@ async function getUserData() {
 }
 
 async function getUserFavourites() {
+  const user = auth.currentUser;
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
@@ -96,6 +98,7 @@ async function getUserFavourites() {
 }
 
 async function getUserReviews() {
+  const user = auth.currentUser;
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
@@ -175,6 +178,7 @@ async function updateUserReviews(reviewObject) {
 }
 
 async function updateUser(updatedData) {
+  const user = auth.currentUser;
   try {
     const userDocRef = doc(db, "users", user.uid);
 
