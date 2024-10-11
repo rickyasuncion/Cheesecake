@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useUserAuth } from "../_utils/auth-context";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { createUser } from "../_utils/firestore";
 
 const SignUp = () => {
   const { emailSignUp } = useUserAuth();
@@ -14,7 +15,9 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     try {
-      await emailSignUp(email, password);
+      await emailSignUp(email, password, username);
+      createUser()
+      navigate("/")
       console.log("Successfully signed up!");
     } catch (error) {
       console.log("Error during sign up:", error.message);
