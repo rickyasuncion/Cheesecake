@@ -28,6 +28,7 @@ try {
       displayName: user.displayName,
       favourites: [],
       reviews: [],
+      recentViewed: []
     });
 
     console.log("User created successfully!");
@@ -135,6 +136,26 @@ async function getUserReviews() {
   }
 }
 
+async function getUserRecentViewed() {
+  const user = auth.currentUser;
+  try {
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const recentViewed = userDoc.data().recentViewed;
+      console.log("Recent Viewed:", recentViewed);
+      return recentViewed;
+    } else {
+      console.log("No user found!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting Recent Viewed:", error);
+    return null;
+  }
+}
+
 async function getReviews(media_type, media_id) {
   try {
     const reviewsRef = collection(db, "reviews", media_type, media_id);
@@ -215,6 +236,7 @@ export {
   getUserData,
   getUserFavourites,
   getUserReviews,
+  getUserRecentViewed,
   getReviews,
   updateUserFavourites,
   updateUserReviews,
