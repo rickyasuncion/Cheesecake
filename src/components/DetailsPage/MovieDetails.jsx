@@ -237,6 +237,20 @@ const MovieDetails = ({ id: propId }) => {
           </p>
         </div>
 
+        <p className="font-bold mb-2">{t("Production Companies")}:</p>
+        <ul className="list-none p-0">
+          {movie.production_companies.map((company) => (
+            <li key={company.id} className="flex items-center mb-2">
+              {company.name}
+              <img
+                src={`https://image.tmdb.org/t/p/w500${company.logo_path}`}
+                alt={company.name}
+                className="w-12 h-12 ml-2 rounded"
+              />
+            </li>
+          ))}
+        </ul>
+
         <div className="mt-8">
           <h3 className="text-lg mb-4">
             {type === "tv-shows" ? t("Similar TV Shows") : t("Similar Movies")}
