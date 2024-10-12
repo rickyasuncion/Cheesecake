@@ -250,7 +250,7 @@ const ShowDetails = ({ id: propId }) => {
         </ul>
 
         <div className="mt-8">
-          <h3 className="text-lg mb-4">{t("Similar TV Shows")}</h3>
+          <h3 className="text-lg mb-4">{t("Similar TV Shows:")}</h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {recommendedShows.map((recShow) => (
               <Link to={`/details/tv/${recShow.id}`} key={recShow.id}>

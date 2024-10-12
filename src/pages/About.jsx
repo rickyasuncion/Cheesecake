@@ -147,31 +147,34 @@ const About = () => {
 
           <AccordionItem value="item-2">
             <AccordionTrigger className="ml-0 pl-0 ">
-              How much does cheesecake cost?
+              {t("How much does cheesecake cost?")}
             </AccordionTrigger>
             <AccordionContent>
-              None. That's the value that we provide to our customers. No
-              payments, no subscription. All there for free
+              {t(
+                "None. That's the value that we provide to our customers. No payments, no subscription. All there for free"
+              )}
             </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="item-3">
             <AccordionTrigger className="ml-0 pl-0 ">
-              What can I watch on cheesecake?
+              {t("What can I watch on cheesecake?")}
             </AccordionTrigger>
             <AccordionContent>
-              Cheesecake have an extensive library of movies, tv shows, genres
-              and much more.
+              {t(
+                "Cheesecake have an extensive library of movies, tv shows, genres and much more"
+              )}
             </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="item-4">
             <AccordionTrigger className="ml-0 pl-0 ">
-              Is cheesecake good for kids?
+              {t("Is cheesecake good for kids?")}
             </AccordionTrigger>
             <AccordionContent>
-              Yes, it is. Kids can select movies falling under animation
-              category, making the movies suitable for kids to watch
+              {t(
+                "Yes, it is. Kids can select movies falling under animation category, making the movies suitable for kids to watch"
+              )}
             </AccordionContent>
           </AccordionItem>
         </Accordion>

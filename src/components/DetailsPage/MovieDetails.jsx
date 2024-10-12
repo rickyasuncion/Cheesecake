@@ -253,7 +253,9 @@ const MovieDetails = ({ id: propId }) => {
 
         <div className="mt-8">
           <h3 className="text-lg mb-4">
-            {type === "tv-shows" ? t("Similar TV Shows") : t("Similar Movies")}
+            {type === "tv-shows"
+              ? t("Similar TV Shows:")
+              : t("Similar Movies:")}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {recommendedMovies.map((recMovie) => (

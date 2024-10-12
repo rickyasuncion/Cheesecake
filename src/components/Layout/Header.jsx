@@ -376,7 +376,6 @@ const Header = () => {
 
   return (
     <header className="bg-[#1c1c1e] p-4 flex justify-between items-center">
-      {/* 左边部分 */}
       <div className="header-left">
         <h1 className="text-white text-2xl font-bold">
           <Link to="/home">Cheesecake</Link>
@@ -439,7 +438,6 @@ const Header = () => {
         </nav>
       </div>
 
-      {/* 右边部分 */}
       <div className="header-right">
         <form onSubmit={handleSearch} className="items-center hidden xl:flex">
           <Input
