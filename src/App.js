@@ -19,6 +19,8 @@ import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
 import SimilarLiked from "./pages/SimilarLiked";
+import TermsOfUse from "./pages/TermsOfUse";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   const { i18n } = useTranslation();
@@ -43,13 +45,15 @@ function App() {
               <Route path="/movies" element={<Movies />} />
               <Route path="/movies/:type/genre/:genreId" element={<MoviesWIthGenre />} />
               <Route path="/tvShows" element={<TvShows />} />
-              <Route path="/search/:searched" element={<Search />} />
+              
               <Route path="/details/:type/:id" element={<MovieDetails />} />
               <Route path="/favourites" element={<Favourties />} />
               <Route path="/favourites/similar" element={<SimilarLiked />} />
               <Route path="/filtered-content" element={<FilteredContent />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/contact-us" element={<ContactUs />} />
+              <Route path="/terms-of-use" element={<TermsOfUse />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             </Routes>
           </main>
 

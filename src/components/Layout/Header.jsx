@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../_utils/LanguageContext";
 import "../LanguageSelector.css";
@@ -16,28 +16,28 @@ const Header = () => {
   const { t, i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-  const location = useLocation();
   const { language, changeLanguage } = useLanguage();
 
   const [genresDropdownOpen, setGenresDropdownOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
-  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false); // New state for 'More' dropdown
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false); // State for "More" dropdown
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const { user, firebaseSignOut } = useUserAuth();
   const genresRef = useRef(null);
+  const moreRef = useRef(null); // Reference for "More" dropdown
 
   useEffect(() => {
     const fetchGenres = async () => {
       try {
         const movieGenres = await fetchData(
-          `https://api.themoviedb.org/3/genre/movie/list?api_key=YOUR_API_KEY&language=${i18n.language}`
+          `https://api.themoviedb.org/3/genre/movie/list?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
         const tvGenres = await fetchData(
-          `https://api.themoviedb.org/3/genre/tv/list?api_key=YOUR_API_KEY&language=${i18n.language}`
+          `https://api.themoviedb.org/3/genre/tv/list?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
 
-        if (movieGenres?.genres && tvGenres?.genres) {
+        if (movieGenres && movieGenres.genres && tvGenres && tvGenres.genres) {
           const combinedGenres = [...movieGenres.genres, ...tvGenres.genres];
           const uniqueGenres = combinedGenres.filter(
             (genre, index, self) =>
@@ -56,11 +56,11 @@ const Header = () => {
   }, [i18n.language]);
 
   const handleCheckboxChange = (genreId) => {
-    if (selectedGenres.includes(genreId)) {
-      setSelectedGenres(selectedGenres.filter((id) => id !== genreId));
-    } else {
-      setSelectedGenres([...selectedGenres, genreId]);
-    }
+    setSelectedGenres((prev) =>
+      prev.includes(genreId)
+        ? prev.filter((id) => id !== genreId)
+        : [...prev, genreId]
+    );
   };
 
   const handleSubmitGenres = () => {
@@ -76,16 +76,26 @@ const Header = () => {
 
   const handleSearch = (event) => {
     event.preventDefault();
-    navigate(`/search/${searchTerm}`);
+    if (searchTerm) {
+      navigate(`/search/${searchTerm}`);
+    }
   };
 
   const toggleLanguageDropdown = () => {
-    setLanguageOpen(!languageOpen);
+    setLanguageOpen((prev) => !prev);
     setGenresDropdownOpen(false);
+    setMoreDropdownOpen(false); // Close "More" dropdown when other dropdowns are opened
   };
 
   const toggleGenresDropdown = () => {
-    setGenresDropdownOpen(!genresDropdownOpen);
+    setGenresDropdownOpen((prev) => !prev);
+    setLanguageOpen(false);
+    setMoreDropdownOpen(false); // Close "More" dropdown when other dropdowns are opened
+  };
+
+  const toggleMoreDropdown = () => {
+    setMoreDropdownOpen((prev) => !prev);
+    setGenresDropdownOpen(false); // Close other dropdowns when "More" is opened
     setLanguageOpen(false);
   };
 
@@ -95,7 +105,7 @@ const Header = () => {
         setGenresDropdownOpen(false);
       }
       if (moreRef.current && !moreRef.current.contains(event.target)) {
-        setMoreDropdownOpen(false); // Close 'More' dropdown if clicked outside
+        setMoreDropdownOpen(false); // Close "More" dropdown if clicked outside
       }
     };
 
@@ -103,143 +113,18 @@ const Header = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [genresRef, moreRef]);
+  }, []);
 
   return (
     <div className="bg-[#1c1c1e]">
-      <header className=" py-3 container flex justify-between items-center">
-        {/* 左边部分 */}
+      <header className="py-3 container flex justify-between items-center">
+        {/* Left Section */}
         <div className="flex items-center gap-3">
-
-          <Link to="/home" className="text-white text-2xl font-bold">Cheesecake</Link>
+          <Link to="/home" className="text-white text-2xl font-bold">
+            Cheesecake
+          </Link>
           <nav className="hidden xl:block">
             <ul className="flex gap-6">
-            <li className="text-gray-300 hover:text-white">
-              <Link to="/movies">{t("Movies")}</Link>
-            </li>
-            <li className="text-gray-300 hover:text-white">
-              <Link to="/tvShows">{t("TV Shows")}</Link>
-            </li>
-            <li className="text-gray-300 hover:text-white">
-              <Link to="/about">{t("About")}</Link>
-            </li>
-
-            <li
-              className="text-gray-300 hover:text-white relative"
-              ref={genresRef}
-            >
-              <button
-                className="hover:text-white"
-                onClick={toggleGenresDropdown}
-              >
-                {t("Genres")}
-              </button>
-              {genresDropdownOpen && (
-                <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
-                  {genres.length > 0 ? (
-                    genres.map((genre) => (
-                      <div key={genre.id} className="flex items-center mb-2">
-                        <input
-                          type="checkbox"
-                          id={genre.id}
-                          value={genre.id}
-                          checked={selectedGenres.includes(genre.id)}
-                          onChange={() => handleCheckboxChange(genre.id)}
-                          className="mr-2"
-                        />
-                        <label htmlFor={genre.id}>{genre.name}</label>
-                      </div>
-                    ))
-                  ) : (
-                    <p>{t("Loading genres...")}</p>
-                  )}
-                  <button
-                    className="mt-4 p-2 bg-yellow-500 text-white rounded"
-                    onClick={handleSubmitGenres}
-                  >
-                    {t("Filter")}
-                  </button>
-                </div>
-              )}
-            </li>
-
-            <li className="text-gray-300 hover:text-white">
-              <Link to="/home">{t("More")}</Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
-
-      {/* 右边部分 */}
-      <div className="header-right">
-        <form onSubmit={handleSearch} className="items-center hidden xl:flex">
-          <Input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder={t("Search...")}
-            className="bg-gray-800 text-white placeholder-gray-500 rounded-l-md p-2 w-64"
-          />
-          <Button type="submit" className="rounded-r-md">
-            {t("Search")}
-          </Button>
-        </form>
-
-        <Button
-          asChild
-          className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent"
-        >
-          <Link to="/favourites">
-            <FaHeart className="text-red-600 text-xl" />
-          </Link>
-        </Button>
-
-        <div className="hidden xl:flex">
-          <button className="text-gray-300 hover:text-white">
-            <span className="material-icons">{t("notifications")}</span>
-          </button>
-          <div className="relative">
-            <button
-              className="text-gray-300 hover:text-white"
-              onClick={toggleLanguageDropdown}
-            >
-              <span className="material-icons">{t("Language")}</span>
-            </button>
-            {languageOpen && (
-              <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
-                <button onClick={() => handleLanguageChange("en-US")}>
-                  English
-                </button>
-                <button onClick={() => handleLanguageChange("zh-CN")}>
-                  中文
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {user ? (
-          <Button
-            onClick={() => {
-              firebaseSignOut();
-            }}
-          >
-            Logout
-          </Button>
-        ) : (
-          <Button>
-            <Link className="text-gray-300 hover:text-white" to="/login">
-              <span className="material-icons">{t("Login")}</span>
-            </Link>
-          </Button>
-        )}
-
-        <Sheet>
-          <SheetTrigger className="xl:hidden">
-            <TextAlignJustifyIcon className="text-white size-8" />
-          </SheetTrigger>
-          <SheetContent>
-            <ul className="space-y-6 mt-10">
               <li className="text-gray-300 hover:text-white">
                 <Link to="/movies">{t("Movies")}</Link>
               </li>
@@ -250,14 +135,8 @@ const Header = () => {
                 <Link to="/about">{t("About")}</Link>
               </li>
 
-              <li
-                className="text-gray-300 hover:text-white relative"
-                ref={genresRef}
-              >
-                <button
-                  className="hover:text-white"
-                  onClick={toggleGenresDropdown}
-                >
+              <li className="text-gray-300 hover:text-white relative" ref={genresRef}>
+                <button className="hover:text-white" onClick={toggleGenresDropdown}>
                   {t("Genres")}
                 </button>
                 {genresDropdownOpen && (
@@ -289,15 +168,31 @@ const Header = () => {
                 )}
               </li>
 
-              <li className="text-gray-300 hover:text-white">
-                <Link to="/home">{t("More")}</Link>
+              {/* More Dropdown */}
+              <li className="text-gray-300 hover:text-white relative" ref={moreRef}>
+                <button className="hover:text-white" onClick={toggleMoreDropdown}>
+                  {t("More")}
+                </button>
+                {moreDropdownOpen && (
+                  <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
+                    <ul>
+                      <li className="text-gray-300 hover:text-white">
+                        <Link to="/terms-of-use">{t("Terms of Use")}</Link>
+                      </li>
+                      <li className="text-gray-300 hover:text-white">
+                        <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
+                      </li>
+
+                    </ul>
+                  </div>
+                )}
               </li>
             </ul>
           </nav>
         </div>
 
-        {/* 右边部分 */}
-        <div className="flex gap-3">
+        {/* Right Section */}
+        <div className="header-right flex items-center gap-3">
           <form onSubmit={handleSearch} className="items-center hidden xl:flex">
             <Input
               type="text"
@@ -311,10 +206,7 @@ const Header = () => {
             </Button>
           </form>
 
-          <Button
-            asChild
-            className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent"
-          >
+          <Button asChild className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent">
             <Link to="/favourites">
               <FaHeart className="text-red-600 text-xl" />
             </Link>
@@ -322,84 +214,51 @@ const Header = () => {
 
           <div className="hidden xl:flex gap-4 items-center">
             <button className="text-gray-300 hover:text-white">
-              {t("notifications")}
+              <span className="material-icons">{t("notifications")}</span>
             </button>
 
             <div className="relative">
-              <button
-                className="text-gray-300 hover:text-white"
-                onClick={toggleLanguageDropdown}
-              >
-                {t("Language")}
+              <button className="text-gray-300 hover:text-white" onClick={toggleLanguageDropdown}>
+                <span className="material-icons">{t("Language")}</span>
               </button>
               {languageOpen && (
                 <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
-                  <button onClick={() => handleLanguageChange("en-US")}>
-                    English
-                  </button>
-                  <button onClick={() => handleLanguageChange("zh-CN")}>
-                    中文
-                  </button>
+                  <button onClick={() => handleLanguageChange("en-US")}>English</button>
+                  <button onClick={() => handleLanguageChange("zh-CN")}>中文</button>
                 </div>
               )}
             </div>
-
-            <Link className="text-gray-300 hover:text-white" to="/login">
-              {t("Login")}
-            </Link>
           </div>
 
-
           <Sheet>
-            <SheetTrigger className="xl:hidden">
-              <TextAlignJustifyIcon className="text-white size-8" />
+            <SheetTrigger asChild>
+              <Button>
+                <TextAlignJustifyIcon className="mr-2" />
+                {t("Menu")}
+              </Button>
             </SheetTrigger>
-            <SheetContent>
-              <ul className="space-y-6 mt-10">
+            <SheetContent side="right">
+              <ul className="flex flex-col gap-6">
                 <li className="text-gray-300 hover:text-white">
                   <Link to="/movies">{t("Movies")}</Link>
                 </li>
                 <li className="text-gray-300 hover:text-white">
-                  <Link to="/home">{t("TV Shows")}</Link>
+                  <Link to="/tvShows">{t("TV Shows")}</Link>
                 </li>
                 <li className="text-gray-300 hover:text-white">
                   <Link to="/about">{t("About")}</Link>
                 </li>
-
-                <li className="text-gray-300 hover:text-white relative">
-                  <button className="hover:text-white">{t("Genres")}</button>
-                  <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
-                    {genres.map((genre) => (
-                      <div key={genre.id} className="genres-dropdown-item">
-                        <input
-                          type="checkbox"
-                          id={genre.id}
-                          value={genre.id}
-                          checked={selectedGenres.includes(genre.id)}
-                          onChange={() => handleCheckboxChange(genre.id)}
-                          className="mr-2"
-                        />
-                        <label htmlFor={genre.id}>{genre.name}</label>
-                      </div>
-                    ))}
-                    <button
-                      className="mt-4 p-2 bg-yellow-500 text-white rounded"
-                      onClick={handleSubmitGenres}
-                    >
-                      {t("Filter")}
-                    </button>
-                  </div>
-                </li>
-
                 <li className="text-gray-300 hover:text-white">
-                  <Link to="/home">{t("More")}</Link>
+                  <Link to="/terms-of-use">{t("Terms of Use")}</Link>
+                </li>
+                <li className="text-gray-300 hover:text-white">
+                  <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
                 </li>
               </ul>
             </SheetContent>
           </Sheet>
         </div>
       </header>
-
     </div>
   );
 };
