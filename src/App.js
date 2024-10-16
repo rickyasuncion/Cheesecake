@@ -12,20 +12,20 @@ import Search from "./pages/Search";
 import Favourties from "./pages/Favourties";
 import Header from "./components/Layout/Header";
 import Movies from "./pages/Movies";
-import Landing from "./components/LandingPage/Landing";
 import FilteredContent from "./pages/FilteredContent";
 import MoviesWIthGenre from "./pages/MoviesWIthGenre";
 import TvShows from "./pages/TvShows";
+import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
 import SimilarLiked from "./pages/SimilarLiked";
 
 function App() {
-    const { i18n } = useTranslation();
+  const { i18n } = useTranslation();
 
-    const changeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
-    };
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <AuthContextProvider>
@@ -53,11 +53,11 @@ function App() {
             </Routes>
           </main>
 
-                    <Footer/>
-                </BrowserRouter>
-            </LanguageProvider>
-        </AuthContextProvider>
-    );
+          <Footer />
+        </BrowserRouter>
+      </LanguageProvider>
+    </AuthContextProvider>
+  );
 }
 
 export default App;
