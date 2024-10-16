@@ -5,7 +5,7 @@ const PrivacyPolicy = () => {
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
       <p className="text-lg mb-2">
-        We take your privacy seriously. This privacy policy explains what personal data we collect and how we use it.
+        We take your privacy seriously. This privacy policy explains what personal data we collect and how we handle it.
       </p>
       
       <h2 className="text-2xl font-semibold mb-2">1. Information We Collect</h2>
