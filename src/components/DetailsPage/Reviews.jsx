@@ -30,16 +30,24 @@ const Test = ({ media_type = "movie", media_id }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <h1>reviews</h1>
-        <input></input>
-        <Button type="submit">submit</Button>
+<div className="max-w-lg mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <h1 className="text-2xl font-bold mb-4">Reviews</h1>
+        <input
+          className="p-2 border border-gray-300 rounded"
+          placeholder="Write a review..."
+        />
+        <Button type="submit">Submit</Button>
       </form>
-      {reviews.length > 0 &&
-        reviews.map((review) => {
-          return <p key={review.id}>{review.content}</p>;
-        })}
+      {reviews.length > 0 && (
+        <div className="mt-6">
+          {reviews.map((review, index) => (
+            <p key={index} className="p-2 border-b border-gray-200">
+              {review.content}
+            </p>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
