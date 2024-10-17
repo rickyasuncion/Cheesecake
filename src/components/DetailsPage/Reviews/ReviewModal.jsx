@@ -1,4 +1,3 @@
-// ReviewModal.js
 import React from "react";
 import { Button } from "../../ui/button";
 
@@ -28,17 +27,17 @@ const ReviewModal = ({
         <h2 className="text-xl font-bold mb-4">YOUR RATING</h2>
         <div className="flex items-center mb-4">
           <div className="flex space-x-1">
-            {[...Array(5)].map((_, index) => (
+            {[...Array(10)].map((_, index) => (
               <button
                 key={index}
-                className={`text-2xl ${index < rating ? "text-yellow-500" : "text-gray-300"}`}
+                className={`text-2xl p-1 ${index < rating ? "text-yellow-500" : "text-gray-300"}`}
                 onClick={() => setRating(index + 1)}
               >
                 ★
               </button>
             ))}
           </div>
-          <span className="ml-2 text-lg">{rating}/5</span>
+          <span className="ml-2 text-lg">{rating}/10</span>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
