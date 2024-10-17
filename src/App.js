@@ -18,7 +18,7 @@ import TvShows from "./pages/TvShows";
 import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
-import Test from "./components/DetailsPage/Reviews";
+import Test from "./components/DetailsPage/Reviews/Reviews"
 
 function App() {
   const { i18n } = useTranslation();

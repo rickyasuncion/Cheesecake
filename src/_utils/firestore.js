@@ -35,7 +35,7 @@ try {
   }
 }
 
-async function createReview({content, media_type, media_id}) {
+async function createReview({ title, content, media_type, media_id, rating, containsSpoilers }) {
   const user = auth.currentUser;
   try {
     const userDocRef = collection(db, "reviews", media_type, media_id);
@@ -45,7 +45,10 @@ async function createReview({content, media_type, media_id}) {
       media_id: media_id,
       uid: user.uid,
       displayName: user.displayName,
+      title: title,
       content: content,
+      rating: rating,
+      containsSpoilers: containsSpoilers,
       date: Date.now(),
     });
 
@@ -54,6 +57,7 @@ async function createReview({content, media_type, media_id}) {
     console.error("Error creating review:", error);
   }
 }
+
 
 async function getUserData() {
   const user = auth.currentUser;
