@@ -42,9 +42,13 @@ const Test = ({ media_type = "movie", media_id }) => {
       {reviews.length > 0 && (
         <div className="mt-6">
           {reviews.map((review, index) => (
-            <p key={index} className="p-2 border-b border-gray-200">
-              {review.content}
-            </p>
+            <div key={index} className="p-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold">{review.title}</h2>
+              <p className="text-sm text-gray-600">
+                {review.displayName} - {new Date(review.date).toLocaleDateString()}
+              </p>
+              <p className="mt-2">{review.content}</p>
+            </div>
           ))}
         </div>
       )}
