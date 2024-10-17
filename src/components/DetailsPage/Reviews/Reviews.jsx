@@ -5,7 +5,7 @@ import { createReview, getReviews } from "../../../_utils/firestore";
 import ReviewModal from "./ReviewModal";
 import ReviewList from "./ReviewList";
 
-const Test = ({ media_type = "movie", media_id }) => {
+const Reviews = ({ media_type, media_id }) => {
   const [reviews, setReviews] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rating, setRating] = useState(0);
@@ -15,15 +15,15 @@ const Test = ({ media_type = "movie", media_id }) => {
 
   useEffect(() => {
     const fetchReviews = async () => {
-      const reviewsData = await getReviews(media_type, "1");
+      const reviewsData = await getReviews(media_type, media_id);
       setReviews(reviewsData);
     };
 
     fetchReviews();
-  }, [media_type, media_id]);
+  }, [media_type, media_id, isModalOpen]);
 
   const handleSubmit = () => {
-    createReview({ title, content, rating, containsSpoilers });
+    createReview({ title, content, media_type, media_id, rating, containsSpoilers });
     setIsModalOpen(false);
     setRating(0);
     setTitle("");
@@ -52,4 +52,4 @@ const Test = ({ media_type = "movie", media_id }) => {
   );
 };
 
-export default Test;
+export default Reviews;

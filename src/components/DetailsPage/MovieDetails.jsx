@@ -206,6 +206,7 @@ import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import { BiPlay } from "react-icons/bi";
 import { BsPauseFill } from "react-icons/bs";
+import Reviews from "./Reviews/Reviews";
 
 const MovieDetails = ({ id }) => {
   const videoRef = useRef(null);
@@ -385,6 +386,7 @@ const MovieDetails = ({ id }) => {
             {movie.vote_count} {t("votes")})
           </p>
         </div>
+      <Reviews media_type="movie" media_id={id}/>
       </div>
     </div>
   );
