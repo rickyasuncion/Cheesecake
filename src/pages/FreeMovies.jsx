@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./FreeMovies.css";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const FreeMovies = () => {
   const [movies, setMovies] = useState([]);
@@ -36,16 +38,9 @@ const FreeMovies = () => {
               (providerData.results.CA && providerData.results.CA.free) ||
               (providerData.results.US && providerData.results.US.free)
             ) {
-              const freeProviders = [
-                ...(providerData.results.CA?.free || []),
-                ...(providerData.results.US?.free || []),
-              ];
               freeMovies.push({
                 ...movie,
-                providers: freeProviders.map((provider) => ({
-                  name: provider.provider_name,
-                  link: provider.provider_link, // 假設 API 返回了具體的電影鏈接
-                })),
+                link: `https://www.themoviedb.org/movie/${movie.id}/watch`, // 連結至 TMDB 的 /watch 頁面
               });
             }
           } catch (error) {
@@ -123,18 +118,12 @@ const FreeMovies = () => {
               <p>Release Date: {movie.release_date}</p>
               <p>Vote Average: {movie.vote_average}</p>
               <p>
-                Available on:{" "}
-                {movie.providers.map((provider, i) => (
-                  <a
-                    key={i}
-                    href={provider.link || "#"} // 使用提供商的具體鏈接，或者用 "#" 作為占位符
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {provider.name}
-                    {i < movie.providers.length - 1 && ", "}
-                  </a>
-                ))}
+                <Button
+                  className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+                  onClick={() => window.open(movie.link, "_blank")}
+                >
+                  More Information from TMDb <ArrowRight className="size-5" />
+                </Button>
               </p>
             </div>
           ))}
