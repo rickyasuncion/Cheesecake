@@ -1,48 +1,39 @@
-.free-movies-container {
+.free-movies-page {
     padding: 20px;
-    text-align: center;
-}
-
-.movies-list {
+  }
+  
+  .movie-list {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.movie-card {
-    margin: 10px;
-    padding: 15px;
-    width: 200px;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    gap: 1rem;
+    padding: 10px;
+  }
+  
+  .movie-card {
+    min-width: 200px;
+    flex-shrink: 0;
+    padding: 10px;
+    text-align: start;
     border: 1px solid #ccc;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.movie-poster {
+    background-color: white;
+  }
+  
+  .movie-card img {
     width: 100%;
+    height: auto;
     border-radius: 5px;
-}
-
-h3 {
-    margin: 10px 0;
-    font-size: 1.2em;
-}
-
-p {
-    margin: 5px 0;
-    font-size: 0.9em;
-}
-
-a {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border-radius: 3px;
-    text-decoration: none;
-}
-
-a:hover {
-    background-color: #0056b3;
-}
+  }
+  
+  .button {
+    background-color: yellow;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  

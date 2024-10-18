@@ -1,129 +1,116 @@
 import React, { useEffect, useState } from "react";
+import "./FreeMovies.css";
 import { Link } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const FreeMovies = () => {
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const apiKey = "bbd89781c7835917a2decb4989b56470"; // 替換為你的 TMDb API Key
-  const country = "CA"; // 設置為加拿大
+  const [currMoviesObj, setCurrMoviesObj] = useState({
+    start: 0,
+    end: 5, // Display 5 movies at a time
+  });
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const freeMovies = [];
+    fetchFreeMovies();
+  }, []);
 
-        // 檢查前 5 頁熱門電影
-        for (let page = 1; page <= 5; page++) {
-          const movieResponse = await fetch(
-            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=${page}`
-          );
-          const movieData = await movieResponse.json();
-          const popularMovies = movieData.results;
+  const fetchFreeMovies = async () => {
+    const apiKey = "bbd89781c7835917a2decb4989b56470";
+    const freeMovies = [];
+    let page = 1;
+    let totalMovies = 0;
 
-          // 遍歷每部電影，檢查是否有 Tubi 免費提供商
-          const moviesWithTubiLinks = await Promise.all(
-            popularMovies.map(async (movie) => {
-              const providerResponse = await fetch(
-                `https://api.themoviedb.org/3/movie/${movie.id}/watch/providers?api_key=${apiKey}`
-              );
-              const providerData = await providerResponse.json();
-
-              const providers = providerData.results[country];
-              if (providers && providers.ads) {
-                const tubiProvider = providers.ads.find((provider) =>
-                  provider.provider_name.toLowerCase().includes("tubi")
-                );
-
-                // 如果 Tubi 提供免費觀看，將該電影與 Tubi 鏈接加入結果
-                if (tubiProvider) {
-                  return { ...movie, tubiLink: tubiProvider.link }; // 加入 Tubi 鏈接
-                }
-              }
-              return null; // 沒有找到 Tubi 提供商的電影返回 null
-            })
-          );
-
-          // 添加到總的免費電影列表中，過濾掉 null 結果
-          freeMovies.push(
-            ...moviesWithTubiLinks.filter((movie) => movie !== null)
-          );
+    while (freeMovies.length < 50 && totalMovies < 500) {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=${page}`
+      );
+      const data = await response.json();
+      for (let movie of data.results) {
+        const providerResponse = await fetch(
+          `https://api.themoviedb.org/3/movie/${movie.id}/watch/providers?api_key=${apiKey}`
+        );
+        const providerData = await providerResponse.json();
+        if (
+          providerData.results &&
+          providerData.results.US &&
+          providerData.results.US.free
+        ) {
+          freeMovies.push({
+            ...movie,
+            providers: providerData.results.US.free.map(
+              (provider) => provider.provider_name
+            ),
+          });
         }
-
-        setMovies(freeMovies);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching movies:", error);
-        setLoading(false);
+        if (freeMovies.length === 50) break;
       }
-    };
+      page += 1;
+      totalMovies += data.results.length;
+    }
+    setMovies(freeMovies);
+  };
 
-    fetchMovies();
-  }, [apiKey]);
+  const handleNext = () => {
+    setCurrMoviesObj((curr) => ({
+      start: Math.min(curr.start + 5, movies.length - 5),
+      end: Math.min(curr.end + 5, movies.length),
+    }));
+  };
 
-  if (loading) {
-    return <div>Loading free movies...</div>;
-  }
+  const handlePrev = () => {
+    setCurrMoviesObj((curr) => ({
+      start: Math.max(curr.start - 5, 0),
+      end: Math.max(curr.end - 5, 5),
+    }));
+  };
 
   return (
-    <div className="free-movies-container">
-      <h1>Free Movies on Tubi (Canada)</h1>
-      <div className="movies-list">
-        {movies.length > 0 ? (
-          movies.map((movie) => (
-            <div
-              key={movie.id}
-              className="movie-card"
-              style={{ marginBottom: "20px" }}
+    <div className="free-movies-page">
+      <h1>Free Movies Available on Streaming Platforms</h1>
+      <div className="flex gap-2 items-center justify-between mt-10">
+        <div className="flex gap-2 items-center">
+          <span>
+            {currMoviesObj.start + 1} to{" "}
+            {currMoviesObj.end > movies.length
+              ? movies.length
+              : currMoviesObj.end}{" "}
+            of {movies.length} Movies
+          </span>
+          <div>
+            <button
+              className="button"
+              disabled={currMoviesObj.start <= 0}
+              onClick={handlePrev}
             >
-              {/* 修改這裡，將 tubiLink 作為 state 傳遞 */}
-              <Link
-                to={`/details/movie/${movie.id}`}
-                state={{ tubiLink: movie.tubiLink }}
-              >
-                {movie.poster_path && (
-                  <img
-                    src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                    alt={movie.title}
-                    style={{
-                      borderRadius: "8px",
-                      marginBottom: "10px",
-                      maxWidth: "154px", // 設置寬度
-                      height: "230px", // 設置高度
-                    }}
-                  />
-                )}
+              <ChevronLeft />
+            </button>
+            <button
+              className="button"
+              disabled={currMoviesObj.end >= movies.length}
+              onClick={handleNext}
+            >
+              <ChevronRight />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="movie-list">
+        {movies
+          .slice(currMoviesObj.start, currMoviesObj.end)
+          .map((movie, index) => (
+            <div key={index} className="movie-card">
+              <Link to={`/details/movie/${movie.id}`}>
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                />
               </Link>
-              <p>
-                <strong>Movie Title:</strong> {movie.title}
-              </p>
-              <p>
-                <strong>Release Date:</strong> {movie.release_date}
-              </p>
-              <p>
-                <strong>Vote Average:</strong> {movie.vote_average}
-              </p>
-              {/* 顯示 Tubi 鏈接 */}
-              {movie.tubiLink && (
-                <a
-                  href={movie.tubiLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    backgroundColor: "#ff5500",
-                    color: "white",
-                    padding: "10px 20px",
-                    borderRadius: "5px",
-                    textDecoration: "none",
-                  }}
-                >
-                  <strong>Watch on Tubi</strong>
-                </a>
-              )}
+              <h2>{movie.title}</h2>
+              <p>Release Date: {movie.release_date}</p>
+              <p>Vote Average: {movie.vote_average}</p>
+              <p>Available on: {movie.providers.join(", ")}</p>
             </div>
-          ))
-        ) : (
-          <p>No free movies found.</p>
-        )}
+          ))}
       </div>
     </div>
   );
