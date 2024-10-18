@@ -13,7 +13,8 @@ import { auth } from "./firebase";
 
 async function createUser() {
   const user = auth.currentUser;
-try {
+  if (!user) return;
+  try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
 
@@ -39,6 +40,7 @@ try {
 
 async function createReview({ title, content, media_type, media_id, rating, containsSpoilers }) {
   const user = auth.currentUser;
+  if (!user) return;
   try {
     const userDocRef = collection(db, "reviews", media_type, media_id);
 
@@ -63,6 +65,7 @@ async function createReview({ title, content, media_type, media_id, rating, cont
 
 async function getUserData() {
   const user = auth.currentUser;
+  if (!user) return;
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
@@ -83,6 +86,7 @@ async function getUserData() {
 
 async function getUserFavourites() {
   const user = auth.currentUser;
+  if (!user) return;
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
@@ -103,6 +107,7 @@ async function getUserFavourites() {
 
 async function getUserReviews() {
   const user = auth.currentUser;
+  if (!user) return;
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
@@ -123,6 +128,7 @@ async function getUserReviews() {
 
 async function getUserRecentlyViewedMovies() {
   const user = auth.currentUser;
+  if (!user) return;
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
@@ -143,6 +149,7 @@ async function getUserRecentlyViewedMovies() {
 
 async function getUserRecentlyViewedShows() {
   const user = auth.currentUser;
+  if (!user) return;
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
@@ -271,6 +278,7 @@ async function updateUserRecentlyViewedShows(viewedObject) {
 
 async function updateUser(updatedData) {
   const user = auth.currentUser;
+  if (!user) return;
   try {
     const userDocRef = doc(db, "users", user.uid);
 
