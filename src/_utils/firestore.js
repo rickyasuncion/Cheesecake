@@ -228,7 +228,8 @@ async function updateUserRecentlyViewedMovies(viewedObject) {
 
     if (recentlyViewedMovies) {
       console.log(recentlyViewedMovies);
-      updatedRecentlyViewedMovies = [viewedObject, ...recentlyViewedMovies];
+      updatedRecentlyViewedMovies = new Set([viewedObject, ...recentlyViewedMovies]);
+      updatedRecentlyViewedMovies = [...updatedRecentlyViewedMovies];
       
       if (updatedRecentlyViewedMovies.length > 5) {
         updatedRecentlyViewedMovies = updatedRecentlyViewedMovies.slice(0, 5);
@@ -251,7 +252,8 @@ async function updateUserRecentlyViewedShows(viewedObject) {
 
     if (recentlyViewedShows) {
       console.log(recentlyViewedShows);
-      updatedRecentlyViewedShows = [viewedObject, ...recentlyViewedShows];
+      updatedRecentlyViewedShows = new Set([viewedObject, ...recentlyViewedShows]);
+      updatedRecentlyViewedShows = [...updateUserRecentlyViewedShows];
       
       if (updatedRecentlyViewedShows.length > 5) {
         updatedRecentlyViewedShows = updatedRecentlyViewedShows.slice(0, 5);
@@ -289,6 +291,8 @@ export {
   getReviews,
   updateUserFavourites,
   updateUserReviews,
-  getUserRecentlyViewed,
-  updateUserRecentlyViewed,
+  getUserRecentlyViewedMovies,
+  updateUserRecentlyViewedMovies,
+  getUserRecentlyViewedShows, 
+  updateUserRecentlyViewedShows,
 };

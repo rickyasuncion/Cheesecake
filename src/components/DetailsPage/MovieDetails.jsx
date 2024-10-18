@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { BiPlay } from "react-icons/bi";
 import { BsPauseFill } from "react-icons/bs";
 import Reviews from "./Reviews/Reviews";
+import { updateUserRecentlyViewedMovies } from "../../_utils/firestore";
 
 const MovieDetails = ({ id }) => {
   const videoRef = useRef(null);
@@ -36,9 +37,8 @@ const MovieDetails = ({ id }) => {
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
-      
     };
-
+    
     const fetchMovieVideos = async () => {
       try {
         // Fetch trailer in the current language
@@ -46,7 +46,7 @@ const MovieDetails = ({ id }) => {
           `https://api.themoviedb.org/3/movie/${id}/videos?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
         const data = await response.json();
-
+        
         // Check if there are no results in the current language and fallback to English
         if (data.results.length === 0) {
           const fallbackResponse = await fetch(
@@ -69,7 +69,11 @@ const MovieDetails = ({ id }) => {
         console.error("Error fetching movie videos:", error);
       }
     };
-
+    const updateViewed = () => {
+    updateUserRecentlyViewedMovies(id);
+    }
+    
+    updateViewed();
     fetchMovieDetails();
     fetchMovieVideos();
   }, [id, i18n.language]);
