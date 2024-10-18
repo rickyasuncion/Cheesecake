@@ -389,6 +389,9 @@ const Header = () => {
               <Link to="/tvShows">{t("TV Shows")}</Link>
             </li>
             <li className="text-gray-300 hover:text-white">
+              <Link to="/free-movies">{t("Free Movies")}</Link>
+            </li>
+            <li className="text-gray-300 hover:text-white">
               <Link to="/about">{t("About")}</Link>
             </li>
 

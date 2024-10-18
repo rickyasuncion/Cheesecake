@@ -19,6 +19,7 @@ import TvShows from "./pages/TvShows";
 import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
+import FreeMovies from "./pages/FreeMovies";
 
 function App() {
   const { i18n } = useTranslation();
@@ -51,6 +52,7 @@ function App() {
               <Route path="/filtered-content" element={<FilteredContent />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/contact-us" element={<ContactUs />} />
+              <Route path="/free-movies" element={<FreeMovies />} />
             </Routes>
           </main>
 

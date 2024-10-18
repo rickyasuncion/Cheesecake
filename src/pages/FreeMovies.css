@@ -1,0 +1,48 @@
+.free-movies-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.movies-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.movie-card {
+    margin: 10px;
+    padding: 15px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.movie-poster {
+    width: 100%;
+    border-radius: 5px;
+}
+
+h3 {
+    margin: 10px 0;
+    font-size: 1.2em;
+}
+
+p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: #0056b3;
+}

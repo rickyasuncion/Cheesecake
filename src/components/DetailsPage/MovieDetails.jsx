@@ -1,4 +1,4 @@
-//03
+//04
 import {
   Tooltip,
   TooltipContent,
@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import React, { useEffect, useRef, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { RiHeartFill } from "react-icons/ri";
 import { Button } from "../ui/button";
@@ -20,6 +20,8 @@ const MovieDetails = ({ id: propId }) => {
   const { type, id: movieId } = useParams();
   const id = propId || movieId;
 
+  const location = useLocation();
+  const { tubiLink } = location.state || {};
   const [movie, setMovie] = useState(null);
   const [trailerVideo, setTrailerVideo] = useState(null);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
@@ -150,6 +152,21 @@ const MovieDetails = ({ id: propId }) => {
   return (
     <div className="mx-auto bg-zinc-900 text-secondary">
       <div className="relative container p-0 overflow-hidden border border-zinc-700 rounded-md">
+        {tubiLink ? (
+          <Button
+            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+            onClick={() => window.open(tubiLink, "_blank")}
+          >
+            {t("Watch on Tubi")} <ArrowRight className="size-5" />
+          </Button>
+        ) : (
+          <Button
+            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+            disabled
+          >
+            {t("No Tubi link available")}
+          </Button>
+        )}
         <div className="relative">
           {!showTrailer && (
             <img
