@@ -1,4 +1,3 @@
-//03
 import {
   Tooltip,
   TooltipContent,
@@ -13,6 +12,8 @@ import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import { BiPlay } from "react-icons/bi";
 import { BsPauseFill } from "react-icons/bs";
+import Reviews from "./Reviews/Reviews";
+import { updateUserRecentlyViewedMovies } from "../../_utils/firestore";
 
 const MovieDetails = ({ id: propId }) => {
   const videoRef = useRef(null);
@@ -59,7 +60,7 @@ const MovieDetails = ({ id: propId }) => {
         console.error("Error fetching movie details:", error);
       }
     };
-
+    
     const fetchMovieVideos = async () => {
       try {
         // Fetch trailer in the current language
@@ -67,7 +68,7 @@ const MovieDetails = ({ id: propId }) => {
           `https://api.themoviedb.org/3/movie/${id}/videos?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
         const data = await response.json();
-
+        
         // Check if there are no results in the current language and fallback to English
         if (data.results.length === 0) {
           const fallbackResponse = await fetch(
@@ -103,6 +104,11 @@ const MovieDetails = ({ id: propId }) => {
       }
     };
 
+    const updateViewed = () => {
+    updateUserRecentlyViewedMovies(id);
+    }
+    
+    updateViewed();
     fetchMovieDetails();
     fetchMovieVideos();
     fetchRecommendedMovies();
@@ -236,7 +242,6 @@ const MovieDetails = ({ id: propId }) => {
             {movie.vote_count} {t("votes")})
           </p>
         </div>
-
         <p className="font-bold mb-2">{t("Production Companies")}:</p>
         <ul className="list-none p-0">
           {movie.production_companies.map((company) => (
@@ -275,6 +280,7 @@ const MovieDetails = ({ id: propId }) => {
             ))}
           </div>
         </div>
+      <Reviews media_type="movie" media_id={id}/>
       </div>
     </div>
   );
