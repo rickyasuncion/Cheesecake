@@ -72,6 +72,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### References
 
 React Documentation: https://react.dev/blog/2023/03/16/introducing-react-dev
+
 TMDb API Documentation: https://developers.themoviedb.org/3/getting-started/introduction
+
 Tailwind CSS: https://tailwindcss.com/docs
+
 React Router: https://reactrouter.com/web/guides/quick-start
