@@ -14,9 +14,7 @@ const Footer = () => {
         Contact Us
         </button>
         
-      <button className="about-us-button" onClick={()=> navigate('/about-us')}>
-        About Us
-        </button>
+      
     </footer>
   );
 };
