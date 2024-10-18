@@ -13,7 +13,6 @@ import { auth } from "./firebase";
 
 async function createUser() {
   const user = auth.currentUser;
-  console.log(auth.currentUser);
 try {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
@@ -36,8 +35,7 @@ try {
   }
 }
 
-
-async function createReview(content, media_type, media_id, displayName) {
+async function createReview({ title, content, media_type, media_id, rating, containsSpoilers }) {
   const user = auth.currentUser;
   try {
     const userDocRef = collection(db, "reviews", media_type, media_id);
@@ -46,8 +44,11 @@ async function createReview(content, media_type, media_id, displayName) {
       media_type: media_type,
       media_id: media_id,
       uid: user.uid,
-      displayName: displayName,
+      displayName: user.displayName,
+      title: title,
       content: content,
+      rating: rating,
+      containsSpoilers: containsSpoilers,
       date: Date.now(),
     });
 
@@ -56,6 +57,7 @@ async function createReview(content, media_type, media_id, displayName) {
     console.error("Error creating review:", error);
   }
 }
+
 
 async function getUserData() {
   const user = auth.currentUser;
