@@ -27,6 +27,7 @@ try {
       displayName: user.displayName,
       favourites: [],
       reviews: [],
+      recentlyViewed: []
     });
 
     console.log("User created successfully!");
@@ -119,6 +120,26 @@ async function getUserReviews() {
   }
 }
 
+async function getUserRecentlyViewed() {
+  const user = auth.currentUser;
+  try {
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const recentlyViewed = userDoc.data().recentlyViewed;
+      console.log("Recently Viewed:", recentlyViewed);
+      return recentlyViewed;
+    } else {
+      console.log("No user found!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting recently viewed items:", error);
+    return null;
+  }
+}
+
 async function getReviews(media_type, media_id) {
   try {
     const reviewsRef = collection(db, "reviews", media_type, media_id);
@@ -179,6 +200,30 @@ async function updateUserReviews(reviewObject) {
   }
 }
 
+async function updateUserRecentlyViewed(viewedObject) {
+  try {
+    const recentlyViewed = await getUserRecentlyViewed();
+    let updatedRecentlyViewed;
+
+    if (recentlyViewed) {
+      console.log(recentlyViewed);
+      updatedRecentlyViewed = [viewedObject, ...recentlyViewed];
+      
+      if (updatedRecentlyViewed.length > 5) {
+        updatedRecentlyViewed = updatedRecentlyViewed.slice(0, 5);
+      }
+    } else {
+      updatedRecentlyViewed = [viewedObject];
+    }
+
+    const data = { recentlyViewed: updatedRecentlyViewed };
+    await updateUser(data);
+
+  } catch (error) {
+    console.error("Error updating recently viewed items:", error);
+  }
+}
+
 async function updateUser(updatedData) {
   const user = auth.currentUser;
   try {
@@ -201,4 +246,6 @@ export {
   getReviews,
   updateUserFavourites,
   updateUserReviews,
+  getUserRecentlyViewed,
+  updateUserRecentlyViewed,
 };
