@@ -21,31 +21,45 @@ const FreeMovies = () => {
     let totalMovies = 0;
 
     while (freeMovies.length < 50 && totalMovies < 500) {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=${page}`
-      );
-      const data = await response.json();
-      for (let movie of data.results) {
-        const providerResponse = await fetch(
-          `https://api.themoviedb.org/3/movie/${movie.id}/watch/providers?api_key=${apiKey}`
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=${page}`
         );
-        const providerData = await providerResponse.json();
-        if (
-          providerData.results &&
-          providerData.results.US &&
-          providerData.results.US.free
-        ) {
-          freeMovies.push({
-            ...movie,
-            providers: providerData.results.US.free.map(
-              (provider) => provider.provider_name
-            ),
-          });
+        const data = await response.json();
+        for (let movie of data.results) {
+          try {
+            const providerResponse = await fetch(
+              `https://api.themoviedb.org/3/movie/${movie.id}/watch/providers?api_key=${apiKey}`
+            );
+            const providerData = await providerResponse.json();
+            if (
+              (providerData.results.CA && providerData.results.CA.free) ||
+              (providerData.results.US && providerData.results.US.free)
+            ) {
+              const freeProviders = [
+                ...(providerData.results.CA?.free || []),
+                ...(providerData.results.US?.free || []),
+              ];
+              freeMovies.push({
+                ...movie,
+                providers: freeProviders.map((provider) => ({
+                  name: provider.provider_name,
+                  link: provider.provider_link, // 假設 API 返回了具體的電影鏈接
+                })),
+              });
+            }
+          } catch (error) {
+            console.error(
+              `Error fetching providers for movie ${movie.id}:`,
+              error
+            );
+          }
         }
-        if (freeMovies.length === 50) break;
+        page += 1;
+        totalMovies += data.results.length;
+      } catch (error) {
+        console.error("Error fetching popular movies:", error);
       }
-      page += 1;
-      totalMovies += data.results.length;
     }
     setMovies(freeMovies);
   };
@@ -108,7 +122,20 @@ const FreeMovies = () => {
               <h2>{movie.title}</h2>
               <p>Release Date: {movie.release_date}</p>
               <p>Vote Average: {movie.vote_average}</p>
-              <p>Available on: {movie.providers.join(", ")}</p>
+              <p>
+                Available on:{" "}
+                {movie.providers.map((provider, i) => (
+                  <a
+                    key={i}
+                    href={provider.link || "#"} // 使用提供商的具體鏈接，或者用 "#" 作為占位符
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {provider.name}
+                    {i < movie.providers.length - 1 && ", "}
+                  </a>
+                ))}
+              </p>
             </div>
           ))}
       </div>
