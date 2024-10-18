@@ -135,38 +135,44 @@ const Header = () => {
                 <Link to="/about">{t("About")}</Link>
               </li>
 
-              <li className="text-gray-300 hover:text-white relative" ref={genresRef}>
-                <button className="hover:text-white" onClick={toggleGenresDropdown}>
-                  {t("Genres")}
-                </button>
-                {genresDropdownOpen && (
-                  <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
-                    {genres.length > 0 ? (
-                      genres.map((genre) => (
-                        <div key={genre.id} className="flex items-center mb-2">
-                          <input
-                            type="checkbox"
-                            id={genre.id}
-                            value={genre.id}
-                            checked={selectedGenres.includes(genre.id)}
-                            onChange={() => handleCheckboxChange(genre.id)}
-                            className="mr-2"
-                          />
-                          <label htmlFor={genre.id}>{genre.name}</label>
-                        </div>
-                      ))
-                    ) : (
-                      <p>{t("Loading genres...")}</p>
-                    )}
-                    <button
-                      className="mt-4 p-2 bg-yellow-500 text-white rounded"
-                      onClick={handleSubmitGenres}
-                    >
-                      {t("Filter")}
-                    </button>
-                  </div>
-                )}
-              </li>
+              <li
+              className="text-gray-300 hover:text-white relative"
+              ref={genresRef}
+            >
+              <button
+                className="hover:text-white"
+                onClick={toggleGenresDropdown}
+              >
+                {t("Genres")}
+              </button>
+              {genresDropdownOpen && (
+                <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
+                  {genres.length > 0 ? (
+                    genres.map((genre) => (
+                      <div key={genre.id} className="flex items-center mb-2">
+                        <input
+                          type="checkbox"
+                          id={genre.id}
+                          value={genre.id}
+                          checked={selectedGenres.includes(genre.id)}
+                          onChange={() => handleCheckboxChange(genre.id)}
+                          className="mr-2"
+                        />
+                        <label htmlFor={genre.id}>{genre.name}</label>
+                      </div>
+                    ))
+                  ) : (
+                    <p>{t("Loading genres...")}</p>
+                  )}
+                  <button
+                    className="mt-4 p-2 bg-yellow-500 text-white rounded"
+                    onClick={handleSubmitGenres}
+                  >
+                    {t("Filter")}
+                  </button>
+                </div>
+              )}
+            </li>
 
               {/* More Dropdown */}
               <li className="text-gray-300 hover:text-white relative" ref={moreRef}>

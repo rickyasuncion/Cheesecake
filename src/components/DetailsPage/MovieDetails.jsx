@@ -1,4 +1,11 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 import React, { useEffect, useRef, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { RiHeartFill } from "react-icons/ri";
 import { Button } from "../ui/button";
@@ -8,10 +15,15 @@ import { BsPauseFill } from "react-icons/bs";
 import Reviews from "./Reviews/Reviews";
 import { updateUserRecentlyViewedMovies } from "../../_utils/firestore";
 
-const MovieDetails = ({ id }) => {
+const MovieDetails = ({ id: propId }) => {
   const videoRef = useRef(null);
+
+  const { type, id: movieId } = useParams();
+  const id = propId || movieId;
+
   const [movie, setMovie] = useState(null);
   const [trailerVideo, setTrailerVideo] = useState(null);
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [englishHomepage, setEnglishHomepage] = useState(null);
   const { t, i18n } = useTranslation();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -26,7 +38,17 @@ const MovieDetails = ({ id }) => {
           `https://api.themoviedb.org/3/movie/${id}?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
         const data = await response.json();
-        setMovie(data);
+
+        const creditsResponse = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
+        );
+        const creditsData = await creditsResponse.json();
+
+        setMovie({
+          ...data,
+          cast: creditsData.cast,
+          crew: creditsData.crew,
+        });
 
         // Fetch the English version of the movie details to always have the homepage link
         const englishResponse = await fetch(
@@ -69,6 +91,19 @@ const MovieDetails = ({ id }) => {
         console.error("Error fetching movie videos:", error);
       }
     };
+
+    const fetchRecommendedMovies = async () => {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
+        );
+        const data = await response.json();
+        setRecommendedMovies(data.results);
+      } catch (error) {
+        console.error("Error fetching recommended movies:", error);
+      }
+    };
+
     const updateViewed = () => {
     updateUserRecentlyViewedMovies(id);
     }
@@ -76,6 +111,7 @@ const MovieDetails = ({ id }) => {
     updateViewed();
     fetchMovieDetails();
     fetchMovieVideos();
+    fetchRecommendedMovies();
   }, [id, i18n.language]);
 
   useEffect(() => {
@@ -173,22 +209,76 @@ const MovieDetails = ({ id }) => {
         <p className="mb-4">{movie.overview}</p>
         <div className="mb-4">
           <p>
-            <strong>{t("Release Date")}</strong>{" "}
+            <strong>{t("Release Date")}:</strong>{" "}
             {new Date(movie.release_date).toLocaleDateString()}
           </p>
           <p>
-            <strong>{t("Runtime")}</strong> {movie.runtime} {t("minutes")}
+            <strong>{t("Runtime")}:</strong> {movie.runtime} {t("minutes")}
           </p>
           <p>
-            <strong>{t("Budget")}</strong> ${movie.budget.toLocaleString()}
+            <strong>{t("Genres")}:</strong>{" "}
+            {movie.genres.map((genre) => genre.name).join(", ")}
           </p>
           <p>
-            <strong>{t("Revenue")}</strong> ${movie.revenue.toLocaleString()}
+            <strong>{t("Director")}:</strong>{" "}
+            {movie.crew?.find((member) => member.job === "Director")?.name ||
+              "N/A"}
           </p>
           <p>
-            <strong>{t("Vote Average")}</strong> {movie.vote_average} (
+            <strong>{t("Cast")}:</strong>{" "}
+            {movie.cast
+              ?.slice(0, 5)
+              .map((actor) => actor.name)
+              .join(", ") || "N/A"}
+          </p>
+          <p>
+            <strong>{t("Budget")}:</strong> ${movie.budget.toLocaleString()}
+          </p>
+          <p>
+            <strong>{t("Revenue")}:</strong> ${movie.revenue.toLocaleString()}
+          </p>
+          <p>
+            <strong>{t("Vote Average")}:</strong> {movie.vote_average} (
             {movie.vote_count} {t("votes")})
           </p>
+        </div>
+        <p className="font-bold mb-2">{t("Production Companies")}:</p>
+        <ul className="list-none p-0">
+          {movie.production_companies.map((company) => (
+            <li key={company.id} className="flex items-center mb-2">
+              {company.name}
+              <img
+                src={`https://image.tmdb.org/t/p/w500${company.logo_path}`}
+                alt={company.name}
+                className="w-12 h-12 ml-2 rounded"
+              />
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-8">
+          <h3 className="text-lg mb-4">
+            {type === "tv-shows"
+              ? t("Similar TV Shows:")
+              : t("Similar Movies:")}
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {recommendedMovies.map((recMovie) => (
+              <Link to={`/details/${type}/${recMovie.id}`} key={recMovie.id}>
+                <div className="flex flex-col items-center">
+                  <img
+                    src={`https://image.tmdb.org/t/p/w154${recMovie.poster_path}`}
+                    alt={recMovie.title || recMovie.name}
+                    className="w-full rounded-md mb-2"
+                    style={{ maxWidth: "154px" }}
+                  />
+                  <p className="text-sm mt-2 text-center">
+                    {recMovie.title || recMovie.name}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       <Reviews media_type="movie" media_id={id}/>
       </div>
