@@ -2,12 +2,12 @@ import React from "react";
 import '../App.css';
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../_utils/LanguageContext";
-import { useTheme } from '../pages/ThemeContext'; // Import the theme context
+import { useTheme } from '../pages/ThemeContext'; 
 
 const Settings = () => {
   const { t } = useTranslation();
   const { language, changeLanguage } = useLanguage();
-  const { darkMode, toggleDarkMode } = useTheme(); // Use the theme context
+  const { darkMode, toggleDarkMode } = useTheme(); 
 
   const handleLanguageChange = (e) => {
     changeLanguage(e.target.value);
@@ -17,7 +17,7 @@ const Settings = () => {
     <div className={`container mx-auto p-8 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
       <h1 className="text-2xl font-bold mb-6">{t("Settings")}</h1>
 
-      {/* Language Settings */}
+      
       <div className="mb-4">
         <label className="block text-lg font-medium mb-2">
           {t("Language")}
@@ -33,13 +33,13 @@ const Settings = () => {
         </select>
       </div>
 
-      {/* Dark Mode Toggle */}
+      
       <div className="mb-4">
         <label className="block text-lg font-medium mb-2">
           {t("Dark Mode")}
         </label>
         <button
-          onClick={toggleDarkMode} // Use toggleDarkMode from context
+          onClick={toggleDarkMode} 
           className={`p-2 rounded-md ${darkMode ? "bg-gray-800 text-white" : "bg-gray-200"}`}
         >
           {darkMode ? t("Disable Dark Mode") : t("Enable Dark Mode")}

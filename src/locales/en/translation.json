@@ -3,6 +3,13 @@
     "Search": "Search",
     "no_results": "No results found.",
     "popular_movies": "Popular Movies",
-    "popular_tv_shows": "Popular TV Shows"
-  }
+    "popular_tv_shows": "Popular TV Shows",
+
+      "footer": {
+        "copyright": "© 2024 Cheesecake. All rights reserved.",
+        "contact_us": "Contact Us"
+      }
+    }
+    
+  
   

@@ -45,8 +45,7 @@
     "votes":  "votes",
     "Visit Official Homepage":  "Visiter la page d'accueil officielle",
     "Trailers":  "Bande-annonces",
-    "No trailers available.":  "Aucune bande-annonce disponible."
-,
+    "No trailers available.":  "Aucune bande-annonce disponible.",
     "First Air Date": "Date de première diffusion",
     "Last Air Date":  "Date de dernière diffusion",
     "Number of Seasons":  "Nombre de saisons",
@@ -86,14 +85,39 @@
     "Filtered Movies and TV Shows": "Films et émissions de télévision filtrés",
     "Filtered Movies":  "Films filtrés",
     "Filtered TV Shows": "Émissions de télévision filtrées",
-    "All Rights Reserved":"Tous droits  réservés",
-    "Contact Us": "contactez-nous",
-    "About":"À propos de"
+    "2024 Cheesecake.All Rights Reserved":"2024 Cheesecake. droits  réservés",
+    "Contact Us": "Contactez-nous",
+    "Contact us":"Contactez-nous",
+    "About":"À propos de",
+    "Contact Us": "Contactez-nous",
+    "If you have any questions or feedback, feel free to reach out to us via email or fill out the form.": "Si vous avez des questions ou des commentaires, n'hésitez pas à nous contacter par email ou à remplir le formulaire.",
+    "We will get back to you as soon as possible.": "Nous vous répondrons dès que possible.",
+    "Name": "Nom",
+    "Your name": "Votre nom",
+    "Email": "Email",
+    "Your email": "Votre email",
+    "Message": "Message",
+    "Your message": "Votre message",
+    "Send Message": "Envoyer le message",
+    "The Only place to get movie recommendations":"Le seul endroit pour obtenir des recommandations de films",
+    "Our philosophy is simple, no more hassle finding movies/tv shows that you are looking for to make your day great":"Notre philosophie est simple, plus de galère pour trouver des films/séries que vous cherchez pour rendre votre journée agréable.",
+    "Browse Movies":"Parcourir les films",
+    "Your Favourite movies":"Vos films préférés",
+    "Our dedicated team":"Notre équipe dédiée",
+    "We ve been blown away by the support from our customers. Any suggestions for improvements? Give a follow-up contact request and we will make a change in a few days!":"Nous sommes impressionnés par le soutien de nos clients.Avez-vous des suggestions d'amélioration ? Faites une demande de contact de suivi et nous apporterons un changement dans quelques jours !",
+    "How cheesecake makes finding a movie or tv show easier?":"Comment Cheesecake rend-il la recherche de films ou séries plus facile ?",
+    "Cheesecake provides the user with a list of movies...":"Cheesecake propose à l'utilisateur une liste de films...",
+    "How much does cheesecake cost?":"Combien coûte cheesecake ?",
+    "What can I watch on cheesecake?":"Que puis-je regarder sur cheesecake ?",
+    "Is cheesecake good for kids?":"Est-ce que cheesecake est bon pour les enfants ?"
+
+    
+}
+    
 
 
 
 
 
-
-  }
+  
   

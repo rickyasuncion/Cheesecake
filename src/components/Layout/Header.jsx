@@ -8,7 +8,6 @@ import Input from "../ui/input";
 import { FaHeart } from "react-icons/fa";
 import { TextAlignJustifyIcon } from "@radix-ui/react-icons";
 import { fetchData } from "../../_utils/utils";
-
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { useUserAuth } from "../../_utils/auth-context";
 
@@ -17,30 +16,24 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const { language, changeLanguage } = useLanguage();
-
+  
   const [genresDropdownOpen, setGenresDropdownOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const { user, firebaseSignOut } = useUserAuth();
   const genresRef = useRef(null);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const movieGenres = await fetchData(
-          `https://api.themoviedb.org/3/genre/movie/list?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
-        );
-        const tvGenres = await fetchData(
-          `https://api.themoviedb.org/3/genre/tv/list?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
-        );
+        const movieGenres = await fetchData(`https://api.themoviedb.org/3/genre/movie/list?api_key=YOUR_API_KEY&language=${i18n.language}`);
+        const tvGenres = await fetchData(`https://api.themoviedb.org/3/genre/tv/list?api_key=YOUR_API_KEY&language=${i18n.language}`);
 
         if (movieGenres && movieGenres.genres && tvGenres && tvGenres.genres) {
           const combinedGenres = [...movieGenres.genres, ...tvGenres.genres];
-          const uniqueGenres = combinedGenres.filter(
-            (genre, index, self) =>
-              index === self.findIndex((g) => g.id === genre.id)
-          );
+          const uniqueGenres = combinedGenres.filter((genre, index, self) => index === self.findIndex((g) => g.id === genre.id));
           setGenres(uniqueGenres);
         } else {
           console.error("Error fetching genres. Response was invalid.");
@@ -55,9 +48,7 @@ const Header = () => {
 
   const handleCheckboxChange = (genreId) => {
     setSelectedGenres((prev) =>
-      prev.includes(genreId)
-        ? prev.filter((id) => id !== genreId)
-        : [...prev, genreId]
+      prev.includes(genreId) ? prev.filter((id) => id !== genreId) : [...prev, genreId]
     );
   };
 
@@ -89,6 +80,10 @@ const Header = () => {
     setLanguageOpen(false);
   };
 
+  const toggleUserMenu = () => {
+    setUserMenuOpen((prev) => !prev);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (genresRef.current && !genresRef.current.contains(event.target)) {
@@ -105,11 +100,8 @@ const Header = () => {
   return (
     <div className="bg-[#1c1c1e]">
       <header className="py-3 container flex justify-between items-center">
-        {/* Left Section */}
         <div className="flex items-center gap-3">
-          <Link to="/home" className="text-white text-2xl font-bold">
-            Cheesecake
-          </Link>
+          <Link to="/home" className="text-white text-2xl font-bold">Cheesecake</Link>
           <nav className="hidden xl:block">
             <ul className="flex gap-6">
               <li className="text-gray-300 hover:text-white">
@@ -121,13 +113,12 @@ const Header = () => {
               <li className="text-gray-300 hover:text-white">
                 <Link to="/about">{t("About")}</Link>
               </li>
-
               <li className="text-gray-300 hover:text-white relative" ref={genresRef}>
                 <button className="hover:text-white" onClick={toggleGenresDropdown}>
                   {t("Genres")}
                 </button>
                 {genresDropdownOpen && (
-                  <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
+                  <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
                     {genres.length > 0 ? (
                       genres.map((genre) => (
                         <div key={genre.id} className="flex items-center mb-2">
@@ -154,13 +145,9 @@ const Header = () => {
                   </div>
                 )}
               </li>
-
-              {/* More Dropdown */}
               <li className="text-gray-300 hover:text-white">
                 <div className="relative">
-                  <button className="hover:text-white">
-                    {t("More")}
-                  </button>
+                  <button className="hover:text-white">{t("More")}</button>
                   <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
                     <ul>
                       <li className="text-gray-300 hover:text-white">
@@ -177,7 +164,6 @@ const Header = () => {
           </nav>
         </div>
 
-        {/* Right Section */}
         <div className="header-right flex items-center gap-3">
           <form onSubmit={handleSearch} className="items-center hidden xl:flex">
             <Input
@@ -187,9 +173,7 @@ const Header = () => {
               placeholder={t("Search...")}
               className="bg-gray-800 text-white placeholder-gray-500 rounded-l-md p-2 w-64"
             />
-            <Button type="submit" className="rounded-r-md">
-              {t("Search")}
-            </Button>
+            <Button type="submit" className="rounded-r-md">{t("Search")}</Button>
           </form>
 
           <Button asChild className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent">
@@ -215,23 +199,26 @@ const Header = () => {
               )}
             </div>
 
-            {user ? (
-              <Button onClick={firebaseSignOut}>Logout</Button>
-            ) : (
-              <Button>
-                <Link className="text-gray-300 hover:text-white" to="/login">
-                  <span className="material-icons">{t("Login")}</span>
-                </Link>
-              </Button>
-            )}
-          </div>
-
-          <Sheet>
-            <SheetTrigger className="xl:hidden">
-              <TextAlignJustifyIcon className="text-white size-8" />
-            </SheetTrigger>
-            <SheetContent>
-              <ul className="space-y-6 mt-10">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button>
+                  <TextAlignJustifyIcon className="mr-2" />
+                  {t("Menu")}
+                </Button>
+                </SheetTrigger>
+            <SheetContent side="right">
+              <ul className="flex flex-col gap-6">
+                {user ? (
+                  <li className="text-gray-300 hover:text-white">
+                    <button onClick={() => firebaseSignOut()}>
+                      {t("Logout")}
+                    </button>
+                  </li>
+                ) : (
+                  <li className="text-gray-300 hover:text-white">
+                    <Link to="/login">{t("Login")}</Link>
+                  </li>
+                )}
                 <li className="text-gray-300 hover:text-white">
                   <Link to="/movies">{t("Movies")}</Link>
                 </li>
@@ -245,11 +232,12 @@ const Header = () => {
                   <Link to="/terms-of-use">{t("Terms of Use")}</Link>
                 </li>
                 <li className="text-gray-300 hover:text-white">
-                  <Link to="/settings">{t("Settings")}</Link>
+                  <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
                 </li>
               </ul>
             </SheetContent>
-          </Sheet>
+            </Sheet>
+          </div>
         </div>
       </header>
     </div>
@@ -257,4 +245,3 @@ const Header = () => {
 };
 
 export default Header;
- 

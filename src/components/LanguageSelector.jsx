@@ -13,9 +13,9 @@ const LanguageSelector = () => {
     setOpen(false); // close the dropdown after selecting a language
   };
 
-//   const toggleDropdown = () => {
-//     setOpen(!open);
-//   };
+   const toggleDropdown = () => {
+     setOpen(!open);
+   };
 
   return (
     <div className="relative">
