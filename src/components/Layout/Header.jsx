@@ -6,17 +6,17 @@ import "../LanguageSelector.css";
 import { Button } from "../ui/button";
 import Input from "../ui/input";
 import { FaHeart } from "react-icons/fa";
-import { TextAlignJustifyIcon } from "@radix-ui/react-icons";
 import { fetchData } from "../../_utils/utils";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { useUserAuth } from "../../_utils/auth-context";
+import {Sheet, SheetContent, SheetTrigger} from "../ui/sheet";
+import { TextAlignJustifyIcon } from "@radix-ui/react-icons";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const { language, changeLanguage } = useLanguage();
-  
+
   const [genresDropdownOpen, setGenresDropdownOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [genres, setGenres] = useState([]);
@@ -28,12 +28,19 @@ const Header = () => {
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const movieGenres = await fetchData(`https://api.themoviedb.org/3/genre/movie/list?api_key=YOUR_API_KEY&language=${i18n.language}`);
-        const tvGenres = await fetchData(`https://api.themoviedb.org/3/genre/tv/list?api_key=YOUR_API_KEY&language=${i18n.language}`);
+        const movieGenres = await fetchData(
+          `https://api.themoviedb.org/3/genre/movie/list?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
+        );
+        const tvGenres = await fetchData(
+          `https://api.themoviedb.org/3/genre/tv/list?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
+        );
 
         if (movieGenres && movieGenres.genres && tvGenres && tvGenres.genres) {
           const combinedGenres = [...movieGenres.genres, ...tvGenres.genres];
-          const uniqueGenres = combinedGenres.filter((genre, index, self) => index === self.findIndex((g) => g.id === genre.id));
+          const uniqueGenres = combinedGenres.filter(
+            (genre, index, self) =>
+              index === self.findIndex((g) => g.id === genre.id)
+          );
           setGenres(uniqueGenres);
         } else {
           console.error("Error fetching genres. Response was invalid.");
@@ -48,7 +55,9 @@ const Header = () => {
 
   const handleCheckboxChange = (genreId) => {
     setSelectedGenres((prev) =>
-      prev.includes(genreId) ? prev.filter((id) => id !== genreId) : [...prev, genreId]
+      prev.includes(genreId)
+        ? prev.filter((id) => id !== genreId)
+        : [...prev, genreId]
     );
   };
 
@@ -100,8 +109,11 @@ const Header = () => {
   return (
     <div className="bg-[#1c1c1e]">
       <header className="py-3 container flex justify-between items-center">
+        {/* Left Section */}
         <div className="flex items-center gap-3">
-          <Link to="/home" className="text-white text-2xl font-bold">Cheesecake</Link>
+          <Link to="/home" className="text-white text-2xl font-bold">
+            Cheesecake
+          </Link>
           <nav className="hidden xl:block">
             <ul className="flex gap-6">
               <li className="text-gray-300 hover:text-white">
@@ -118,7 +130,7 @@ const Header = () => {
                   {t("Genres")}
                 </button>
                 {genresDropdownOpen && (
-                  <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
+                  <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
                     {genres.length > 0 ? (
                       genres.map((genre) => (
                         <div key={genre.id} className="flex items-center mb-2">
@@ -145,9 +157,13 @@ const Header = () => {
                   </div>
                 )}
               </li>
-              <li className="text-gray-300 hover:text-white">
-                <div className="relative">
-                  <button className="hover:text-white">{t("More")}</button>
+
+              {/* More Dropdown */}
+              <li className="text-gray-300 hover:text-white relative">
+                <button className="hover:text-white" onClick={toggleUserMenu}>
+                  {t("More")}
+                </button>
+                {userMenuOpen && (
                   <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
                     <ul>
                       <li className="text-gray-300 hover:text-white">
@@ -158,7 +174,7 @@ const Header = () => {
                       </li>
                     </ul>
                   </div>
-                </div>
+                )}
               </li>
             </ul>
           </nav>
@@ -173,7 +189,9 @@ const Header = () => {
               placeholder={t("Search...")}
               className="bg-gray-800 text-white placeholder-gray-500 rounded-l-md p-2 w-64"
             />
-            <Button type="submit" className="rounded-r-md">{t("Search")}</Button>
+            <Button type="submit" className="rounded-r-md">
+              {t("Search")}
+            </Button>
           </form>
 
           <Button asChild className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent">
@@ -200,12 +218,12 @@ const Header = () => {
             </div>
 
             <Sheet>
-              <SheetTrigger asChild>
-                <Button>
-                  <TextAlignJustifyIcon className="mr-2" />
-                  {t("Menu")}
-                </Button>
-                </SheetTrigger>
+            <SheetTrigger asChild>
+              <Button>
+                <TextAlignJustifyIcon className="mr-2" />
+                {t("Menu")}
+              </Button>
+            </SheetTrigger>
             <SheetContent side="right">
               <ul className="flex flex-col gap-6">
                 {user ? (
@@ -236,11 +254,14 @@ const Header = () => {
                 </li>
               </ul>
             </SheetContent>
-            </Sheet>
+          </Sheet>
           </div>
+          
+          </div>
+          </header>
         </div>
-      </header>
-    </div>
+      
+   
   );
 };
 
