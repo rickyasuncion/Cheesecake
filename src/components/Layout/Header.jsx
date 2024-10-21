@@ -7,6 +7,10 @@ import { Button } from "../ui/button";
 import Input from "../ui/input";
 import { FaHeart } from "react-icons/fa";
 import { fetchData } from "../../_utils/utils";
+
+
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+
 import { useUserAuth } from "../../_utils/auth-context";
 import {Sheet, SheetContent, SheetTrigger} from "../ui/sheet";
 import { TextAlignJustifyIcon } from "@radix-ui/react-icons";
@@ -125,6 +129,7 @@ const Header = () => {
               <li className="text-gray-300 hover:text-white">
                 <Link to="/about">{t("About")}</Link>
               </li>
+
               <li className="text-gray-300 hover:text-white relative" ref={genresRef}>
                 <button className="hover:text-white" onClick={toggleGenresDropdown}>
                   {t("Genres")}
@@ -161,6 +166,57 @@ const Header = () => {
               {/* More Dropdown */}
               <li className="text-gray-300 hover:text-white relative">
                 <button className="hover:text-white" onClick={toggleUserMenu}>
+
+
+              <li
+              className="text-gray-300 hover:text-white relative"
+              ref={genresRef}
+            >
+              <button
+                className="hover:text-white"
+                onClick={toggleGenresDropdown}
+              >
+                {t("Genres")}
+              </button>
+              {genresDropdownOpen && (
+                <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
+                  {genres.length > 0 ? (
+                    genres.map((genre) => (
+                      <div key={genre.id} className="flex items-center mb-2">
+                        <input
+                          type="checkbox"
+                          id={genre.id}
+                          value={genre.id}
+                          checked={selectedGenres.includes(genre.id)}
+                          onChange={() => handleCheckboxChange(genre.id)}
+                          className="mr-2"
+                        />
+                        <label htmlFor={genre.id}>{genre.name}</label>
+                      </div>
+                    ))
+                  ) : (
+                    <p>{t("Loading genres...")}</p>
+                  )}
+                  <button
+                    className="mt-4 p-2 bg-yellow-500 text-white rounded"
+                    onClick={handleSubmitGenres}
+                  >
+                    {t("Filter")}
+                  </button>
+                </div>
+              )}
+            </li>
+
+              {/* More Dropdown */}
+              <li
+                className="text-gray-300 hover:text-white relative"
+                ref={moreRef}
+              >
+                <button
+                  className="hover:text-white"
+                  onClick={toggleMoreDropdown}
+                >
+
                   {t("More")}
                 </button>
                 {userMenuOpen && (
@@ -194,7 +250,10 @@ const Header = () => {
             </Button>
           </form>
 
-          <Button asChild className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent">
+          <Button
+            asChild
+            className="bg-transparent outline p-2 outline-red-600 hover:bg-transparent"
+          >
             <Link to="/favourites">
               <FaHeart className="text-red-600 text-xl" />
             </Link>
@@ -206,13 +265,20 @@ const Header = () => {
             </button>
 
             <div className="relative">
-              <button className="text-gray-300 hover:text-white" onClick={toggleLanguageDropdown}>
+              <button
+                className="text-gray-300 hover:text-white"
+                onClick={toggleLanguageDropdown}
+              >
                 <span className="material-icons">{t("Language")}</span>
               </button>
               {languageOpen && (
                 <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
-                  <button onClick={() => handleLanguageChange("en-US")}>English</button>
-                  <button onClick={() => handleLanguageChange("zh-CN")}>中文</button>
+                  <button onClick={() => handleLanguageChange("en-US")}>
+                    English
+                  </button>
+                  <button onClick={() => handleLanguageChange("zh-CN")}>
+                    中文
+                  </button>
                 </div>
               )}
             </div>

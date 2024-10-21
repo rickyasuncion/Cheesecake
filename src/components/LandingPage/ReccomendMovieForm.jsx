@@ -43,13 +43,15 @@ const MovieReccomendation = ({
   rating,
   runtime,
 }) => {
-    const[movies, setMovies] = useState([]);
-    const[movie, setMovie] = useState();
+  const [movies, setMovies] = useState([]);
+  const [movie, setMovie] = useState();
 
   const currentYear = new Date().getFullYear();
   const yearDifference = currentYear - date;
-  const newDate = new Date(currentYear - yearDifference, 0, 1).toISOString().split('T')[0];
-  const currentDate = new Date().toISOString().split('T');
+  const newDate = new Date(currentYear - yearDifference, 0, 1)
+    .toISOString()
+    .split("T")[0];
+  const currentDate = new Date().toISOString().split("T");
 
   let movieLength;
   if (runtime == null) {
@@ -62,40 +64,38 @@ const MovieReccomendation = ({
     movieLength = { with_runtime_gte: 150 };
   }
 
-    const queryString = new URLSearchParams({
-      with_watch_providers: provider,
-      with_genres: genres.join(","),
-      primary_release_date_gte: newDate,
-      primary_release_date_lte: currentDate[0],
-      "vote_average.gte": rating,
-      "vote_count.lte": popularity,
-      ...movieLength
-    }).toString();
+  const queryString = new URLSearchParams({
+    with_watch_providers: provider,
+    with_genres: genres.join(","),
+    primary_release_date_gte: newDate,
+    primary_release_date_lte: currentDate[0],
+    "vote_average.gte": rating,
+    "vote_count.lte": popularity,
+    ...movieLength,
+  }).toString();
 
-    
-    useEffect(() => {
-        const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&${queryString}&api_key=bbd89781c7835917a2decb4989b56470`;
-        const fetchMovies = async () => {
-            const fetchedMovies = await fetchData(url);
-            setMovies(filterResults(fetchedMovies));
-        };
-        
-        fetchMovies();
-    }, [queryString]);
+  useEffect(() => {
+    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&${queryString}&api_key=bbd89781c7835917a2decb4989b56470`;
+    const fetchMovies = async () => {
+      const fetchedMovies = await fetchData(url);
+      setMovies(filterResults(fetchedMovies));
+    };
 
+    fetchMovies();
+  }, [queryString]);
 
-    return (
-        <div className="w-1/2">
-        {movies.length > 1 ? (
-          <MovieListView
-            movies={movies}
-            title={"Recommended Movies"}
-            contentType="movies"
-            MOVIE_DISPLAY_COUNT={1}
-          />
-        ) : null}
-      </div>
-    )
+  return (
+    <div className="w-1/2">
+      {movies.length > 1 ? (
+        <MovieListView
+          movies={movies}
+          title={"Recommended Movies"}
+          contentType="movies"
+          MOVIE_DISPLAY_COUNT={1}
+        />
+      ) : null}
+    </div>
+  );
 };
 
 const RecommendMovieForm = () => {
@@ -137,29 +137,29 @@ const RecommendMovieForm = () => {
       topic: "I feel like...",
       options: [
         {
-            text: "Dramatic .Action, Adventure, Drama",
-            value: [28, 12, 18], // Action, Adventure, Drama
-          },
-          {
-            text: "Intense .Horror, Thriller",
-            value: [27, 53], // Horror, Thriller
-          },
-          {
-            text: "Gentle .Comedy, Family, Romance",
-            value: [35, 10751, 10749], // Comedy, Family, Romance
-          },
-          {
-            text: "Curious .Comedy, Family, Romance",
-            value: [35, 10751, 10749], // Comedy, Family, Romance
-          },
-          {
-            text: "Out of this world .Fantasy, Science-Fiction",
-            value: [14, 878], // Fantasy, Science-Fiction
-          },
-          {
-            text: "Realistic .Documentary",
-            value: [99] // Documentary
-          }
+          text: "Dramatic .Action, Adventure, Drama",
+          value: [28, 12, 18], // Action, Adventure, Drama
+        },
+        {
+          text: "Intense .Horror, Thriller",
+          value: [27, 53], // Horror, Thriller
+        },
+        {
+          text: "Gentle .Comedy, Family, Romance",
+          value: [35, 10751, 10749], // Comedy, Family, Romance
+        },
+        {
+          text: "Curious .Comedy, Family, Romance",
+          value: [35, 10751, 10749], // Comedy, Family, Romance
+        },
+        {
+          text: "Out of this world .Fantasy, Science-Fiction",
+          value: [14, 878], // Fantasy, Science-Fiction
+        },
+        {
+          text: "Realistic .Documentary",
+          value: [99], // Documentary
+        },
       ],
     },
     {
@@ -248,7 +248,7 @@ const RecommendMovieForm = () => {
     <div className="flex flex-col gap-2 text-lg font-semibold font-mono items-center justify-center min-h-screen h-1/2 bg-gray-100 scrolling-background">
       {questions === 0 && (
         <React.Fragment>
-          <h1>Looking to find something to wathc?</h1>
+          <h1>Looking to find something to watch?</h1>
           <h2>Take this quick quiz to find the best movie.</h2>
           <Button onClick={() => setQuestions(questions + 1)}>Start</Button>
         </React.Fragment>
