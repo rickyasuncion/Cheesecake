@@ -297,10 +297,10 @@ export {
   getUserFavourites,
   getUserReviews,
   getReviews,
+  getUserRecentlyViewedMovies,
+  getUserRecentlyViewedShows, 
   updateUserFavourites,
   updateUserReviews,
-  getUserRecentlyViewedMovies,
   updateUserRecentlyViewedMovies,
-  getUserRecentlyViewedShows, 
   updateUserRecentlyViewedShows,
 };

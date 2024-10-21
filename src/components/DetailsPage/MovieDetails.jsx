@@ -196,7 +196,6 @@ const MovieDetails = ({ id: propId }) => {
               {t("No official website available")}
             </Button>
           )}
-
           <button
             onClick={handlePlayPause}
             className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0"

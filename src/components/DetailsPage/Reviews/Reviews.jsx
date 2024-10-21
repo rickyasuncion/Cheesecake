@@ -1,4 +1,3 @@
-// Test.js
 import React, { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import { createReview, getReviews } from "../../../_utils/firestore";
