@@ -42,7 +42,7 @@ const Settings = () => {
           onClick={toggleDarkMode} 
           className={`p-2 rounded-md ${darkMode ? "bg-gray-800 text-white" : "bg-gray-200"}`}
         >
-          {darkMode ? t("Disable Dark Mode") : t("Enable Dark Mode")}
+          {darkMode ? t("Light Mode") : t("Dark Mode")}
         </button>
       </div>
     </div>
