@@ -1,3 +1,8 @@
+/*
+Similar movies api refrence: https://developer.themoviedb.org/reference/movie-similar
+Similar tv shows api refrence: https://developer.themoviedb.org/reference/tv-series-similar
+*/
+
 import React, { useEffect, useState } from 'react'
 import { fetchAndSetFavouriteMovies, fetchAndSetFavouriteTv } from '../_utils/utils';
 import { MovieCard } from '../components/ui/MovieCard';
@@ -37,6 +42,7 @@ const SimilarLiked = () => {
 
             setSimilarFavMovies(prev => {
                 const temp = { ...prev };
+                // dynamically setting the key of the object: https://stackoverflow.com/questions/2462800/how-do-i-create-a-dynamic-key-to-be-added-to-a-javascript-object-variable
                 temp[movie.title] = relatedMovies.results
                 return temp;
             })

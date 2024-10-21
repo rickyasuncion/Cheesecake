@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { fetchData, filterResults } from "../../_utils/utils";
 import SearchCardMovie from "./SearchMovieCard";
+import { useTranslation } from "react-i18next";
 
 const SearchItems = ({ searchTerm }) => {
   const [movies, setMovies] = useState([]);
   const [filter, setFilter] = useState("all");
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const fetchMovies = async () => {
       const fetchedMovies = await fetchData(
-        `https://api.themoviedb.org/3/search/multi?query=${searchTerm}&include_adult=false&language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470`
+        `https://api.themoviedb.org/3/search/multi?query=${searchTerm}&include_adult=false&language=${i18n.language}&page=1&api_key=bbd89781c7835917a2decb4989b56470`
       );
       setMovies(filterResults(fetchedMovies));
     };
@@ -29,12 +31,12 @@ const SearchItems = ({ searchTerm }) => {
     <div className="p-4">
       {movies.length === 0 || searchTerm === undefined ? (
         <p className="text-center text-lg font-semibold text-gray-600">
-          No results found.
+          {t("No results found")}
         </p>
       ) : (
         <div className="flex flex-col items-center">
           <h2 className="text-xl font-bold mb-2">
-            Search results for: "
+            {t("Search results for: ")}
             <span className="text-blue-500">{searchTerm}</span>"
           </h2>
           <div className="flex space-x-4 mb-4">
@@ -44,7 +46,7 @@ const SearchItems = ({ searchTerm }) => {
                 filter === "movie" ? "bg-blue-500 text-white" : ""
               }`}
             >
-              Movies
+              {t("Movies")}
             </button>
             <button
               onClick={() => handleFilterChange("tv")}
@@ -52,7 +54,7 @@ const SearchItems = ({ searchTerm }) => {
                 filter === "tv" ? "bg-blue-500 text-white" : ""
               }`}
             >
-              TV Shows
+              {t("TV Shows")}
             </button>
           </div>
           {filteredMovies.map((movie) => (
