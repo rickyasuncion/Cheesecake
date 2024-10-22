@@ -1,4 +1,4 @@
-//03
+//04
 import {
   Tooltip,
   TooltipContent,
@@ -137,13 +137,6 @@ const MovieDetails = ({ id: propId }) => {
       }
     };
 
-    //         })
-    //     setRecommendedMovies(data.results);
-    //   } catch (error) {
-    //     console.error("Error fetching recommended movies:", error);
-    //   }
-    // };
-
     const updateViewed = () => {
       updateUserRecentlyViewedMovies(id);
     };
@@ -248,6 +241,21 @@ const MovieDetails = ({ id: propId }) => {
           >
             {isPlaying ? <BsPauseFill /> : <BiPlay />}
           </button>
+
+          {isFree && (
+            <button
+              className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+              onClick={() =>
+                window.open(
+                  `https://www.themoviedb.org/movie/${id}/watch`,
+                  "_blank"
+                )
+              }
+            >
+              {t("More Information from TMDb")}{" "}
+              <ArrowRight className="size-5" />
+            </button>
+          )}
         </div>
 
         <h2 className="text-xl italic mb-4">{movie.tagline}</h2>
@@ -308,26 +316,58 @@ const MovieDetails = ({ id: propId }) => {
               : t("Similar Movies:")}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {recommendedMovies.map((recMovie) => (
-              <Link to={`/details/${type}/${recMovie.id}`} key={recMovie.id}>
-                <div className="flex flex-col items-center relative">
-                  {recMovie.isFree && (
-                    <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded">
-                      {t("Free")}
-                    </div>
-                  )}
-                  <img
-                    src={`https://image.tmdb.org/t/p/w154${recMovie.poster_path}`}
-                    alt={recMovie.title || recMovie.name}
-                    className="w-full rounded-md mb-2"
-                    style={{ maxWidth: "154px" }}
-                  />
-                  <p className="text-sm mt-2 text-center">
-                    {recMovie.title || recMovie.name}
-                  </p>
-                </div>
-              </Link>
-            ))}
+            {recommendedMovies.map((recMovie) => {
+              const isRecMovieFree =
+                recMovie?.providers?.CA?.free || recMovie?.providers?.US?.free;
+              return (
+                <Link to={`/details/${type}/${recMovie.id}`} key={recMovie.id}>
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "154px",
+                      margin: "0 auto",
+                    }}
+                  >
+                    {recMovie.isFree && (
+                      <div
+                        className="absolute bg-red-600 text-white px-2 py-1 rounded"
+                        style={{
+                          top: "10px",
+                          left: "10px",
+                          fontSize: "12px",
+                          fontWeight: "bold",
+                          zIndex: 10,
+                        }}
+                      >
+                        {t("Free")}
+                      </div>
+                    )}
+                    <img
+                      src={`https://image.tmdb.org/t/p/w154${recMovie.poster_path}`}
+                      alt={recMovie.title || recMovie.name}
+                      style={{
+                        width: "154px",
+                        borderRadius: "8px",
+                        display: "block",
+                        margin: "0 auto",
+                      }}
+                    />
+                    <p
+                      className="text-sm mt-2 text-center"
+                      style={{
+                        textAlign: "center",
+                        width: "100%",
+                        margin: "8px 0 0 0",
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {recMovie.title || recMovie.name}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
         <Reviews media_type="movie" media_id={id} />
