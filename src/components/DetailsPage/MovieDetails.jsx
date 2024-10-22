@@ -1,3 +1,4 @@
+//03
 import {
   Tooltip,
   TooltipContent,
@@ -28,6 +29,7 @@ const MovieDetails = ({ id: propId }) => {
   const { t, i18n } = useTranslation();
   const [isPlaying, setIsPlaying] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [isFree, setIsFree] = useState(false);
 
   useEffect(() => {
     // Fetch movie details based on current language
@@ -56,11 +58,23 @@ const MovieDetails = ({ id: propId }) => {
         );
         const englishData = await englishResponse.json();
         setEnglishHomepage(englishData.homepage);
+
+        const providerResponse = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=bbd89781c7835917a2decb4989b56470`
+        );
+        const providerData = await providerResponse.json();
+
+        if (
+          (providerData.results.CA && providerData.results.CA.free) ||
+          (providerData.results.US && providerData.results.US.free)
+        ) {
+          setIsFree(true);
+        }
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
     };
-    
+
     const fetchMovieVideos = async () => {
       try {
         // Fetch trailer in the current language
@@ -68,7 +82,7 @@ const MovieDetails = ({ id: propId }) => {
           `https://api.themoviedb.org/3/movie/${id}/videos?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
         const data = await response.json();
-        
+
         // Check if there are no results in the current language and fallback to English
         if (data.results.length === 0) {
           const fallbackResponse = await fetch(
@@ -98,16 +112,42 @@ const MovieDetails = ({ id: propId }) => {
           `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
         const data = await response.json();
-        setRecommendedMovies(data.results);
+
+        const checkedMovies = await Promise.all(
+          data.results.map(async (recMovie) => {
+            try {
+              const providerResponse = await fetch(
+                `https://api.themoviedb.org/3/movie/${recMovie.id}/watch/providers?api_key=bbd89781c7835917a2decb4989b56470`
+              );
+              const providerData = await providerResponse.json();
+              const isFree =
+                (providerData.results.CA && providerData.results.CA.free) ||
+                (providerData.results.US && providerData.results.US.free);
+              return { ...recMovie, isFree: !!isFree };
+            } catch (error) {
+              console.error("Error fetching providers for movie:", error);
+              return { ...recMovie, isFree: false };
+            }
+          })
+        );
+
+        setRecommendedMovies(checkedMovies);
       } catch (error) {
         console.error("Error fetching recommended movies:", error);
       }
     };
 
+    //         })
+    //     setRecommendedMovies(data.results);
+    //   } catch (error) {
+    //     console.error("Error fetching recommended movies:", error);
+    //   }
+    // };
+
     const updateViewed = () => {
-    updateUserRecentlyViewedMovies(id);
-    }
-    
+      updateUserRecentlyViewedMovies(id);
+    };
+
     updateViewed();
     fetchMovieDetails();
     fetchMovieVideos();
@@ -157,6 +197,11 @@ const MovieDetails = ({ id: propId }) => {
     <div className="mx-auto bg-zinc-900 text-secondary">
       <div className="relative container p-0 overflow-hidden border border-zinc-700 rounded-md">
         <div className="relative">
+          {isFree && (
+            <div className="absolute top-4 left-4 bg-red-600 text-white px-4 py-2 rounded">
+              {t("Free")}
+            </div>
+          )}
           {!showTrailer && (
             <img
               src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
@@ -265,7 +310,12 @@ const MovieDetails = ({ id: propId }) => {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {recommendedMovies.map((recMovie) => (
               <Link to={`/details/${type}/${recMovie.id}`} key={recMovie.id}>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center relative">
+                  {recMovie.isFree && (
+                    <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded">
+                      {t("Free")}
+                    </div>
+                  )}
                   <img
                     src={`https://image.tmdb.org/t/p/w154${recMovie.poster_path}`}
                     alt={recMovie.title || recMovie.name}
@@ -280,7 +330,7 @@ const MovieDetails = ({ id: propId }) => {
             ))}
           </div>
         </div>
-      <Reviews media_type="movie" media_id={id}/>
+        <Reviews media_type="movie" media_id={id} />
       </div>
     </div>
   );

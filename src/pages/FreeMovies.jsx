@@ -1,15 +1,18 @@
+//01
 import React, { useEffect, useState } from "react";
 import "./FreeMovies.css";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const FreeMovies = () => {
   const [movies, setMovies] = useState([]);
+  const { t } = useTranslation();
   const [currMoviesObj, setCurrMoviesObj] = useState({
     start: 0,
-    end: 5, // Display 5 movies at a time
+    end: 5,
   });
 
   useEffect(() => {
@@ -34,13 +37,16 @@ const FreeMovies = () => {
               `https://api.themoviedb.org/3/movie/${movie.id}/watch/providers?api_key=${apiKey}`
             );
             const providerData = await providerResponse.json();
-            if (
-              (providerData.results.CA && providerData.results.CA.free) ||
-              (providerData.results.US && providerData.results.US.free)
-            ) {
+            const isFreeInCA =
+              providerData.results.CA && providerData.results.CA.free;
+            const isFreeInUS =
+              providerData.results.US && providerData.results.US.free;
+
+            if (isFreeInCA || isFreeInUS) {
               freeMovies.push({
                 ...movie,
-                link: `https://www.themoviedb.org/movie/${movie.id}/watch`, // 連結至 TMDB 的 /watch 頁面
+                isFree: true,
+                link: `https://www.themoviedb.org/movie/${movie.id}/watch`,
               });
             }
           } catch (error) {
@@ -50,6 +56,22 @@ const FreeMovies = () => {
             );
           }
         }
+        //     if (
+        //       (providerData.results.CA && providerData.results.CA.free) ||
+        //       (providerData.results.US && providerData.results.US.free)
+        //     ) {
+        //       freeMovies.push({
+        //         ...movie,
+        //         link: `https://www.themoviedb.org/movie/${movie.id}/watch`,
+        //       });
+        //     }
+        //   } catch (error) {
+        //     console.error(
+        //       `Error fetching providers for movie ${movie.id}:`,
+        //       error
+        //     );
+        //   }
+        // }
         page += 1;
         totalMovies += data.results.length;
       } catch (error) {
@@ -75,7 +97,7 @@ const FreeMovies = () => {
 
   return (
     <div className="free-movies-page">
-      <h1>Free Movies Available on Streaming Platforms</h1>
+      <h1>{t("Free Movies Available on Streaming Platforms")}</h1>
       <div className="flex gap-2 items-center justify-between mt-10">
         <div className="flex gap-2 items-center">
           <span>
@@ -108,7 +130,10 @@ const FreeMovies = () => {
           .slice(currMoviesObj.start, currMoviesObj.end)
           .map((movie, index) => (
             <div key={index} className="movie-card">
-              <Link to={`/details/movie/${movie.id}`}>
+              <Link
+                to={`/details/movie/${movie.id}`}
+                state={{ isFree: movie.isFree }}
+              >
                 <img
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                   alt={movie.title}
@@ -117,6 +142,7 @@ const FreeMovies = () => {
               <h2>{movie.title}</h2>
               <p>Release Date: {movie.release_date}</p>
               <p>Vote Average: {movie.vote_average}</p>
+              {movie.isFree && <span classname="free-badge">Free</span>}
               <p>
                 <Button
                   className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
