@@ -56,22 +56,7 @@ const FreeMovies = () => {
             );
           }
         }
-        //     if (
-        //       (providerData.results.CA && providerData.results.CA.free) ||
-        //       (providerData.results.US && providerData.results.US.free)
-        //     ) {
-        //       freeMovies.push({
-        //         ...movie,
-        //         link: `https://www.themoviedb.org/movie/${movie.id}/watch`,
-        //       });
-        //     }
-        //   } catch (error) {
-        //     console.error(
-        //       `Error fetching providers for movie ${movie.id}:`,
-        //       error
-        //     );
-        //   }
-        // }
+
         page += 1;
         totalMovies += data.results.length;
       } catch (error) {
@@ -142,13 +127,13 @@ const FreeMovies = () => {
               <h2>{movie.title}</h2>
               <p>Release Date: {movie.release_date}</p>
               <p>Vote Average: {movie.vote_average}</p>
-              {movie.isFree && <span classname="free-badge">Free</span>}
               <p>
                 <Button
-                  className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+                  className="rounded-full h-auto px-4 m-0 flex gap-1 items-center text-base text-xs"
                   onClick={() => window.open(movie.link, "_blank")}
                 >
-                  More Information from TMDb <ArrowRight className="size-5" />
+                  Find Free Viewing Options on TMDb{" "}
+                  <ArrowRight className="size-5" />
                 </Button>
               </p>
             </div>

@@ -243,7 +243,7 @@ const MovieDetails = ({ id: propId }) => {
           </button>
 
           {isFree && (
-            <button
+            <Button
               className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
               onClick={() =>
                 window.open(
@@ -252,9 +252,9 @@ const MovieDetails = ({ id: propId }) => {
                 )
               }
             >
-              {t("More Information from TMDb")}{" "}
+              {t("Find Free Viewing Options on TMDb")}{" "}
               <ArrowRight className="size-5" />
-            </button>
+            </Button>
           )}
         </div>
 
