@@ -29,7 +29,7 @@ async function createUser() {
       favourites: [],
       reviews: [],
       recentlyViewedMovie: [],
-      recentlyViewedShow: []
+      recentlyViewedShow: [],
     });
 
     console.log("User created successfully!");
@@ -38,7 +38,14 @@ async function createUser() {
   }
 }
 
-async function createReview({ title, content, media_type, media_id, rating, containsSpoilers }) {
+async function createReview({
+  title,
+  content,
+  media_type,
+  media_id,
+  rating,
+  containsSpoilers,
+}) {
   const user = auth.currentUser;
   if (!user) return;
   try {
@@ -61,7 +68,6 @@ async function createReview({ title, content, media_type, media_id, rating, cont
     console.error("Error creating review:", error);
   }
 }
-
 
 async function getUserData() {
   const user = auth.currentUser;
@@ -235,9 +241,12 @@ async function updateUserRecentlyViewedMovies(viewedObject) {
 
     if (recentlyViewedMovies) {
       console.log(recentlyViewedMovies);
-      updatedRecentlyViewedMovies = new Set([viewedObject, ...recentlyViewedMovies]);
+      updatedRecentlyViewedMovies = new Set([
+        viewedObject,
+        ...recentlyViewedMovies,
+      ]);
       updatedRecentlyViewedMovies = [...updatedRecentlyViewedMovies];
-      
+
       if (updatedRecentlyViewedMovies.length > 5) {
         updatedRecentlyViewedMovies = updatedRecentlyViewedMovies.slice(0, 5);
       }
@@ -259,9 +268,12 @@ async function updateUserRecentlyViewedShows(viewedObject) {
 
     if (recentlyViewedShows) {
       console.log(recentlyViewedShows);
-      updatedRecentlyViewedShows = new Set([viewedObject, ...recentlyViewedShows]);
+      updatedRecentlyViewedShows = new Set([
+        viewedObject,
+        ...recentlyViewedShows,
+      ]);
       updatedRecentlyViewedShows = [...updateUserRecentlyViewedShows];
-      
+
       if (updatedRecentlyViewedShows.length > 5) {
         updatedRecentlyViewedShows = updatedRecentlyViewedShows.slice(0, 5);
       }
@@ -301,6 +313,6 @@ export {
   updateUserReviews,
   getUserRecentlyViewedMovies,
   updateUserRecentlyViewedMovies,
-  getUserRecentlyViewedShows, 
+  getUserRecentlyViewedShows,
   updateUserRecentlyViewedShows,
 };
