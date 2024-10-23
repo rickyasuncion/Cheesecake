@@ -19,12 +19,11 @@ const Header = () => {
 
   const [genresDropdownOpen, setGenresDropdownOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
-  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false); // State for "More" dropdown
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const { user, firebaseSignOut } = useUserAuth();
   const genresRef = useRef(null);
-  const moreRef = useRef(null); // Reference for "More" dropdown
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -83,18 +82,18 @@ const Header = () => {
   const toggleLanguageDropdown = () => {
     setLanguageOpen((prev) => !prev);
     setGenresDropdownOpen(false);
-    setMoreDropdownOpen(false); // Close "More" dropdown when other dropdowns are opened
+    setMoreDropdownOpen(false);
   };
 
   const toggleGenresDropdown = () => {
     setGenresDropdownOpen((prev) => !prev);
     setLanguageOpen(false);
-    setMoreDropdownOpen(false); // Close "More" dropdown when other dropdowns are opened
+    setMoreDropdownOpen(false);
   };
 
   const toggleMoreDropdown = () => {
     setMoreDropdownOpen((prev) => !prev);
-    setGenresDropdownOpen(false); // Close other dropdowns when "More" is opened
+    setGenresDropdownOpen(false);
     setLanguageOpen(false);
   };
 
@@ -103,16 +102,13 @@ const Header = () => {
       if (genresRef.current && !genresRef.current.contains(event.target)) {
         setGenresDropdownOpen(false);
       }
-      if (moreRef.current && !moreRef.current.contains(event.target)) {
-        setMoreDropdownOpen(false); // Close "More" dropdown if clicked outside
-      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [genresRef]);
 
   return (
     <div className="bg-[#1c1c1e]">
@@ -134,54 +130,42 @@ const Header = () => {
                 <Link to="/about">{t("About")}</Link>
               </li>
 
-              <li
-              className="text-gray-300 hover:text-white relative"
-              ref={genresRef}
-            >
-              <button
-                className="hover:text-white"
-                onClick={toggleGenresDropdown}
-              >
-                {t("Genres")}
-              </button>
-              {genresDropdownOpen && (
-                <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
-                  {genres.length > 0 ? (
-                    genres.map((genre) => (
-                      <div key={genre.id} className="flex items-center mb-2">
-                        <input
-                          type="checkbox"
-                          id={genre.id}
-                          value={genre.id}
-                          checked={selectedGenres.includes(genre.id)}
-                          onChange={() => handleCheckboxChange(genre.id)}
-                          className="mr-2"
-                        />
-                        <label htmlFor={genre.id}>{genre.name}</label>
-                      </div>
-                    ))
-                  ) : (
-                    <p>{t("Loading genres...")}</p>
-                  )}
-                  <button
-                    className="mt-4 p-2 bg-yellow-500 text-white rounded"
-                    onClick={handleSubmitGenres}
-                  >
-                    {t("Filter")}
-                  </button>
-                </div>
-              )}
-            </li>
+              <li className="text-gray-300 hover:text-white relative" ref={genresRef}>
+                <button className="hover:text-white" onClick={toggleGenresDropdown}>
+                  {t("Genres")}
+                </button>
+                {genresDropdownOpen && (
+                  <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
+                    {genres.length > 0 ? (
+                      genres.map((genre) => (
+                        <div key={genre.id} className="flex items-center mb-2">
+                          <input
+                            type="checkbox"
+                            id={genre.id}
+                            value={genre.id}
+                            checked={selectedGenres.includes(genre.id)}
+                            onChange={() => handleCheckboxChange(genre.id)}
+                            className="mr-2"
+                          />
+                          <label htmlFor={genre.id}>{genre.name}</label>
+                        </div>
+                      ))
+                    ) : (
+                      <p>{t("Loading genres...")}</p>
+                    )}
+                    <button
+                      className="mt-4 p-2 bg-yellow-500 text-white rounded"
+                      onClick={handleSubmitGenres}
+                    >
+                      {t("Filter")}
+                    </button>
+                  </div>
+                )}
+              </li>
 
               {/* More Dropdown */}
-              <li
-                className="text-gray-300 hover:text-white relative"
-                ref={moreRef}
-              >
-                <button
-                  className="hover:text-white"
-                  onClick={toggleMoreDropdown}
-                >
+              <li className="text-gray-300 hover:text-white relative">
+                <button onClick={toggleMoreDropdown} className="hover:text-white">
                   {t("More")}
                 </button>
                 {moreDropdownOpen && (
@@ -191,7 +175,7 @@ const Header = () => {
                         <Link to="/terms-of-use">{t("Terms of Use")}</Link>
                       </li>
                       <li className="text-gray-300 hover:text-white">
-                        <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
+                        <Link to="/settings">{t("Settings")}</Link>
                       </li>
                     </ul>
                   </div>
@@ -248,44 +232,46 @@ const Header = () => {
                 </div>
               )}
             </div>
+
+            {user ? (
+              <Button onClick={firebaseSignOut}>{t("Logout")}</Button>
+            ) : (
+              <Button>
+                <Link className="text-gray-300 hover:text-white" to="/login">
+                  <span className="material-icons">{t("Login")}</span>
+                </Link>
+              </Button>
+            )}
           </div>
 
           <Sheet>
             <SheetTrigger asChild>
               <Button>
-                <TextAlignJustifyIcon className="mr-2" />
-                {t("Menu")}
+              <TextAlignJustifyIcon className="mr-2" />
+               {t("Menu")}
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
-              <ul className="flex flex-col gap-6">
-                {user ? (
-                  <li className="text-gray-300 hover:text-white">
-                    <button onClick={() => firebaseSignOut()}>
-                      {t("Logout")}
-                    </button>
-                  </li>
-                ) : (
-                  <li className="text-gray-300 hover:text-white">
-                    <Link to="/login">{t("Login")}</Link>
-                  </li>
-                )}
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/movies">{t("Movies")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/tvShows">{t("TV Shows")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/about">{t("About")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/terms-of-use">{t("Terms of Use")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
-                </li>
-              </ul>
+              <nav className="flex flex-col">
+                <Link to="/movies" className="p-2 text-white">
+                  {t("Movies")}
+                </Link>
+                <Link to="/tvShows" className="p-2 text-white">
+                  {t("TV Shows")}
+                </Link>
+                <Link to="/about" className="p-2 text-white">
+                  {t("About")}
+                </Link>
+                <Link to="/terms-of-use" className="p-2 text-white">
+                  {t("Terms of Use")}
+                </Link>
+                <Link to="/settings" className="p-2 text-white">
+                  {t("Settings")}
+                </Link>
+                <Link to="/favourites" className="p-2 text-white">
+                  <FaHeart className="text-red-600 inline" /> {t("Favourites")}
+                </Link>
+              </nav>
             </SheetContent>
           </Sheet>
         </div>
