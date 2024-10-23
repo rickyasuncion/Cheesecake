@@ -3,10 +3,14 @@ import MovieListView from "../LandingPage/MovieListView";
 import { getUserRecentlyViewedMovies } from "../../_utils/firestore";
 import { fetchData } from "../../_utils/utils";
 import { useUserAuth } from "../../_utils/auth-context";
+import { useTranslation } from "react-i18next";
 
 const ReccomendRecentList = () => {
+  const { t, i18n } = useTranslation();
   const { user } = useUserAuth();
   const [recentViewed, setRecentViewed] = useState([]);
+
+  const language = i18n.language;
 
   useEffect(() => {
     const fetchRecentlyViewedMovies = async () => {
@@ -15,7 +19,7 @@ const ReccomendRecentList = () => {
 
         const moviesPromises = ids.map(async (id) => {
           const data = await fetchData(
-            `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470`
+            `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=${language}`
           );
           return data.results || [];
         });
@@ -39,7 +43,7 @@ const ReccomendRecentList = () => {
   return (
     <MovieListView
       movies={recentViewed}
-      title={"Your Next Watch"}
+      title={t("Your Next Watch")}
       contentType="movies"
     />
   );
