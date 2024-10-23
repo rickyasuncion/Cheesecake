@@ -23,6 +23,7 @@ const Header = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const { user, firebaseSignOut } = useUserAuth();
   const genresRef = useRef(null);
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -81,20 +82,18 @@ const Header = () => {
   const toggleLanguageDropdown = () => {
     setLanguageOpen((prev) => !prev);
     setGenresDropdownOpen(false);
-
-    setMoreDropdownOpen(false); 
+    setMoreDropdownOpen(false);
   };
 
   const toggleGenresDropdown = () => {
     setGenresDropdownOpen((prev) => !prev);
     setLanguageOpen(false);
-
-    setMoreDropdownOpen(false); 
+    setMoreDropdownOpen(false);
   };
 
   const toggleMoreDropdown = () => {
     setMoreDropdownOpen((prev) => !prev);
-    setGenresDropdownOpen(false); // Close other dropdowns when "More" is opened
+    setGenresDropdownOpen(false);
     setLanguageOpen(false);
   };
 
@@ -131,65 +130,45 @@ const Header = () => {
                 <Link to="/about">{t("About")}</Link>
               </li>
 
-              <li
-              className="text-gray-300 hover:text-white relative"
-              ref={genresRef}
-            >
-              <button
-                className="hover:text-white"
-                onClick={toggleGenresDropdown}
-              >
-                {t("Genres")}
-              </button>
-              {genresDropdownOpen && (
-                <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
-                  {genres.length > 0 ? (
-                    genres.map((genre) => (
-                      <div key={genre.id} className="flex items-center mb-2">
-                        <input
-                          type="checkbox"
-                          id={genre.id}
-                          value={genre.id}
-                          checked={selectedGenres.includes(genre.id)}
-                          onChange={() => handleCheckboxChange(genre.id)}
-                          className="mr-2"
-                        />
-                        <label htmlFor={genre.id}>{genre.name}</label>
-                      </div>
-                    ))
-                  ) : (
-                    <p>{t("Loading genres...")}</p>
-                  )}
-                  <button
-                    className="mt-4 p-2 bg-yellow-500 text-white rounded"
-                    onClick={handleSubmitGenres}
-                  >
-                    {t("Filter")}
-                  </button>
-                </div>
-              )}
-            </li>
+              <li className="text-gray-300 hover:text-white relative" ref={genresRef}>
+                <button className="hover:text-white" onClick={toggleGenresDropdown}>
+                  {t("Genres")}
+                </button>
+                {genresDropdownOpen && (
+                  <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10 genres-dropdown">
+                    {genres.length > 0 ? (
+                      genres.map((genre) => (
+                        <div key={genre.id} className="flex items-center mb-2">
+                          <input
+                            type="checkbox"
+                            id={genre.id}
+                            value={genre.id}
+                            checked={selectedGenres.includes(genre.id)}
+                            onChange={() => handleCheckboxChange(genre.id)}
+                            className="mr-2"
+                          />
+                          <label htmlFor={genre.id}>{genre.name}</label>
+                        </div>
+                      ))
+                    ) : (
+                      <p>{t("Loading genres...")}</p>
+                    )}
+                    <button
+                      className="mt-4 p-2 bg-yellow-500 text-white rounded"
+                      onClick={handleSubmitGenres}
+                    >
+                      {t("Filter")}
+                    </button>
+                  </div>
+                )}
+              </li>
 
               {/* More Dropdown */}
-
-              <li className="text-gray-300 hover:text-white">
-                <div className="relative">
-                  <button className="hover:text-white">
-                    {t("More")}
-                  </button>
-
-              <li
-                className="text-gray-300 hover:text-white relative"
-                ref={moreRef}
-              >
-                <button
-                  className="hover:text-white"
-                  onClick={toggleMoreDropdown}
-                >
+              <li className="text-gray-300 hover:text-white relative">
+                <button onClick={toggleMoreDropdown} className="hover:text-white">
                   {t("More")}
                 </button>
                 {moreDropdownOpen && (
-
                   <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
                     <ul>
                       <li className="text-gray-300 hover:text-white">
@@ -200,7 +179,7 @@ const Header = () => {
                       </li>
                     </ul>
                   </div>
-                </div>
+                )}
               </li>
             </ul>
           </nav>
@@ -255,7 +234,7 @@ const Header = () => {
             </div>
 
             {user ? (
-              <Button onClick={firebaseSignOut}>Logout</Button>
+              <Button onClick={firebaseSignOut}>{t("Logout")}</Button>
             ) : (
               <Button>
                 <Link className="text-gray-300 hover:text-white" to="/login">
@@ -267,42 +246,29 @@ const Header = () => {
 
           <Sheet>
             <SheetTrigger className="xl:hidden">
-              <TextAlignJustifyIcon className="text-white size-8" />
+              <TextAlignJustifyIcon className="text-white" />
             </SheetTrigger>
-
-            <SheetContent>
-              <ul className="space-y-6 mt-10">
-
             <SheetContent side="right">
-              <ul className="flex flex-col gap-6">
-                {user ? (
-                  <li className="text-gray-300 hover:text-white">
-                    <button onClick={() => firebaseSignOut()}>
-                      {t("Logout")}
-                    </button>
-                  </li>
-                ) : (
-                  <li className="text-gray-300 hover:text-white">
-                    <Link to="/login">{t("Login")}</Link>
-                  </li>
-                )}
-
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/movies">{t("Movies")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/tvShows">{t("TV Shows")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/about">{t("About")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/terms-of-use">{t("Terms of Use")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/settings">{t("Settings")}</Link>
-                </li>
-              </ul>
+              <nav className="flex flex-col">
+                <Link to="/movies" className="p-2 text-white">
+                  {t("Movies")}
+                </Link>
+                <Link to="/tvShows" className="p-2 text-white">
+                  {t("TV Shows")}
+                </Link>
+                <Link to="/about" className="p-2 text-white">
+                  {t("About")}
+                </Link>
+                <Link to="/terms-of-use" className="p-2 text-white">
+                  {t("Terms of Use")}
+                </Link>
+                <Link to="/settings" className="p-2 text-white">
+                  {t("Settings")}
+                </Link>
+                <Link to="/favourites" className="p-2 text-white">
+                  <FaHeart className="text-red-600 inline" /> {t("Favourites")}
+                </Link>
+              </nav>
             </SheetContent>
           </Sheet>
         </div>
@@ -312,4 +278,3 @@ const Header = () => {
 };
 
 export default Header;
- 
