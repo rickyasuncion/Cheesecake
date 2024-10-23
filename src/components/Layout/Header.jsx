@@ -83,13 +83,13 @@ const Header = () => {
   const toggleLanguageDropdown = () => {
     setLanguageOpen((prev) => !prev);
     setGenresDropdownOpen(false);
-    setMoreDropdownOpen(false); // Close "More" dropdown when other dropdowns are opened
+    setMoreDropdownOpen(false); 
   };
 
   const toggleGenresDropdown = () => {
     setGenresDropdownOpen((prev) => !prev);
     setLanguageOpen(false);
-    setMoreDropdownOpen(false); // Close "More" dropdown when other dropdowns are opened
+    setMoreDropdownOpen(false); 
   };
 
   const toggleMoreDropdown = () => {
