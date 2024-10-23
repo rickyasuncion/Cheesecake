@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 
 const FreeMovies = () => {
   const [movies, setMovies] = useState([]);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currMoviesObj, setCurrMoviesObj] = useState({
     start: 0,
     end: 5,
