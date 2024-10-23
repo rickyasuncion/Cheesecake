@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import { MovieCard } from "../ui/MovieCard";
 import { fetchData, filterResults } from "../../_utils/utils";
+import { Button } from "../ui/button";
 import MovieListView from "./MovieListView";
 import "./ReccomendMovieForm.css";
 
