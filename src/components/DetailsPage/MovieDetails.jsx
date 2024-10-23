@@ -1,4 +1,4 @@
-//0
+//06
 import {
   Tooltip,
   TooltipContent,
@@ -14,7 +14,11 @@ import { ArrowRight } from "lucide-react";
 import { BiPlay } from "react-icons/bi";
 import { BsPauseFill } from "react-icons/bs";
 import Reviews from "./Reviews/Reviews";
-import { updateUserRecentlyViewedMovies } from "../../_utils/firestore";
+import {
+  updateUserRecentlyViewedMovies,
+  subscribeUserToMovieNotifications,
+  isUserSubscribedToMovie,
+} from "../../_utils/firestore";
 
 const MovieDetails = ({ id: propId }) => {
   const videoRef = useRef(null);
@@ -30,6 +34,7 @@ const MovieDetails = ({ id: propId }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [isFree, setIsFree] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
     // Fetch movie details based on current language
@@ -137,6 +142,12 @@ const MovieDetails = ({ id: propId }) => {
       }
     };
 
+    //06
+    const checkIfSubscribed = async () => {
+      const subscribed = await isUserSubscribedToMovie(id);
+      setIsSubscribed(subscribed);
+    };
+
     const updateViewed = () => {
       updateUserRecentlyViewedMovies(id);
     };
@@ -145,6 +156,7 @@ const MovieDetails = ({ id: propId }) => {
     fetchMovieDetails();
     fetchMovieVideos();
     fetchRecommendedMovies();
+    checkIfSubscribed();
   }, [id, i18n.language]);
 
   useEffect(() => {
@@ -170,6 +182,12 @@ const MovieDetails = ({ id: propId }) => {
         console.error("Video reference is null or contentWindow is undefined");
       }
     }
+  };
+
+  //06
+  const handleSubscribe = async () => {
+    await subscribeUserToMovieNotifications(id);
+    setIsSubscribed(true);
   };
 
   const handleVisitWebsite = () => {
@@ -254,6 +272,16 @@ const MovieDetails = ({ id: propId }) => {
             >
               {t("Find Free Viewing Options on TMDb")}{" "}
               <ArrowRight className="size-5" />
+            </Button>
+          )}
+
+          {!isSubscribed && !isFree && (
+            <Button
+              className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+              onClick={handleSubscribe}
+            >
+              {t("Notify me when I can watch it for free")}{" "}
+              <RiHeartFill className="size-5" />
             </Button>
           )}
         </div>

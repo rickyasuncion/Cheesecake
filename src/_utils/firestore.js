@@ -6,6 +6,7 @@ import {
   getDocs,
   collection,
   addDoc,
+  arrayUnion,
 } from "firebase/firestore";
 
 import { db } from "./firebase";
@@ -302,6 +303,43 @@ async function updateUser(updatedData) {
   }
 }
 
+async function subscribeUserToMovieNotifications(movieId) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  try {
+    const userDocRef = doc(db, "users", user.uid);
+
+    await updateDoc(userDocRef, {
+      subscriptions: arrayUnion(movieId),
+    });
+
+    console.log("User subscribed to movie notifications successfully!");
+  } catch (error) {
+    console.error("Error subscribing user to movie notifications:", error);
+  }
+}
+
+async function isUserSubscribedToMovie(movieId) {
+  const user = auth.currentUser;
+  if (!user) return false;
+
+  try {
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const subscriptions = userDoc.data().subscriptions || [];
+      return subscriptions.includes(movieId);
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error("Error checking if user is subscribed to movie:", error);
+    return false;
+  }
+}
+
 export {
   createUser,
   createReview,
@@ -315,4 +353,6 @@ export {
   updateUserRecentlyViewedMovies,
   getUserRecentlyViewedShows,
   updateUserRecentlyViewedShows,
+  isUserSubscribedToMovie,
+  subscribeUserToMovieNotifications,
 };
