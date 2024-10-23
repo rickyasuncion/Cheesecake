@@ -25,10 +25,12 @@ const FreeMovies = () => {
     let page = 1;
     let totalMovies = 0;
 
+    const language = i18n.language;
+
     while (freeMovies.length < 50 && totalMovies < 500) {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=${page}`
+          `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=${language}&page=${page}`
         );
         const data = await response.json();
         for (let movie of data.results) {
@@ -86,11 +88,11 @@ const FreeMovies = () => {
       <div className="flex gap-2 items-center justify-between mt-10">
         <div className="flex gap-2 items-center">
           <span>
-            {currMoviesObj.start + 1} to{" "}
+            {currMoviesObj.start + 1} {t("to")}{" "}
             {currMoviesObj.end > movies.length
               ? movies.length
               : currMoviesObj.end}{" "}
-            of {movies.length} Movies
+            {t("of")} {movies.length} {t("Movies")}
           </span>
           <div>
             <button
@@ -125,14 +127,18 @@ const FreeMovies = () => {
                 />
               </Link>
               <h2>{movie.title}</h2>
-              <p>Release Date: {movie.release_date}</p>
-              <p>Vote Average: {movie.vote_average}</p>
+              <p>
+                {t("Release Date")}: {movie.release_date}
+              </p>
+              <p>
+                {t("Vote Average")}: {movie.vote_average}
+              </p>
               <p>
                 <Button
                   className="rounded-full h-auto px-4 m-0 flex gap-1 items-center text-base text-xs"
                   onClick={() => window.open(movie.link, "_blank")}
                 >
-                  Find Free Viewing Options on TMDb{" "}
+                  {t("Find Free Viewing Options on TMDb")}{" "}
                   <ArrowRight className="size-5" />
                 </Button>
               </p>
