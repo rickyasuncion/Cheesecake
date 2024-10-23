@@ -19,16 +19,11 @@ const Header = () => {
 
   const [genresDropdownOpen, setGenresDropdownOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
-  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false); // State for "More" dropdown
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const { user, firebaseSignOut } = useUserAuth();
   const genresRef = useRef(null);
-
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
-
-  const moreRef = useRef(null); // Reference for "More" dropdown
-
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -87,21 +82,13 @@ const Header = () => {
   const toggleLanguageDropdown = () => {
     setLanguageOpen((prev) => !prev);
     setGenresDropdownOpen(false);
-
     setMoreDropdownOpen(false);
-
-    setMoreDropdownOpen(false); // Close "More" dropdown when other dropdowns are opened
-
   };
 
   const toggleGenresDropdown = () => {
     setGenresDropdownOpen((prev) => !prev);
     setLanguageOpen(false);
-
     setMoreDropdownOpen(false);
-
-    setMoreDropdownOpen(false); // Close "More" dropdown when other dropdowns are opened
-
   };
 
   const toggleMoreDropdown = () => {
@@ -115,16 +102,13 @@ const Header = () => {
       if (genresRef.current && !genresRef.current.contains(event.target)) {
         setGenresDropdownOpen(false);
       }
-      if (moreRef.current && !moreRef.current.contains(event.target)) {
-        setMoreDropdownOpen(false); // Close "More" dropdown if clicked outside
-      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [genresRef]);
 
   return (
     <div className="bg-[#1c1c1e]">
@@ -180,19 +164,8 @@ const Header = () => {
               </li>
 
               {/* More Dropdown */}
-
               <li className="text-gray-300 hover:text-white relative">
                 <button onClick={toggleMoreDropdown} className="hover:text-white">
-
-              <li
-                className="text-gray-300 hover:text-white relative"
-                ref={moreRef}
-              >
-                <button
-                  className="hover:text-white"
-                  onClick={toggleMoreDropdown}
-                >
-
                   {t("More")}
                 </button>
                 {moreDropdownOpen && (
@@ -202,7 +175,7 @@ const Header = () => {
                         <Link to="/terms-of-use">{t("Terms of Use")}</Link>
                       </li>
                       <li className="text-gray-300 hover:text-white">
-                        <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
+                        <Link to="/settings">{t("Settings")}</Link>
                       </li>
                     </ul>
                   </div>
@@ -260,7 +233,6 @@ const Header = () => {
               )}
             </div>
 
-
             {user ? (
               <Button onClick={firebaseSignOut}>{t("Logout")}</Button>
             ) : (
@@ -276,12 +248,11 @@ const Header = () => {
             <SheetTrigger asChild>
               <Button>
               <TextAlignJustifyIcon className="mr-2" />
-              {t("Menu")}
+               {t("Menu")}
               </Button>
-              
             </SheetTrigger>
             <SheetContent side="right">
-              <nav className="flex flex-col gap-6">
+              <nav className="flex flex-col">
                 <Link to="/movies" className="p-2 text-white">
                   {t("Movies")}
                 </Link>
@@ -301,46 +272,6 @@ const Header = () => {
                   <FaHeart className="text-red-600 inline" /> {t("Favourites")}
                 </Link>
               </nav>
-
-          </div>
-
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button>
-                <TextAlignJustifyIcon className="mr-2" />
-                {t("Menu")}
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right">
-              <ul className="flex flex-col gap-6">
-                {user ? (
-                  <li className="text-gray-300 hover:text-white">
-                    <button onClick={() => firebaseSignOut()}>
-                      {t("Logout")}
-                    </button>
-                  </li>
-                ) : (
-                  <li className="text-gray-300 hover:text-white">
-                    <Link to="/login">{t("Login")}</Link>
-                  </li>
-                )}
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/movies">{t("Movies")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/tvShows">{t("TV Shows")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/about">{t("About")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/terms-of-use">{t("Terms of Use")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
-                </li>
-              </ul>
-
             </SheetContent>
           </Sheet>
         </div>
