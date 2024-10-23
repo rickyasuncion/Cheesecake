@@ -29,6 +29,7 @@ const Header = () => {
   const [notifications, setNotifications] = useState([]);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const notificationsRef = useRef(null);
+  const moreRef = useRef(null);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -130,7 +131,6 @@ const Header = () => {
       ) {
         setNotificationsOpen(false);
       }
-
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -163,7 +163,6 @@ const Header = () => {
                 <Link to="/about">{t("About")}</Link>
               </li>
 
-
               <li
                 className="text-gray-300 hover:text-white relative"
                 ref={genresRef}
@@ -172,7 +171,6 @@ const Header = () => {
                   className="hover:text-white"
                   onClick={toggleGenresDropdown}
                 >
-
                   {t("Genres")}
                 </button>
                 {genresDropdownOpen && (
@@ -206,7 +204,10 @@ const Header = () => {
 
               {/* More Dropdown */}
               <li className="text-gray-300 hover:text-white relative">
-                <button onClick={toggleMoreDropdown} className="hover:text-white">
+                <button
+                  onClick={toggleMoreDropdown}
+                  className="hover:text-white"
+                >
                   {t("More")}
                 </button>
                 {moreDropdownOpen && (
@@ -275,7 +276,6 @@ const Header = () => {
             )}
           </div>
 
-
           <div className="relative">
             <button
               className="text-gray-300 hover:text-white"
@@ -292,17 +292,14 @@ const Header = () => {
                   中文
                 </button>
               </div>
-
-            
-
             )}
           </div>
 
           <Sheet>
             <SheetTrigger asChild>
               <Button>
-              <TextAlignJustifyIcon className="mr-2" />
-               {t("Menu")}
+                <TextAlignJustifyIcon className="mr-2" />
+                {t("Menu")}
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
