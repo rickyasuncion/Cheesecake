@@ -47,13 +47,17 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
     }
 
     containerRef.current?.addEventListener('mouseleave', handleVideoPause)
+    containerRef.current?.addEventListener('focusout', handleVideoPause)
 
     containerRef.current?.addEventListener('mouseenter', handleVideoPlay)
+    containerRef.current?.addEventListener('focusin', handleVideoPlay)
 
 
     return () => {
       containerRef.current?.removeEventListener('mouseleave', handleVideoPause)
       containerRef.current?.removeEventListener('mouseenter', handleVideoPlay)
+      containerRef.current?.removeEventListener('focusin', handleVideoPlay)
+      containerRef.current?.removeEventListener('focusout', handleVideoPause)
     }
 
 
@@ -111,7 +115,7 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
     <div className={` relative max-w-[200px] group ${cn(className)}`} ref={containerRef}>
 
 
-      <div className="absolute border-8 border-black shadow-lg order hidden group-hover:block h-52 aspect-video -left-1/2 top-1/2 -translate-y-1/2 bg-green-200 z-40">
+      <div className="absolute border-8 border-black shadow-lg order hidden group-hover:block group-focus-within:block h-52 aspect-video -left-1/2 top-1/2 -translate-y-1/2 bg-green-200 z-40">
 
         {trailerPath ?
           <iframe
