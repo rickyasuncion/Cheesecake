@@ -8,16 +8,16 @@ export const useTheme = () => {
   return useContext(ThemeContext);
 };
 
-// Provider component
+
 export const ThemeProvider = ({ children }) => {
   const [darkMode, setDarkMode] = useState(false);
 
-  // Load dark mode preference from localStorage
+  
   useEffect(() => {
     const savedMode = localStorage.getItem('darkMode');
     if (savedMode === 'true') {
       setDarkMode(true);
-      document.documentElement.classList.add('dark'); // Add dark class
+      document.documentElement.classList.add('dark'); 
     }
   }, []);
 
@@ -25,7 +25,7 @@ export const ThemeProvider = ({ children }) => {
     setDarkMode((prevMode) => {
       const newMode = !prevMode;
       localStorage.setItem('darkMode', newMode);
-      document.documentElement.classList.toggle('dark', newMode); // Toggle dark class
+      document.documentElement.classList.toggle('dark', newMode); 
       return newMode;
     });
   };

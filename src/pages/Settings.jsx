@@ -7,7 +7,7 @@ import { useTheme } from '../pages/ThemeContext'; // Import the theme context
 const Settings = () => {
   const { t } = useTranslation();
   const { language, changeLanguage } = useLanguage();
-  const { darkMode, toggleDarkMode } = useTheme(); // Use the theme context
+  const { darkMode, toggleDarkMode } = useTheme(); 
 
   const handleLanguageChange = (e) => {
     changeLanguage(e.target.value);
