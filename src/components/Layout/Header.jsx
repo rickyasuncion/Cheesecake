@@ -10,6 +10,7 @@ import { TextAlignJustifyIcon } from "@radix-ui/react-icons";
 import { fetchData } from "../../_utils/utils";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { useUserAuth } from "../../_utils/auth-context";
+import { getUserNotifications } from "../../_utils/firestore";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -25,6 +26,10 @@ const Header = () => {
   const { user, firebaseSignOut } = useUserAuth();
   const genresRef = useRef(null);
   const moreRef = useRef(null); // Reference for "More" dropdown
+
+  const [notifications, setNotifications] = useState([]);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notificationsRef = useRef(null);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -51,8 +56,16 @@ const Header = () => {
       }
     };
 
+    const fetchUserNotifications = async () => {
+      if (user) {
+        const fetchedNotifications = await getUserNotifications(user.uid);
+        setNotifications(fetchedNotifications);
+      }
+    };
+
     fetchGenres();
-  }, [i18n.language]);
+    fetchUserNotifications();
+  }, [i18n.language, user]);
 
   const handleCheckboxChange = (genreId) => {
     setSelectedGenres((prev) =>
@@ -98,6 +111,11 @@ const Header = () => {
     setLanguageOpen(false);
   };
 
+  const toggleNotificationsDropdown = () => {
+    setNotificationsOpen((prev) => !prev);
+    setMoreDropdownOpen(false); // Close "More" dropdown when notifications are opened
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (genresRef.current && !genresRef.current.contains(event.target)) {
@@ -105,6 +123,12 @@ const Header = () => {
       }
       if (moreRef.current && !moreRef.current.contains(event.target)) {
         setMoreDropdownOpen(false); // Close "More" dropdown if clicked outside
+      }
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target)
+      ) {
+        setNotificationsOpen(false);
       }
     };
 
@@ -229,29 +253,48 @@ const Header = () => {
             </Link>
           </Button>
 
-          <div className="hidden xl:flex gap-4 items-center">
-            <button className="text-gray-300 hover:text-white">
-              <span className="material-icons">{t("notifications")}</span>
-            </button>
-
-            <div className="relative">
-              <button
-                className="text-gray-300 hover:text-white"
-                onClick={toggleLanguageDropdown}
-              >
-                <span className="material-icons">{t("Language")}</span>
-              </button>
-              {languageOpen && (
-                <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
-                  <button onClick={() => handleLanguageChange("en-US")}>
-                    English
-                  </button>
-                  <button onClick={() => handleLanguageChange("zh-CN")}>
-                    中文
-                  </button>
-                </div>
+          <div className="relative" ref={notificationsRef}>
+            <button
+              className="text-gray-300 hover:text-white"
+              onClick={toggleNotificationsDropdown}
+            >
+              {t("Notifications")}{" "}
+              {notifications.length > 0 && (
+                <span>({notifications.length})</span>
               )}
-            </div>
+            </button>
+            {notificationsOpen && (
+              <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
+                {notifications.length > 0 ? (
+                  notifications.map((notif) => (
+                    <div key={notif.id} className="notification-item">
+                      {notif.message}
+                    </div>
+                  ))
+                ) : (
+                  <p>{t("No notifications")}</p>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="relative">
+            <button
+              className="text-gray-300 hover:text-white"
+              onClick={toggleLanguageDropdown}
+            >
+              <span className="material-icons">{t("Language")}</span>
+            </button>
+            {languageOpen && (
+              <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
+                <button onClick={() => handleLanguageChange("en-US")}>
+                  English
+                </button>
+                <button onClick={() => handleLanguageChange("zh-CN")}>
+                  中文
+                </button>
+              </div>
+            )}
           </div>
 
           <Sheet>

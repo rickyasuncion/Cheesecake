@@ -10,7 +10,7 @@
     "Genres:": "类型",
     "Genres": "类型",
     "More": "更多",
-    "notifications": "通知",
+    "Notifications": "通知",
     "Language": "语言",
     "Login": "登录",
     "Welcome to Movie Recommendation": "欢迎来到电影推荐",
@@ -139,7 +139,10 @@
     "We may update this privacy policy from time to time. Please check this page regularly to stay informed about updates."
     : "我们可能会不时更新本隐私政策。请定期查看此页面以了解更新。",
     "Find Free Viewing Options on TMDb": "在TMDb上查找免费观看选项",
-    "Your Next Watch": "您的下一个观看"
+    "Your Next Watch": "您的下一个观看",
+    "No notifications": "没有通知",
+    "No official website available": "没有官方网站",
+    "Notify me when I can watch it for free": "可以免费观看时通知我"
 
 
 

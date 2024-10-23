@@ -7,6 +7,7 @@ import {
   collection,
   addDoc,
   arrayUnion,
+  Timestamp,
 } from "firebase/firestore";
 
 import { db } from "./firebase";
@@ -340,6 +341,48 @@ async function isUserSubscribedToMovie(movieId) {
   }
 }
 
+async function addUserNotification(movieId, message) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  try {
+    const userNotificationRef = doc(
+      db,
+      "users",
+      user.uid,
+      "notifications",
+      movieId
+    );
+    await setDoc(userNotificationRef, {
+      movieId,
+      message,
+      isRead: false,
+      timestamp: Date.now(),
+    });
+    console.log("Notification added successfully!");
+  } catch (error) {
+    console.error("Error adding notification:", error);
+  }
+}
+
+async function getUserNotifications() {
+  const user = auth.currentUser;
+  if (!user) return [];
+
+  try {
+    const notificationsRef = collection(db, "users", user.uid, "notifications");
+    const notificationsSnapshot = await getDocs(notificationsRef);
+    const notifications = notificationsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return notifications;
+  } catch (error) {
+    console.error("Error getting notifications:", error);
+    return [];
+  }
+}
+
 export {
   createUser,
   createReview,
@@ -355,4 +398,6 @@ export {
   updateUserRecentlyViewedShows,
   isUserSubscribedToMovie,
   subscribeUserToMovieNotifications,
+  addUserNotification,
+  getUserNotifications,
 };
