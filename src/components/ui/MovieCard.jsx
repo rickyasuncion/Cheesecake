@@ -32,20 +32,29 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
   }
 
   useEffect(() => {
-    containerRef.current?.addEventListener('mouseleave', () => {
+    function handleVideoPause() {
       videoRef.current?.contentWindow.postMessage(
         `{"event":"command","func":"pauseVideo","args":""}`,
         "*"
       );
-    })
+    }
 
-    containerRef.current?.addEventListener('mouseenter', () => {
+    function handleVideoPlay() {
       videoRef.current?.contentWindow.postMessage(
         `{"event":"command","func":"playVideo","args":""}`,
         "*"
       );
-    })
+    }
 
+    containerRef.current?.addEventListener('mouseleave', handleVideoPause)
+
+    containerRef.current?.addEventListener('mouseenter', handleVideoPlay)
+
+
+    return () => {
+      containerRef.current?.removeEventListener('mouseleave', handleVideoPause)
+      containerRef.current?.removeEventListener('mouseenter', handleVideoPlay)
+    }
 
 
 
