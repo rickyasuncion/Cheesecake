@@ -245,11 +245,15 @@ const Header = () => {
           </div>
 
           <Sheet>
-            <SheetTrigger className="xl:hidden">
-              <TextAlignJustifyIcon className="text-white" />
+            <SheetTrigger asChild>
+              <Button>
+              <TextAlignJustifyIcon className="mr-2" />
+              {t("Menu")}
+              </Button>
+              
             </SheetTrigger>
             <SheetContent side="right">
-              <nav className="flex flex-col">
+              <nav className="flex flex-col gap-6">
                 <Link to="/movies" className="p-2 text-white">
                   {t("Movies")}
                 </Link>
