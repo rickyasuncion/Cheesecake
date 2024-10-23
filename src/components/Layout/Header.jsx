@@ -20,12 +20,11 @@ const Header = () => {
 
   const [genresDropdownOpen, setGenresDropdownOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
-  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false); // State for "More" dropdown
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const { user, firebaseSignOut } = useUserAuth();
   const genresRef = useRef(null);
-  const moreRef = useRef(null); // Reference for "More" dropdown
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
 
   const [notifications, setNotifications] = useState([]);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -96,18 +95,18 @@ const Header = () => {
   const toggleLanguageDropdown = () => {
     setLanguageOpen((prev) => !prev);
     setGenresDropdownOpen(false);
-    setMoreDropdownOpen(false); // Close "More" dropdown when other dropdowns are opened
+    setMoreDropdownOpen(false);
   };
 
   const toggleGenresDropdown = () => {
     setGenresDropdownOpen((prev) => !prev);
     setLanguageOpen(false);
-    setMoreDropdownOpen(false); // Close "More" dropdown when other dropdowns are opened
+    setMoreDropdownOpen(false);
   };
 
   const toggleMoreDropdown = () => {
     setMoreDropdownOpen((prev) => !prev);
-    setGenresDropdownOpen(false); // Close other dropdowns when "More" is opened
+    setGenresDropdownOpen(false);
     setLanguageOpen(false);
   };
 
@@ -121,6 +120,7 @@ const Header = () => {
       if (genresRef.current && !genresRef.current.contains(event.target)) {
         setGenresDropdownOpen(false);
       }
+
       if (moreRef.current && !moreRef.current.contains(event.target)) {
         setMoreDropdownOpen(false); // Close "More" dropdown if clicked outside
       }
@@ -130,13 +130,14 @@ const Header = () => {
       ) {
         setNotificationsOpen(false);
       }
+
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [genresRef]);
 
   return (
     <div className="bg-[#1c1c1e]">
@@ -162,6 +163,7 @@ const Header = () => {
                 <Link to="/about">{t("About")}</Link>
               </li>
 
+
               <li
                 className="text-gray-300 hover:text-white relative"
                 ref={genresRef}
@@ -170,6 +172,7 @@ const Header = () => {
                   className="hover:text-white"
                   onClick={toggleGenresDropdown}
                 >
+
                   {t("Genres")}
                 </button>
                 {genresDropdownOpen && (
@@ -202,14 +205,8 @@ const Header = () => {
               </li>
 
               {/* More Dropdown */}
-              <li
-                className="text-gray-300 hover:text-white relative"
-                ref={moreRef}
-              >
-                <button
-                  className="hover:text-white"
-                  onClick={toggleMoreDropdown}
-                >
+              <li className="text-gray-300 hover:text-white relative">
+                <button onClick={toggleMoreDropdown} className="hover:text-white">
                   {t("More")}
                 </button>
                 {moreDropdownOpen && (
@@ -219,7 +216,7 @@ const Header = () => {
                         <Link to="/terms-of-use">{t("Terms of Use")}</Link>
                       </li>
                       <li className="text-gray-300 hover:text-white">
-                        <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
+                        <Link to="/settings">{t("Settings")}</Link>
                       </li>
                     </ul>
                   </div>
@@ -278,6 +275,7 @@ const Header = () => {
             )}
           </div>
 
+
           <div className="relative">
             <button
               className="text-gray-300 hover:text-white"
@@ -294,45 +292,40 @@ const Header = () => {
                   中文
                 </button>
               </div>
+
+            
+
             )}
           </div>
 
           <Sheet>
             <SheetTrigger asChild>
               <Button>
-                <TextAlignJustifyIcon className="mr-2" />
-                {t("Menu")}
+              <TextAlignJustifyIcon className="mr-2" />
+               {t("Menu")}
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
-              <ul className="flex flex-col gap-6">
-                {user ? (
-                  <li className="text-gray-300 hover:text-white">
-                    <button onClick={() => firebaseSignOut()}>
-                      {t("Logout")}
-                    </button>
-                  </li>
-                ) : (
-                  <li className="text-gray-300 hover:text-white">
-                    <Link to="/login">{t("Login")}</Link>
-                  </li>
-                )}
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/movies">{t("Movies")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/tvShows">{t("TV Shows")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/about">{t("About")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/terms-of-use">{t("Terms of Use")}</Link>
-                </li>
-                <li className="text-gray-300 hover:text-white">
-                  <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
-                </li>
-              </ul>
+              <nav className="flex flex-col">
+                <Link to="/movies" className="p-2 text-white">
+                  {t("Movies")}
+                </Link>
+                <Link to="/tvShows" className="p-2 text-white">
+                  {t("TV Shows")}
+                </Link>
+                <Link to="/about" className="p-2 text-white">
+                  {t("About")}
+                </Link>
+                <Link to="/terms-of-use" className="p-2 text-white">
+                  {t("Terms of Use")}
+                </Link>
+                <Link to="/settings" className="p-2 text-white">
+                  {t("Settings")}
+                </Link>
+                <Link to="/favourites" className="p-2 text-white">
+                  <FaHeart className="text-red-600 inline" /> {t("Favourites")}
+                </Link>
+              </nav>
             </SheetContent>
           </Sheet>
         </div>
