@@ -19,10 +19,12 @@ const Header = () => {
 
   const [genresDropdownOpen, setGenresDropdownOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false); // State for "More" dropdown
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const { user, firebaseSignOut } = useUserAuth();
   const genresRef = useRef(null);
+  const moreRef = useRef(null); // Reference for "More" dropdown
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -81,14 +83,12 @@ const Header = () => {
   const toggleLanguageDropdown = () => {
     setLanguageOpen((prev) => !prev);
     setGenresDropdownOpen(false);
-
     setMoreDropdownOpen(false); 
   };
 
   const toggleGenresDropdown = () => {
     setGenresDropdownOpen((prev) => !prev);
     setLanguageOpen(false);
-
     setMoreDropdownOpen(false); 
   };
 
@@ -103,13 +103,16 @@ const Header = () => {
       if (genresRef.current && !genresRef.current.contains(event.target)) {
         setGenresDropdownOpen(false);
       }
+      if (moreRef.current && !moreRef.current.contains(event.target)) {
+        setMoreDropdownOpen(false); // Close "More" dropdown if clicked outside
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [genresRef]);
+  }, []);
 
   return (
     <div className="bg-[#1c1c1e]">
@@ -171,13 +174,6 @@ const Header = () => {
             </li>
 
               {/* More Dropdown */}
-
-              <li className="text-gray-300 hover:text-white">
-                <div className="relative">
-                  <button className="hover:text-white">
-                    {t("More")}
-                  </button>
-
               <li
                 className="text-gray-300 hover:text-white relative"
                 ref={moreRef}
@@ -189,18 +185,17 @@ const Header = () => {
                   {t("More")}
                 </button>
                 {moreDropdownOpen && (
-
                   <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
                     <ul>
                       <li className="text-gray-300 hover:text-white">
                         <Link to="/terms-of-use">{t("Terms of Use")}</Link>
                       </li>
                       <li className="text-gray-300 hover:text-white">
-                        <Link to="/settings">{t("Settings")}</Link>
+                        <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
                       </li>
                     </ul>
                   </div>
-                </div>
+                )}
               </li>
             </ul>
           </nav>
@@ -253,26 +248,15 @@ const Header = () => {
                 </div>
               )}
             </div>
-
-            {user ? (
-              <Button onClick={firebaseSignOut}>Logout</Button>
-            ) : (
-              <Button>
-                <Link className="text-gray-300 hover:text-white" to="/login">
-                  <span className="material-icons">{t("Login")}</span>
-                </Link>
-              </Button>
-            )}
           </div>
 
           <Sheet>
-            <SheetTrigger className="xl:hidden">
-              <TextAlignJustifyIcon className="text-white size-8" />
+            <SheetTrigger asChild>
+              <Button>
+                <TextAlignJustifyIcon className="mr-2" />
+                {t("Menu")}
+              </Button>
             </SheetTrigger>
-
-            <SheetContent>
-              <ul className="space-y-6 mt-10">
-
             <SheetContent side="right">
               <ul className="flex flex-col gap-6">
                 {user ? (
@@ -286,7 +270,6 @@ const Header = () => {
                     <Link to="/login">{t("Login")}</Link>
                   </li>
                 )}
-
                 <li className="text-gray-300 hover:text-white">
                   <Link to="/movies">{t("Movies")}</Link>
                 </li>
@@ -300,7 +283,7 @@ const Header = () => {
                   <Link to="/terms-of-use">{t("Terms of Use")}</Link>
                 </li>
                 <li className="text-gray-300 hover:text-white">
-                  <Link to="/settings">{t("Settings")}</Link>
+                  <Link to="/privacy-policy">{t("Privacy Policy")}</Link>
                 </li>
               </ul>
             </SheetContent>
@@ -312,4 +295,3 @@ const Header = () => {
 };
 
 export default Header;
- 
