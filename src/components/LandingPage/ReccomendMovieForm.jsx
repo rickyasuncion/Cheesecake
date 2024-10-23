@@ -244,7 +244,7 @@ const RecommendMovieForm = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-2 text-lg font-semibold font-mono items-center justify-center min-h-screen h-1/2 bg-gray-100 scrolling-background">
+    <div className="flex flex-col gap-2 text-white text-lg font-semibold font-mono items-center justify-center min-h-screen h-1/2 bg-gray-100 scrolling-background">
       {questions === 0 && (
         <React.Fragment>
           <h1>Looking to find something to watch?</h1>
