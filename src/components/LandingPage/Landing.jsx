@@ -5,6 +5,7 @@ import { fetchData, filterResults } from "../../_utils/utils.js";
 import { useLanguage } from "../../_utils/LanguageContext.js";
 import { useTranslation } from "react-i18next";
 import ReccomendMovieForm from "./ReccomendMovieForm.jsx";
+import ReccomendRecentList from "../ReccomendRecent/ReccomendRecentList.jsx";
 
 const Landing = () => {
   const { language } = useLanguage();
@@ -36,6 +37,8 @@ const Landing = () => {
       {/* <p>Current Language: {language}</p> */}
 
       <ReccomendMovieForm></ReccomendMovieForm>
+
+      <ReccomendRecentList/>
 
       <MovieListView
         movies={trendingMovies}
