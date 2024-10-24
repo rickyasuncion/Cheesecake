@@ -1,4 +1,5 @@
 import React from "react";
+import {ThemeProvider} from './pages/ThemeContext';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -22,6 +23,7 @@ import FreeMovies from "./pages/FreeMovies";
 import SimilarLiked from "./pages/SimilarLiked";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Settings from "./pages/Settings";
 
 function App() {
   const { i18n } = useTranslation();
@@ -32,6 +34,7 @@ function App() {
 
   return (
     <AuthContextProvider>
+      <ThemeProvider>
       <LanguageProvider>
         <BrowserRouter>
           <Header />
@@ -51,18 +54,21 @@ function App() {
               <Route path="/favourites/similar" element={<SimilarLiked />} />
               <Route path="/filtered-content" element={<FilteredContent />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="/contact-us" element={<ContactUs />} />
+              
               <Route path="/terms-of-use" element={<TermsOfUse />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/contact-us" element={<ContactUs />} />
               <Route path="/free-movies" element={<FreeMovies />} />
+              <Route path="/settings" element={<Settings/>} />
             </Routes>
           </main>
 
           <Footer />
         </BrowserRouter>
       </LanguageProvider>
+      </ThemeProvider>
     </AuthContextProvider>
+    
   );
 }
 
