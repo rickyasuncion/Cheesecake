@@ -1,15 +1,18 @@
+//01
 import React, { useEffect, useState } from "react";
 import "./FreeMovies.css";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const FreeMovies = () => {
   const [movies, setMovies] = useState([]);
+  const { t, i18n } = useTranslation();
   const [currMoviesObj, setCurrMoviesObj] = useState({
     start: 0,
-    end: 5, // Display 5 movies at a time
+    end: 5,
   });
 
   useEffect(() => {
@@ -22,10 +25,12 @@ const FreeMovies = () => {
     let page = 1;
     let totalMovies = 0;
 
+    const language = i18n.language;
+
     while (freeMovies.length < 50 && totalMovies < 500) {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=${page}`
+          `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=${language}&page=${page}`
         );
         const data = await response.json();
         for (let movie of data.results) {
@@ -34,13 +39,16 @@ const FreeMovies = () => {
               `https://api.themoviedb.org/3/movie/${movie.id}/watch/providers?api_key=${apiKey}`
             );
             const providerData = await providerResponse.json();
-            if (
-              (providerData.results.CA && providerData.results.CA.free) ||
-              (providerData.results.US && providerData.results.US.free)
-            ) {
+            const isFreeInCA =
+              providerData.results.CA && providerData.results.CA.free;
+            const isFreeInUS =
+              providerData.results.US && providerData.results.US.free;
+
+            if (isFreeInCA || isFreeInUS) {
               freeMovies.push({
                 ...movie,
-                link: `https://www.themoviedb.org/movie/${movie.id}/watch`, // 連結至 TMDB 的 /watch 頁面
+                isFree: true,
+                link: `https://www.themoviedb.org/movie/${movie.id}/watch`,
               });
             }
           } catch (error) {
@@ -50,6 +58,7 @@ const FreeMovies = () => {
             );
           }
         }
+
         page += 1;
         totalMovies += data.results.length;
       } catch (error) {
@@ -75,15 +84,15 @@ const FreeMovies = () => {
 
   return (
     <div className="free-movies-page">
-      <h1>Free Movies Available on Streaming Platforms</h1>
+      <h1>{t("Free Movies Available on Streaming Platforms")}</h1>
       <div className="flex gap-2 items-center justify-between mt-10">
         <div className="flex gap-2 items-center">
           <span>
-            {currMoviesObj.start + 1} to{" "}
+            {currMoviesObj.start + 1} {t("to")}{" "}
             {currMoviesObj.end > movies.length
               ? movies.length
               : currMoviesObj.end}{" "}
-            of {movies.length} Movies
+            {t("of")} {movies.length} {t("Movies")}
           </span>
           <div>
             <button
@@ -108,21 +117,29 @@ const FreeMovies = () => {
           .slice(currMoviesObj.start, currMoviesObj.end)
           .map((movie, index) => (
             <div key={index} className="movie-card">
-              <Link to={`/details/movie/${movie.id}`}>
+              <Link
+                to={`/details/movie/${movie.id}`}
+                state={{ isFree: movie.isFree }}
+              >
                 <img
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                   alt={movie.title}
                 />
               </Link>
               <h2>{movie.title}</h2>
-              <p>Release Date: {movie.release_date}</p>
-              <p>Vote Average: {movie.vote_average}</p>
+              <p>
+                {t("Release Date")}: {movie.release_date}
+              </p>
+              <p>
+                {t("Vote Average")}: {movie.vote_average}
+              </p>
               <p>
                 <Button
-                  className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+                  className="rounded-full h-auto px-4 m-0 flex gap-1 items-center text-base text-xs"
                   onClick={() => window.open(movie.link, "_blank")}
                 >
-                  More Information from TMDb <ArrowRight className="size-5" />
+                  {t("Find Free Viewing Options on TMDb")}{" "}
+                  <ArrowRight className="size-5" />
                 </Button>
               </p>
             </div>

@@ -1,3 +1,4 @@
+//06
 import {
   Tooltip,
   TooltipContent,
@@ -13,7 +14,11 @@ import { ArrowRight } from "lucide-react";
 import { BiPlay } from "react-icons/bi";
 import { BsPauseFill } from "react-icons/bs";
 import Reviews from "./Reviews/Reviews";
-import { updateUserRecentlyViewedMovies } from "../../_utils/firestore";
+import {
+  updateUserRecentlyViewedMovies,
+  subscribeUserToMovieNotifications,
+  isUserSubscribedToMovie,
+} from "../../_utils/firestore";
 
 const MovieDetails = ({ id: propId }) => {
   const videoRef = useRef(null);
@@ -28,6 +33,8 @@ const MovieDetails = ({ id: propId }) => {
   const { t, i18n } = useTranslation();
   const [isPlaying, setIsPlaying] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [isFree, setIsFree] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
     // Fetch movie details based on current language
@@ -56,11 +63,23 @@ const MovieDetails = ({ id: propId }) => {
         );
         const englishData = await englishResponse.json();
         setEnglishHomepage(englishData.homepage);
+
+        const providerResponse = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=bbd89781c7835917a2decb4989b56470`
+        );
+        const providerData = await providerResponse.json();
+
+        if (
+          (providerData.results.CA && providerData.results.CA.free) ||
+          (providerData.results.US && providerData.results.US.free)
+        ) {
+          setIsFree(true);
+        }
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
     };
-    
+
     const fetchMovieVideos = async () => {
       try {
         // Fetch trailer in the current language
@@ -68,7 +87,7 @@ const MovieDetails = ({ id: propId }) => {
           `https://api.themoviedb.org/3/movie/${id}/videos?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
         const data = await response.json();
-        
+
         // Check if there are no results in the current language and fallback to English
         if (data.results.length === 0) {
           const fallbackResponse = await fetch(
@@ -98,20 +117,46 @@ const MovieDetails = ({ id: propId }) => {
           `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
         const data = await response.json();
-        setRecommendedMovies(data.results);
+
+        const checkedMovies = await Promise.all(
+          data.results.map(async (recMovie) => {
+            try {
+              const providerResponse = await fetch(
+                `https://api.themoviedb.org/3/movie/${recMovie.id}/watch/providers?api_key=bbd89781c7835917a2decb4989b56470`
+              );
+              const providerData = await providerResponse.json();
+              const isFree =
+                (providerData.results.CA && providerData.results.CA.free) ||
+                (providerData.results.US && providerData.results.US.free);
+              return { ...recMovie, isFree: !!isFree };
+            } catch (error) {
+              console.error("Error fetching providers for movie:", error);
+              return { ...recMovie, isFree: false };
+            }
+          })
+        );
+
+        setRecommendedMovies(checkedMovies);
       } catch (error) {
         console.error("Error fetching recommended movies:", error);
       }
     };
 
+    //06
+    const checkIfSubscribed = async () => {
+      const subscribed = await isUserSubscribedToMovie(id);
+      setIsSubscribed(subscribed);
+    };
+
     const updateViewed = () => {
-    updateUserRecentlyViewedMovies(id);
-    }
-    
+      updateUserRecentlyViewedMovies(id);
+    };
+
     updateViewed();
     fetchMovieDetails();
     fetchMovieVideos();
     fetchRecommendedMovies();
+    checkIfSubscribed();
   }, [id, i18n.language]);
 
   useEffect(() => {
@@ -139,6 +184,12 @@ const MovieDetails = ({ id: propId }) => {
     }
   };
 
+  //06
+  const handleSubscribe = async () => {
+    await subscribeUserToMovieNotifications(id);
+    setIsSubscribed(true);
+  };
+
   const handleVisitWebsite = () => {
     if (englishHomepage) {
       window.open(englishHomepage, "_blank");
@@ -157,6 +208,11 @@ const MovieDetails = ({ id: propId }) => {
     <div className="mx-auto bg-zinc-900 text-secondary">
       <div className="relative container p-0 overflow-hidden border border-zinc-700 rounded-md">
         <div className="relative">
+          {isFree && (
+            <div className="absolute top-4 left-4 bg-red-600 text-white px-4 py-2 rounded">
+              {t("Free")}
+            </div>
+          )}
           {!showTrailer && (
             <img
               src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
@@ -202,6 +258,31 @@ const MovieDetails = ({ id: propId }) => {
           >
             {isPlaying ? <BsPauseFill /> : <BiPlay />}
           </button>
+
+          {isFree && (
+            <Button
+              className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+              onClick={() =>
+                window.open(
+                  `https://www.themoviedb.org/movie/${id}/watch`,
+                  "_blank"
+                )
+              }
+            >
+              {t("Find Free Viewing Options on TMDb")}{" "}
+              <ArrowRight className="size-5" />
+            </Button>
+          )}
+
+          {!isSubscribed && !isFree && (
+            <Button
+              className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+              onClick={handleSubscribe}
+            >
+              {t("Notify me when I can watch it for free")}{" "}
+              <RiHeartFill className="size-5" />
+            </Button>
+          )}
         </div>
 
         <h2 className="text-xl italic mb-4">{movie.tagline}</h2>
@@ -262,24 +343,61 @@ const MovieDetails = ({ id: propId }) => {
               : t("Similar Movies:")}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {recommendedMovies.map((recMovie) => (
-              <Link to={`/details/${type}/${recMovie.id}`} key={recMovie.id}>
-                <div className="flex flex-col items-center">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w154${recMovie.poster_path}`}
-                    alt={recMovie.title || recMovie.name}
-                    className="w-full rounded-md mb-2"
-                    style={{ maxWidth: "154px" }}
-                  />
-                  <p className="text-sm mt-2 text-center">
-                    {recMovie.title || recMovie.name}
-                  </p>
-                </div>
-              </Link>
-            ))}
+            {recommendedMovies.map((recMovie) => {
+              const isRecMovieFree =
+                recMovie?.providers?.CA?.free || recMovie?.providers?.US?.free;
+              return (
+                <Link to={`/details/${type}/${recMovie.id}`} key={recMovie.id}>
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "154px",
+                      margin: "0 auto",
+                    }}
+                  >
+                    {recMovie.isFree && (
+                      <div
+                        className="absolute bg-red-600 text-white px-2 py-1 rounded"
+                        style={{
+                          top: "10px",
+                          left: "10px",
+                          fontSize: "12px",
+                          fontWeight: "bold",
+                          zIndex: 10,
+                        }}
+                      >
+                        {t("Free")}
+                      </div>
+                    )}
+                    <img
+                      src={`https://image.tmdb.org/t/p/w154${recMovie.poster_path}`}
+                      alt={recMovie.title || recMovie.name}
+                      style={{
+                        width: "154px",
+                        borderRadius: "8px",
+                        display: "block",
+                        margin: "0 auto",
+                      }}
+                    />
+                    <p
+                      className="text-sm mt-2 text-center"
+                      style={{
+                        textAlign: "center",
+                        width: "100%",
+                        margin: "8px 0 0 0",
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {recMovie.title || recMovie.name}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
-      <Reviews media_type="movie" media_id={id}/>
+        <Reviews media_type="movie" media_id={id} />
       </div>
     </div>
   );
