@@ -40,7 +40,7 @@ const Movies = () => {
               );
               const r = { backdrop_path: movieFound?.backdrop_path, ...obj };
 
-              movies = movies.filter((movie) => movie.id !== movieFound.id);
+              movies = movies.filter((movie) => movie.id !== movieFound?.id);
               p.push(r);
             });
             callback(p);

@@ -4,6 +4,7 @@ import { MovieCard } from "../components/ui/MovieCard";
 import { Button } from "../components/ui/button";
 import { IoIosRemoveCircle } from "react-icons/io";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const Favourties = () => {
   const [favouriteMovies, setFavouritesMovies] = useState([]);
@@ -86,9 +87,13 @@ const Favourties = () => {
 
   return (
     <div className="container py-4">
+      <Button asChild className="mb-3">
+        <Link to={'/favourites/similar'}>Browse Similar Movies/TvShows</Link>
+      </Button>
       <h1 className="text-lg font-semibold underline">
         {t("Favourite Movies")}
       </h1>
+
       <div className="flex flex-wrap gap-2 p-2">
         {favouriteMovies.map((movie) => (
           <div className="relative max-w-[200px] " key={movie.id}>
