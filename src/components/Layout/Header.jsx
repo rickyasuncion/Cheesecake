@@ -271,6 +271,10 @@ const Header = () => {
                 <Link to="/favourites" className="p-2 text-white">
                   <FaHeart className="text-red-600 inline" /> {t("Favourites")}
                 </Link>
+
+                <Link to="ContactUs" className="p-2 text-white">
+                  {t("ContactUs")}
+                </Link>
               </nav>
             </SheetContent>
           </Sheet>

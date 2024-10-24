@@ -120,7 +120,27 @@
      "Take this quick quiz to find the best movie.":"Faites ce quiz rapide pour trouver le meilleur film.",
 
      "Start":"Commencer",
-     "I'm watching with...":"Je regarde avec"
+
+     "I'm watching with...":"Je regarde avec",
+
+     "I'm watching with...":"Je regarde avec",
+     
+        "All Movies": "Tous les films",
+        "New & Upcoming": "Nouveaux et à venir",
+        "Popular": "Populaire",
+        "Top Rated": "Les mieux notés",
+        
+            "Home": "Accueil",
+            "About": "À propos",
+            "Movies": "Films",
+            "TV Shows": "Séries TV",
+            "Favourites": "Favoris",
+            "All Rights Reserved": "Tous droits réservés"
+          
+          
+      
+      
+
     
   
 

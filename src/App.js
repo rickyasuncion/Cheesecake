@@ -1,5 +1,5 @@
 import React from "react";
-import {ThemeProvider} from './pages/ThemeContext';
+import { ThemeProvider } from './pages/ThemeContext';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -10,7 +10,7 @@ import MovieDetails from "./pages/Details";
 import { LanguageProvider } from "./_utils/LanguageContext";
 import { useTranslation } from "react-i18next";
 import Search from "./pages/Search";
-import Favourties from "./pages/Favourties";
+import Favourites from "./pages/Favourites"; // Fixed spelling
 import Header from "./components/Layout/Header";
 import Movies from "./pages/Movies";
 import FilteredContent from "./pages/FilteredContent";
@@ -35,6 +35,7 @@ function App() {
   return (
     <AuthContextProvider>
       <ThemeProvider>
+
       <LanguageProvider>
         <BrowserRouter>
           <Header />
@@ -50,7 +51,7 @@ function App() {
               <Route path="/movies/:type/genre/:genreId" element={<MoviesWIthGenre />} />
               <Route path="/tvShows" element={<TvShows />} />
               <Route path="/details/:type/:id" element={<MovieDetails />} />
-              <Route path="/favourites" element={<Favourties />} />
+              <Route path="/favourites" element={<Favourites />} />
               <Route path="/favourites/similar" element={<SimilarLiked />} />
               <Route path="/filtered-content" element={<FilteredContent />} />
               <Route path="*" element={<NotFound />} />
@@ -66,6 +67,9 @@ function App() {
           <Footer />
         </BrowserRouter>
       </LanguageProvider>
+
+        
+
       </ThemeProvider>
     </AuthContextProvider>
     
