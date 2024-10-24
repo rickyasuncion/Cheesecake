@@ -59,9 +59,6 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
       containerRef.current?.removeEventListener('focusin', handleVideoPlay)
       containerRef.current?.removeEventListener('focusout', handleVideoPause)
     }
-
-
-
   }, [])
 
 
