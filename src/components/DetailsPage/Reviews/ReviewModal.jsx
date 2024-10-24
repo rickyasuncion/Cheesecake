@@ -1,3 +1,7 @@
+// html and css created with help with chatGpt
+// prompt: create template with x inputs
+// prompt: style; style better; style more; center
+
 import React from "react";
 import { Button } from "../../ui/button";
 
@@ -30,7 +34,9 @@ const ReviewModal = ({
             {[...Array(10)].map((_, index) => (
               <button
                 key={index}
-                className={`text-2xl p-1 ${index < rating ? "text-yellow-500" : "text-gray-300"}`}
+                className={`text-2xl p-1 ${
+                  index < rating ? "text-yellow-500" : "text-gray-300"
+                }`}
                 onClick={() => setRating(index + 1)}
               >
                 ★
@@ -79,7 +85,9 @@ const ReviewModal = ({
           </div>
           <Button type="submit">Submit</Button>
         </form>
-        <button onClick={onClose} className="mt-4 text-blue-500">Close</button>
+        <button onClick={onClose} className="mt-4 text-blue-500">
+          Close
+        </button>
       </div>
     </div>
   );
