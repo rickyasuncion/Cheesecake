@@ -201,28 +201,6 @@ const Header = () => {
                   </div>
                 )}
               </li>
-
-              {/* More Dropdown */}
-              <li className="text-gray-300 hover:text-white relative">
-                <button
-                  onClick={toggleMoreDropdown}
-                  className="hover:text-white"
-                >
-                  {t("More")}
-                </button>
-                {moreDropdownOpen && (
-                  <div className="absolute bg-gray-800 text-white p-4 rounded shadow-lg top-full mt-2 z-10">
-                    <ul>
-                      <li className="text-gray-300 hover:text-white">
-                        <Link to="/terms-of-use">{t("Terms of Use")}</Link>
-                      </li>
-                      <li className="text-gray-300 hover:text-white">
-                        <Link to="/settings">{t("Settings")}</Link>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </li>
             </ul>
           </nav>
         </div>
@@ -304,20 +282,29 @@ const Header = () => {
             </SheetTrigger>
             <SheetContent side="right">
               <nav className="flex flex-col">
+                {user ? (
+                    <Link className="p-2 text-white" onClick={() => firebaseSignOut()}>
+                      {t("Logout")}
+                    </Link>
+                ) : (
+                  <Link className="p-2 text-white" to="/login">
+                    {t("Login")}
+                  </Link>
+                )}
                 <Link to="/movies" className="p-2 text-white">
                   {t("Movies")}
                 </Link>
                 <Link to="/tvShows" className="p-2 text-white">
                   {t("TV Shows")}
                 </Link>
+                <Link to="/settings" className="p-2 text-white">
+                  {t("Settings")}
+                </Link>
                 <Link to="/about" className="p-2 text-white">
                   {t("About")}
                 </Link>
                 <Link to="/terms-of-use" className="p-2 text-white">
                   {t("Terms of Use")}
-                </Link>
-                <Link to="/settings" className="p-2 text-white">
-                  {t("Settings")}
                 </Link>
                 <Link to="/favourites" className="p-2 text-white">
                   <FaHeart className="text-red-600 inline" /> {t("Favourites")}
