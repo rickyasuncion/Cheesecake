@@ -29,7 +29,10 @@ const ReviewItem = ({ review }) => {
         {review.displayName} - {new Date(review.date).toLocaleDateString()}
       </p>
       {showSpoilerWarning ? (
-        <button onClick={btnHandler} className="text-red-600">Warning: Spoiler!</button>
+        <React.Fragment>
+          <p className="text-red-600">Warning: Spoiler!</p>
+          <button onClick={btnHandler}>Click here to view</button>
+        </React.Fragment>
       ) : (
         <p className="mt-2">{review.content}</p>
       )}
