@@ -159,16 +159,10 @@ const MovieDetails = ({ id: propId }) => {
     checkIfSubscribed();
   }, [id, i18n.language]);
 
-  useEffect(() => {
-    if (showTrailer && trailerVideo && videoRef.current) {
-      videoRef.current.src = `https://www.youtube.com/embed/${trailerVideo.key}?enablejsapi=1&modestbranding=1&controls=1&showinfo=0&rel=0&autoplay=1`;
-    }
-  }, [showTrailer, trailerVideo]);
-
   const handlePlayPause = (event) => {
-    event.preventDefault(); // Prevent default action
+    event.preventDefault();
     if (!showTrailer) {
-      setShowTrailer(true); // Show the trailer
+      setShowTrailer(true);
       setIsPlaying(true);
     } else {
       if (videoRef.current && videoRef.current.contentWindow) {

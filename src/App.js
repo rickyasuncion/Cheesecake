@@ -23,6 +23,7 @@ import SimilarLiked from "./pages/SimilarLiked";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Settings from "./pages/Settings";
+import Details from "./components/DetailsPage/Details";
 
 function App() {
   return (
@@ -42,7 +43,7 @@ function App() {
               <Route path="/movies" element={<Movies />} />
               <Route path="/movies/:type/genre/:genreId" element={<MoviesWIthGenre />} />
               <Route path="/tvShows" element={<TvShows />} />
-              <Route path="/details/:type/:id" element={<MovieDetails />} />
+              <Route path="/details/:type/:id" element={<Details />} />
               <Route path="/favourites" element={<Favourties />} />
               <Route path="/favourites/similar" element={<SimilarLiked />} />
               <Route path="/filtered-content" element={<FilteredContent />} />
