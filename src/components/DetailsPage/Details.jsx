@@ -13,7 +13,7 @@ const Details = ({ id: propId }) => {
   const { type, id: movieId } = useParams();
   const id = propId || movieId;
 
-  const [movie, setMovie] = useState(null);
+  const [media, setMedia] = useState(null);
   const [trailerVideo, setTrailerVideo] = useState(null);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [englishHomepage, setEnglishHomepage] = useState(null);
@@ -21,7 +21,7 @@ const Details = ({ id: propId }) => {
   const [isFree, setIsFree] = useState(false);
 
   useEffect(() => {
-    const fetchMovieDetails = async () => {
+    const fetchMediaDetails = async () => {
         try {
           // Fetch movie details in the selected language
           const response = await fetch(
@@ -34,7 +34,7 @@ const Details = ({ id: propId }) => {
           );
           const creditsData = await creditsResponse.json();
   
-          setMovie({
+          setMedia({
             ...data,
             cast: creditsData.cast,
             crew: creditsData.crew,
@@ -59,7 +59,7 @@ const Details = ({ id: propId }) => {
             setIsFree(true);
           }
         } catch (error) {
-          console.error("Error fetching movie details:", error);
+          console.error("Error fetching Media details:", error);
         }
       };
   
@@ -130,12 +130,12 @@ const Details = ({ id: propId }) => {
     };
 
     updateViewed();
-    fetchMovieDetails();
+    fetchMediaDetails();
     fetchMovieVideos();
     fetchRecommendedMovies();
   }, [id, i18n.language]);
 
-  if (!movie) {
+  if (!media) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white">
         {t("Loading...")}
@@ -147,13 +147,13 @@ const Details = ({ id: propId }) => {
     <div className="mx-auto bg-zinc-900 text-secondary">
       <div className="relative container p-0 overflow-hidden border border-zinc-700 rounded-md">
         <DetailsHeader
-          movie={movie}
+          movie={media}
           trailerVideo={trailerVideo}
           setTrailerVideo={setTrailerVideo}
           isFree={isFree}
           englishHomepage={englishHomepage}
         />
-        <DetailsInfo movie={movie} t={t} />
+        <DetailsInfo media={media} t={t} />
         <Recommended
           recommendedMovies={recommendedMovies}
           type={type}
