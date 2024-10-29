@@ -157,6 +157,7 @@ const Details = ({ id: propId }) => {
         <Recommended
           recommendedMovies={recommendedMovies}
           type={type}
+          t={t}
         />
         <Reviews media_type="movie" media_id={id} />
       </div>
