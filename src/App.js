@@ -8,10 +8,9 @@ import NotFound from "./pages/NotFound";
 import { AuthContextProvider } from "./_utils/auth-context";
 import MovieDetails from "./pages/Details";
 import { LanguageProvider } from "./_utils/LanguageContext";
-import { useTranslation } from "react-i18next";
 import Search from "./pages/Search";
 import Favourties from "./pages/Favourties";
-import Header from "./components/Layout/Header";
+import Header from "./components/Layout/Header/Header";
 import Movies from "./pages/Movies";
 import FilteredContent from "./pages/FilteredContent";
 import MoviesWIthGenre from "./pages/MoviesWIthGenre";
@@ -26,12 +25,6 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Settings from "./pages/Settings";
 
 function App() {
-  const { i18n } = useTranslation();
-
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-  };
-
   return (
     <AuthContextProvider>
       <ThemeProvider>
