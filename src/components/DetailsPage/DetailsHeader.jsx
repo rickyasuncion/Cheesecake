@@ -71,7 +71,7 @@ const DetailsHeader = ({
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
         ></iframe>
       )}
-      <div className="p-4 flex gap-4 items-center">
+      <div className="p-4 flex gap-4 items-center justify-end">
         <button
           onClick={handlePlayPause}
           className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0"
