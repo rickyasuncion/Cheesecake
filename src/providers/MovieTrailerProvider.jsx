@@ -9,8 +9,8 @@ export const useMovieTrailerContext = () => useContext(context);
 export const MovieTrailerContextProvider = ({ children }) => {
     const [shouldPlayTrailer, setShouldPlayTrailer] = useState(false);
 
-    const toggleTrailerState = () => {
-        setShouldPlayTrailer(prev => !prev)
+    const toggleTrailerState = (state) => {
+        setShouldPlayTrailer(state)
     };
 
     return (
