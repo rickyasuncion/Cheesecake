@@ -77,8 +77,10 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
       setIsFavourite(true);
     }
 
-    getTrailer(id);
-  }, [id])
+    if (shouldPlayTrailer) {
+      getTrailer(id);
+    }
+  }, [id, shouldPlayTrailer])
 
 
   function addToFavourites(contentId) {
