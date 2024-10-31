@@ -24,6 +24,7 @@ import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Settings from "./pages/Settings";
 import Details from "./components/DetailsPage/Details";
+import Kids from "./pages/Kids";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
               <Route path="/contact-us" element={<ContactUs />} />
               <Route path="/free-movies" element={<FreeMovies />} />
               <Route path="/settings" element={<Settings/>} />
+              <Route path="/Kids" element={<Kids/>} />
             </Routes>
           </main>
 
