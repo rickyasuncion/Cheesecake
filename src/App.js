@@ -25,6 +25,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Settings from "./pages/Settings";
 import Details from "./components/DetailsPage/Details";
 import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
+import UsersPage from "./pages/users";
 
 function App() {
     return (
@@ -100,6 +101,11 @@ function App() {
                                     <Route
                                         path="/settings"
                                         element={<Settings />}
+                                    />
+
+                                    <Route
+                                        path="/users"
+                                        element={<UsersPage />}
                                     />
                                 </Routes>
                             </main>
