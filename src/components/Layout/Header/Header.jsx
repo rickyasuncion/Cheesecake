@@ -3,6 +3,9 @@ import NavBar from "./NavBar";
 import SearchBar from "./SearchBar";
 import LanguageSelector from "./LanguageSelector";
 import Menu from "./Menu";
+import { FaCirclePlay } from "react-icons/fa6";
+
+import { Toggle } from "../../ui/toggle";
 
 const Header = () => {
   return (
@@ -10,6 +13,9 @@ const Header = () => {
       <header className="py-3 container flex justify-between items-center">
         <NavBar />
 
+        <Toggle className="text-white">
+          <FaCirclePlay className="size-6" />
+        </Toggle>
         <div className="header-right flex items-center gap-3">
           <SearchBar />
           <LanguageSelector />
