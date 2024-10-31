@@ -10,6 +10,13 @@ const Kids = () => {
       <p className="text-lg mb-2">
         {t("Welcome to the Kids section! Here you'll find movies and shows suitable for children.")}
       </p>
+
+      <img
+        src="..media/movie-kids.png"
+    // Path relative to the public folder
+        alt="Kids section "
+        className="w-1/2 mx-auto mb-6 rounded-lg shadow-md"
+      />
       {/* Add any other content or features for the Kids page here */}
     </div>
   );
