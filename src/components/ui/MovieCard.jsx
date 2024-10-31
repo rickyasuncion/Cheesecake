@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "./button";
 import { FaHeart } from "react-icons/fa";
 import { cn } from "./lib/utils";
+import { useMovieTrailerContext } from "../../providers/MovieTrailerProvider";
 
 
 const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = true, className }) => {
@@ -13,6 +14,7 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
   const detailPath = `/details/${media_type}/${id}`;
   const [isFavourite, setIsFavourite] = useState(false);
   const [trailerPath, setTrailerPath] = useState(null);
+  const { shouldPlayTrailer } = useMovieTrailerContext();
 
   async function getTrailer(movieId) {
     const res = await fetch(
@@ -112,18 +114,21 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
     <div className={` relative max-w-[200px] group ${cn(className)}`} ref={containerRef}>
 
 
-      <div className="absolute border-8 border-black shadow-lg order hidden group-hover:block group-focus-within:block h-52 aspect-video -left-1/2 top-1/2 -translate-y-1/2 bg-green-200 z-40">
+      {shouldPlayTrailer &&
+        <div className="absolute border-8 border-black shadow-lg order hidden group-hover:block group-focus-within:block h-52 aspect-video -left-1/2 top-1/2 -translate-y-1/2 bg-green-200 z-40">
 
-        {trailerPath ?
-          <iframe
-            ref={videoRef}
-            src={`https://www.youtube.com/embed/${trailerPath.key}?enablejsapi=1&modestbranding=1&controls=1&showinfo=0&rel=0&autoplay=1`}
-            className="w-full h-full"
-            title="Movie Trailer"
-            allow="accelerometer;clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-          ></iframe> : <span className="text-black">No Trailer found</span>
-        }
-      </div>
+          {trailerPath ?
+            <iframe
+              ref={videoRef}
+              src={`https://www.youtube.com/embed/${trailerPath.key}?enablejsapi=1&modestbranding=1&controls=1&showinfo=0&rel=0&autoplay=1`}
+              className="w-full h-full"
+              title="Movie Trailer"
+              allow="accelerometer;clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            ></iframe> : <span className="text-black">No Trailer found</span>
+          }
+        </div>
+
+      }
 
       <Link to={detailPath}>
         <div className="rounded-md overflow-hidden">
