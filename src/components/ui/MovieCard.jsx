@@ -8,7 +8,6 @@ import { useMovieTrailerContext } from "../../providers/MovieTrailerProvider";
 const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = true, className }) => {
   const videoRef = useRef();
   const containerRef = useRef();
-
   const detailPath = `/details/${media_type}/${id}`;
   const [isFavourite, setIsFavourite] = useState(false);
   const [trailerPath, setTrailerPath] = useState(null);
@@ -27,66 +26,67 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
         );
         setTrailerPath(trailerPathFound || null);
       } else {
-        setTrailerPath(null); // No results, so no trailer available
+        setTrailerPath(null);
       }
     } catch (error) {
       console.error("Error fetching trailer:", error);
-      setTrailerPath(null); // Handle fetch error by setting trailer path to null
+      setTrailerPath(null);
     }
   }
 
   useEffect(() => {
-    function handleVideoPause() {
-      videoRef.current?.contentWindow.postMessage(
-        `{"event":"command","func":"pauseVideo","args":""}`,
-        "*"
-      );
-    }
+    const favouriteMovies = JSON.parse(localStorage.getItem("favouriteMovies")) || [];
+    const favouriteTv = JSON.parse(localStorage.getItem("favouriteTv")) || [];
 
-    function handleVideoPlay() {
-      videoRef.current?.contentWindow.postMessage(
-        `{"event":"command","func":"playVideo","args":""}`,
-        "*"
-      );
-    }
-
-    containerRef.current?.addEventListener('mouseleave', handleVideoPause);
-    containerRef.current?.addEventListener('focusout', handleVideoPause);
-
-    containerRef.current?.addEventListener('mouseenter', handleVideoPlay);
-    containerRef.current?.addEventListener('focusin', handleVideoPlay);
-
-    return () => {
-      containerRef.current?.removeEventListener('mouseleave', handleVideoPause);
-      containerRef.current?.removeEventListener('mouseenter', handleVideoPlay);
-      containerRef.current?.removeEventListener('focusin', handleVideoPlay);
-      containerRef.current?.removeEventListener('focusout', handleVideoPause);
-    };
-  }, []);
-
-  useEffect(() => {
-    const favouriteMovies = JSON.parse(localStorage.getItem("favouriteMovies"));
-    const favouriteTv = JSON.parse(localStorage.getItem("favouriteTv"));
-
-    const isAlreadyFavourite = favouriteMovies?.find(movie_id => movie_id === id) || favouriteTv?.find(tvId => tvId === id);
+    const isAlreadyFavourite = favouriteMovies.includes(id) || favouriteTv.includes(id);
     if (isAlreadyFavourite) {
       setIsFavourite(true);
     }
 
-
     getTrailer(id);
-  }, [id]);
 
+    const handleVideoPause = () => {
+      videoRef.current?.contentWindow.postMessage(
+        `{"event":"command","func":"pauseVideo","args":""}`,
+        "*"
+      );
+    };
+
+    const handleVideoPlay = () => {
+      videoRef.current?.contentWindow.postMessage(
+        `{"event":"command","func":"playVideo","args":""}`,
+        "*"
+      );
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('mouseleave', handleVideoPause);
+      container.addEventListener('focusout', handleVideoPause);
+      container.addEventListener('mouseenter', handleVideoPlay);
+      container.addEventListener('focusin', handleVideoPlay);
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('mouseleave', handleVideoPause);
+        container.removeEventListener('mouseenter', handleVideoPlay);
+        container.removeEventListener('focusin', handleVideoPlay);
+        container.removeEventListener('focusout', handleVideoPause);
+      }
+    };
+  }, [id, shouldPlayTrailer]);
+
+  useEffect(() => {
     if (shouldPlayTrailer) {
       getTrailer(id);
     }
-  }, [id, shouldPlayTrailer])
-
-
+  }, [shouldPlayTrailer]);
 
   function addToFavourites(contentId) {
-    const favouriteMovies = JSON.parse(localStorage.getItem("favouriteMovies"));
-    const favouriteTv = JSON.parse(localStorage.getItem("favouriteTv"));
+    const favouriteMovies = JSON.parse(localStorage.getItem("favouriteMovies")) || [];
+    const favouriteTv = JSON.parse(localStorage.getItem("favouriteTv")) || [];
+
     if (isFavourite) {
       alert('Movie/TV show is already in favourites');
       return;
@@ -95,24 +95,15 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
     setIsFavourite(true);
 
     if (media_type === 'movie') {
-      if (favouriteMovies) {
-        localStorage.setItem('favouriteMovies', JSON.stringify([...favouriteMovies, contentId]));
-      } else {
-        localStorage.setItem('favouriteMovies', JSON.stringify([contentId]));
-      }
+      localStorage.setItem('favouriteMovies', JSON.stringify([...favouriteMovies, contentId]));
     } else if (media_type === 'tv') {
-      if (favouriteTv) {
-        localStorage.setItem('favouriteTv', JSON.stringify([...favouriteTv, contentId]));
-      } else {
-        localStorage.setItem('favouriteTv', JSON.stringify([contentId]));
-      }
+      localStorage.setItem('favouriteTv', JSON.stringify([...favouriteTv, contentId]));
     }
   }
 
   return (
-
     <div className={`relative max-w-[200px] group ${cn(className)}`} ref={containerRef}>
-      <div className="absolute border-8 border-black shadow-lg order hidden group-hover:block group-focus-within:block h-52 aspect-video -left-1/2 top-1/2 -translate-y-1/2 bg-green-200 z-40">
+      <div className="absolute border-8 border-black shadow-lg hidden group-hover:block group-focus-within:block h-52 aspect-video -left-1/2 top-1/2 -translate-y-1/2 bg-green-200 z-40">
         {trailerPath ? (
           <iframe
             ref={videoRef}
@@ -126,33 +117,15 @@ const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = t
         )}
       </div>
 
-    <div className={` relative max-w-[200px] group ${cn(className)}`} ref={containerRef}>
-
-
-      {shouldPlayTrailer &&
-        <div className="absolute border-8 border-black shadow-lg order hidden group-hover:block group-focus-within:block h-52 aspect-video -left-1/2 top-1/2 -translate-y-1/2 bg-green-200 z-40">
-
-          {trailerPath ?
-            <iframe
-              ref={videoRef}
-              src={`https://www.youtube.com/embed/${trailerPath.key}?enablejsapi=1&modestbranding=1&controls=1&showinfo=0&rel=0&autoplay=1`}
-              className="w-full h-full"
-              title="Movie Trailer"
-              allow="accelerometer;clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-            ></iframe> : <span className="text-black">No Trailer found</span>
-          }
-        </div>
-
-      }
-
-
       <Link to={detailPath}>
         <div className="rounded-md overflow-hidden">
-          <img
-            src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
-            alt={media_type === "movie" ? title : name}
-            className="group-hover:scale-110 transition-transform duration-200"
-          />
+          {poster_path && (
+            <img
+              src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
+              alt={media_type === "movie" ? title : name}
+              className="group-hover:scale-110 transition-transform duration-200"
+            />
+          )}
         </div>
         <h3 className="font-medium text-sm">{title || name}</h3>
       </Link>
