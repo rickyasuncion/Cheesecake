@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 const Kids = () => {
   const { t } = useTranslation();
   const navigate = useNavigate(); // Initialize useNavigate
+
   const [animatedMovies, setAnimatedMovies] = useState([]);
 
   // Fetch animated movies from the API
@@ -55,6 +56,7 @@ const Kids = () => {
               className="text-lg h-auto bg-transparent text-white border border-white rounded px-4 py-2 hover:bg-white hover:text-black transition-colors"
               onClick={goToFavourites} // Add onClick to navigate to Favorites
             >
+
               <span>{t("Your Favourite Kids Movies")}</span>
             </button>
           </div>
