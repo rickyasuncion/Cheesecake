@@ -3,13 +3,13 @@ import { useTranslation } from "react-i18next";
 import kidsImage from "../media/movie-kids.png";
 import { fetchData, filterResults } from "../_utils/utils.js";
 import MovieListView from "../components/LandingPage/MovieListView.jsx";
-import {useNavigate} from "react-router-dom";
-import "./Kids.css"; // Import Landing.css for consistent styles
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 
 const Kids = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const [animatedMovies, setAnimatedMovies] = useState([]);
 
   // Fetch animated movies from the API
@@ -28,8 +28,9 @@ const Kids = () => {
     fetchAnimatedMovies();
   }, []);
 
-  const goToFavourties = () => {
-    navigate("/Favourties");
+  // Handler to navigate to Favorites page
+  const goToFavourites = () => {
+    navigate("/favourites");
   };
 
   return (
@@ -51,8 +52,10 @@ const Kids = () => {
             <button className="text-lg h-auto bg-transparent text-white border border-white rounded px-4 py-2 hover:bg-white hover:text-black transition-colors">
               <span>{t("Browse Kids Movies")}</span>
             </button>
-            <button className="text-lg h-auto bg-transparent text-white border border-white rounded px-4 py-2 hover:bg-white hover:text-black transition-colors"
-                onClick={goToFavourties}>
+            <button
+              className="text-lg h-auto bg-transparent text-white border border-white rounded px-4 py-2 hover:bg-white hover:text-black transition-colors"
+              onClick={goToFavourites} // Add onClick to navigate to Favorites
+            >
 
               <span>{t("Your Favourite Kids Movies")}</span>
             </button>
@@ -61,16 +64,11 @@ const Kids = () => {
       </div>
 
       <div className="py-14">
-      <h2 className="text-4xl font-medium text-center">
-        {t("Animated Movies for Kids")}
-        </h2>
-      
-      
         <MovieListView
           movies={animatedMovies}
+          title={t("Animated Movies for Kids")}
           contentType="animated-movies"
         />
-        
       </div>
     </div>
   );
