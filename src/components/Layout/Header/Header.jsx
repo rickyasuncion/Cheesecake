@@ -17,13 +17,14 @@ const Header = () => {
   const { toggleTrailerState } = useMovieTrailerContext();
 
   return (
+    <div>
     <header className="flex items-center justify-between p-3 text-black bg-white/50 backdrop-blur-sm fixed w-full z-50 top-0">
       <NavBar />
 
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
-            <Toggle className="text-white" onPressedChange={toggleTrailerState}>
+            <Toggle onPressedChange={toggleTrailerState}>
               <FaCirclePlay className="size-6" />
             </Toggle>
           </TooltipTrigger>
@@ -40,6 +41,8 @@ const Header = () => {
         <Menu className="h-5 w-5" />
       </div>
     </header>
+    <div className="mb-16"/>
+    </div>
   );
 };
 

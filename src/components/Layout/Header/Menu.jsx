@@ -59,7 +59,7 @@ const Sidebar = () => {
             <NavItem
               icon={<Bookmark size={20} />}
               text="Favorites"
-              link="/favourites"
+              link="/favourties"
             />
             <NavItem icon={<User size={20} />} text="For You" link="#" />
           </div>
