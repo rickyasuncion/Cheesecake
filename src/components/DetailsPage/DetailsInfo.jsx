@@ -1,34 +1,43 @@
 import React from "react";
 
-const DetailsInfo = ({ media, t }) => {
+const DetailsInfo = ({ movie, t }) => {
   return (
-    <div className="px-6 w-1/2">
-      <h1 className="text-xl mb-4">{media.title}</h1>
-      <h2 className="text-xl italic mb-4">{media.tagline}</h2>
-      <p className="mb-4">{media.overview}</p>
+    <div>
+      <h2 className="text-xl italic mb-4">{movie.tagline}</h2>
+      <p className="mb-4">{movie.overview}</p>
       <div className="mb-4">
         <p>
-          <strong>{t("Director")}:</strong>{" "}
-          {media.crew?.find((member) => member.job === "Director")?.name ||
-            "N/A"}
-        </p>
-        <p>
           <strong>{t("Release Date")}:</strong>{" "}
-          {new Date(media.release_date).toLocaleDateString()}
+          {new Date(movie.release_date).toLocaleDateString()}
         </p>
         <p>
-          <strong>{t("Runtime")}:</strong> {media.runtime} {t("minutes")}
+          <strong>{t("Runtime")}:</strong> {movie.runtime} {t("minutes")}
         </p>
         <p>
           <strong>{t("Genres")}:</strong>{" "}
-          {media.genres.map((genre) => genre.name).join(", ")}
+          {movie.genres.map((genre) => genre.name).join(", ")}
+        </p>
+        <p>
+          <strong>{t("Director")}:</strong>{" "}
+          {movie.crew?.find((member) => member.job === "Director")?.name ||
+            "N/A"}
         </p>
         <p>
           <strong>{t("Cast")}:</strong>{" "}
-          {media.cast
+          {movie.cast
             ?.slice(0, 5)
             .map((actor) => actor.name)
             .join(", ") || "N/A"}
+        </p>
+        <p>
+          <strong>{t("Budget")}:</strong> ${movie.budget.toLocaleString()}
+        </p>
+        <p>
+          <strong>{t("Revenue")}:</strong> ${movie.revenue.toLocaleString()}
+        </p>
+        <p>
+          <strong>{t("Vote Average")}:</strong> {movie.vote_average} (
+          {movie.vote_count} {t("votes")})
         </p>
       </div>
     </div>
