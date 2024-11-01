@@ -68,7 +68,6 @@ const Kids = () => {
       
         <MovieListView
           movies={animatedMovies}
-          
           contentType="animated-movies"
         />
         
