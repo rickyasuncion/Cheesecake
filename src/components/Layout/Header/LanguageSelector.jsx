@@ -14,7 +14,7 @@ const LanguageSelector = () => {
 
   return (
     <div className="relative">
-      <button className="text-gray-300 hover:text-white" onClick={() => setLanguageOpen((prev) => !prev)}>
+      <button className="hover:text-yellow-400" onClick={() => setLanguageOpen((prev) => !prev)}>
         <span className="material-icons">{t("Language")}</span>
       </button>
       {languageOpen && (

@@ -33,7 +33,7 @@ const TvShows = () => {
   }, []);
 
   return (
-    <div className="bg-[#171c21] text-secondary pt-5 pb-16">
+    <div className="pt-5 pb-16">
       <div className="container">
         <div className="pt-48 pb-3 relative overflow-hidden rounded-md  isolate">
           <div className="bg-neutral-900/60 absolute top-0 bottom-0 z-10 w-full">
@@ -47,7 +47,7 @@ const TvShows = () => {
         <div className="mt-5">
           <h2 className="text-lg mb-2 font-medium">{t("Trending")}</h2>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap text-white">
             {trendingTvShows &&
               trendingTvShows.map((tvShow) => {
                 return (
@@ -67,7 +67,7 @@ const TvShows = () => {
         <div>
           <h2 className="text-lg mb-2 font-medium">{t("Top Rated")}</h2>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap text-white">
             {topRateTvShows &&
               topRateTvShows.map((tvShow) => {
                 return (
@@ -87,7 +87,7 @@ const TvShows = () => {
         <div>
           <h2 className="text-lg mb-2 font-medium">{t("Airing Today")}</h2>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap text-white">
             {tvShowsToday &&
               tvShowsToday.map((tvShow) => {
                 return (

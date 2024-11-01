@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "../../ui/input";
-import { Button } from "../../ui/button";
 import { useTranslation } from "react-i18next";
+import { Search } from "lucide-react";
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,17 +16,18 @@ const SearchBar = () => {
   };
 
   return (
-    <form onSubmit={handleSearch} className="items-center hidden xl:flex">
-      <Input
-        type="text"
+    <form
+      onSubmit={handleSearch}
+      className="relative"
+    >
+      <input
+        type="search"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder={t("Search...")}
-        className="bg-gray-800 text-white placeholder-gray-500 rounded-l-md p-2 w-64"
+        className="bg-secondary rounded-full px-3 py-1 pl-8 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 w-40"
       />
-      <Button type="submit" className="rounded-r-md">
-        {t("Search")}
-      </Button>
+      <Search onClick={handleSearch} className="absolute left-2 top-1.5 h-4 w-4 hover:cursor-pointer" />
     </form>
   );
 };
