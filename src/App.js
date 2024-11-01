@@ -45,7 +45,7 @@ function App() {
               <Route path="/movies/:type/genre/:genreId" element={<MoviesWIthGenre />} />
               <Route path="/tvShows" element={<TvShows />} />
               <Route path="/details/:type/:id" element={<Details />} />
-              <Route path="/favourites" element={<Favourties />} />
+              <Route path="/favourties" element={<Favourties />} />
               <Route path="/favourites/similar" element={<SimilarLiked />} />
               <Route path="/filtered-content" element={<FilteredContent />} />
               <Route path="*" element={<NotFound />} />
