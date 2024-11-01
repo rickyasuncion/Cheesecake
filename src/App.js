@@ -32,46 +32,52 @@ function App() {
   return (
     <AuthContextProvider>
       <ThemeProvider>
+        <MovieTrailerContextProvider>
+          <LanguageProvider>
+            <BrowserRouter>
+              <Header />
+              <main>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/home" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/search/:searched" element={<Search />} />
+                  <Route path="/movies" element={<Movies />} />
+                  <Route
+                    path="/movies/:type/genre/:genreId"
+                    element={<MoviesWIthGenre />}
+                  />
+                  <Route path="/tvShows" element={<TvShows />} />
+                  <Route path="/details/:type/:id" element={<Details />} />
+                  <Route path="/favourties" element={<Favourties />} />
+                  <Route
+                    path="/favourites/similar"
+                    element={<SimilarLiked />}
+                  />
+                  <Route
+                    path="/filtered-content"
+                    element={<FilteredContent />}
+                  />
+                  <Route path="*" element={<NotFound />} />
+                  <Route path="/contact-us" element={<ContactUs />} />
+                  <Route path="/terms-of-use" element={<TermsOfUse />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/contact-us" element={<ContactUs />} />
+                  <Route path="/free-movies" element={<FreeMovies />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/users" element={<UsersPage />} />
+                  <Route path="/Kids" element={<Kids />} />
+                </Routes>
+              </main>
 
-      <LanguageProvider>
-        <BrowserRouter>
-          <Header />
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/search/:searched" element={<Search />} />
-              <Route path="/movies" element={<Movies />} />
-              <Route path="/movies/:type/genre/:genreId" element={<MoviesWIthGenre />} />
-              <Route path="/tvShows" element={<TvShows />} />
-              <Route path="/details/:type/:id" element={<Details />} />
-              <Route path="/favourties" element={<Favourties />} />
-              <Route path="/favourites/similar" element={<SimilarLiked />} />
-              <Route path="/filtered-content" element={<FilteredContent />} />
-              <Route path="*" element={<NotFound />} />
-              <Route path="/contact-us" element={<ContactUs />} />
-              <Route path="/terms-of-use" element={<TermsOfUse />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/contact-us" element={<ContactUs />} />
-              <Route path="/free-movies" element={<FreeMovies />} />
-              <Route path="/settings" element={<Settings/>} />
-              <Route path="/Kids" element={<Kids/>} />
-            </Routes>
-          </main>
-
-          <Footer />
-        </BrowserRouter>
-      </LanguageProvider>
+              <Footer />
+            </BrowserRouter>
+          </LanguageProvider>
+        </MovieTrailerContextProvider>
       </ThemeProvider>
-      </AuthContextProvider>
-    
-    
-    
-    
-    
+    </AuthContextProvider>
   );
 }
 
