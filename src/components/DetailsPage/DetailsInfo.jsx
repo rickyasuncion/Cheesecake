@@ -11,7 +11,7 @@ const DetailsInfo = ({ movie, t }) => {
           {new Date(movie.release_date).toLocaleDateString()}
         </p>
         <p>
-          <strong>{t("Runtime")}:</strong> {movie.runtime} {t("minutes")}
+          <strong>{t("Runtime")}:</strong> {movie.runtime}
         </p>
         <p>
           <strong>{t("Genres")}:</strong>{" "}
@@ -28,12 +28,6 @@ const DetailsInfo = ({ movie, t }) => {
             ?.slice(0, 5)
             .map((actor) => actor.name)
             .join(", ") || "N/A"}
-        </p>
-        <p>
-          <strong>{t("Budget")}:</strong> ${movie.budget.toLocaleString()}
-        </p>
-        <p>
-          <strong>{t("Revenue")}:</strong> ${movie.revenue.toLocaleString()}
         </p>
         <p>
           <strong>{t("Vote Average")}:</strong> {movie.vote_average} (
