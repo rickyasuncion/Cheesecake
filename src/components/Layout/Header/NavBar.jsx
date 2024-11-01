@@ -1,51 +1,53 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import GenresDropdown from "./GenresDropdown";
 
 const NavBar = () => {
   const { t } = useTranslation();
-  const [genresDropdownOpen, setGenresDropdownOpen] = useState(false);
-  const genresRef = useRef(null);
-
-  const toggleGenresDropdown = () => {
-    setGenresDropdownOpen((prev) => !prev);
-  };
 
   return (
-    <nav className="hidden xl:block">
-      <ul className="flex gap-6">
-        <li className="text-gray-300 hover:text-white">
-          <Link to="/home" className="text-white text-2xl font-bold">
-            Cheesecake
-          </Link>
-        </li>
-        <li className="text-gray-300 hover:text-white">
-          <Link to="/movies">{t("Movies")}</Link>
-        </li>
-        <li className="text-gray-300 hover:text-white">
-          <Link to="/tvShows">{t("TV Shows")}</Link>
-        </li>
-        <li className="text-gray-300 hover:text-white">
-          <Link to="/free-movies">{t("Free Movies")}</Link>
-        </li>
-        <li className="text-gray-300 hover:text-white">
-          <Link to="/about">{t("About")}</Link>
-        </li>
-        <li className="text-gray-300 hover:text-white">
-          <Link to="/Kids">{t("Kids")}</Link>
-        </li>
-
-        <li className="text-gray-300 hover:text-white relative" ref={genresRef}>
-          <button className="hover:text-white" onClick={toggleGenresDropdown}>
-            {t("Genres")}
-          </button>
-          {genresDropdownOpen && (
-            <GenresDropdown toggleGenresDropdown={toggleGenresDropdown} />
-          )}
-        </li>
-      </ul>
-    </nav>
+    <div className="flex items-center space-x-6">
+      <Link to={"/home"}>
+        <h1 className="text-xl font-bold">CheeseCake</h1>
+      </Link>
+      <nav className="hidden md:flex space-x-4 text-sm">
+        <Link to={"/movies"} className="hover:text-yellow-400">
+          Movies
+        </Link>
+        <Link to="/tvShows" className="hover:text-yellow-400">
+          TV Shows
+        </Link>
+        <Link to="/free-movies" className="hover:text-yellow-400">
+          Free Movies
+        </Link>
+        <Link to="/Kids" className="hover:text-yellow-400">
+          Kids
+        </Link>
+        <div className="relative group">
+          <button className="hover:text-yellow-400">Genres</button>
+          <div className="absolute hidden group-hover:block text-white w-40 bg-gray-800 rounded-md shadow-lg p-1">
+            <Link
+              to="/home"
+              className="block px-3 py-1 text-sm hover:bg-gray-700 rounded"
+            >
+              Action
+            </Link>
+            <Link
+              to="/home"
+              className="block px-3 py-1 text-sm hover:bg-gray-700 rounded"
+            >
+              Drama
+            </Link>
+            <Link
+              to="/home"
+              className="block px-3 py-1 text-sm hover:bg-gray-700 rounded"
+            >
+              Comedy
+            </Link>
+          </div>
+        </div>
+      </nav>
+    </div>
   );
 };
 
