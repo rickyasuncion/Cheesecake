@@ -49,6 +49,9 @@ const Menu = () => {
           <Link to="/users" className="p-2 text-white">
             {t("Users")}
           </Link>
+          <Link to="/privacy-policy" className="p-2 text-white">
+            {t("Privacy Policy ")}
+          </Link>
           <Link to="/favourites" className="p-2 text-white">
             <FaHeart className="text-red-600 inline" /> {t("Favourites")}
           </Link>

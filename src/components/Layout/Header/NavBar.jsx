@@ -32,6 +32,10 @@ const NavBar = () => {
         <li className="text-gray-300 hover:text-white">
           <Link to="/about">{t("About")}</Link>
         </li>
+        <li className="text-gray-300 hover:text-white">
+          <Link to="/Kids">{t("Kids")}</Link>
+        </li>
+
         <li className="text-gray-300 hover:text-white relative" ref={genresRef}>
           <button className="hover:text-white" onClick={toggleGenresDropdown}>
             {t("Genres")}
