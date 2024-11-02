@@ -27,7 +27,8 @@ import Details from "./components/DetailsPage/Details";
 import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
 import UsersPage from "./pages/users";
 import Kids from "./pages/Kids";
-
+import Genres from "./pages/Genres";
+import Action from "./pages/genres/Action";
 function App() {
   return (
     <AuthContextProvider>
@@ -69,6 +70,8 @@ function App() {
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/users" element={<UsersPage />} />
                   <Route path="/Kids" element={<Kids />} />
+                  <Route path="/Genres" element={<Genres />} />
+                  <Route path="/genres/action" element={<Action />} />
                 </Routes>
               </main>
 
