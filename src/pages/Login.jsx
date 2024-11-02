@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserAuth } from "../_utils/auth-context";
 import { createUser } from "../_utils/firestore";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import { FaGoogle, FaGithub } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { user, gitHubSignIn, googleSignIn, emailSignIn } = useUserAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
 
   const handleLogin = async (provider) => {
     try {
@@ -25,6 +28,12 @@ const Login = () => {
     }
   };
 
+  useEffect(()=>{
+    if (user) {
+      navigate("/");
+    }
+  },[user, navigate])
+
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <div className="flex-1 flex items-center justify-center p-8">
@@ -39,7 +48,7 @@ const Login = () => {
               </p>
             </div>
 
-            <form onSubmit={handleLogin("EmailPassword")} className="space-y-6">
+            <form onSubmit={() => handleLogin("EmailPassword")} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email
@@ -118,9 +127,9 @@ const Login = () => {
 
             <p className="text-center mt-8 text-sm text-gray-600">
               Don't have an account?{" "}
-              <button className="text-yellow-500 hover:text-yellow-600 transition font-medium">
+              <Link to={"/signup"} className="text-yellow-500 hover:text-yellow-600 transition font-medium">
                 Sign up for free
-              </button>
+              </Link>
             </p>
           </div>
         </div>
