@@ -51,7 +51,9 @@ const Landing = () => {
         title={t("Popular TV Shows")}
         contentType="tv-shows"
       ></MovieListView>
+      
     </div>
+    
   );
 };
 

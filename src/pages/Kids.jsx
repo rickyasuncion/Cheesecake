@@ -6,6 +6,7 @@ import MovieListView from "../components/LandingPage/MovieListView.jsx";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 
+
 const Kids = () => {
   const { t } = useTranslation();
   const navigate = useNavigate(); // Initialize useNavigate
@@ -68,6 +69,13 @@ const Kids = () => {
           contentType="animated-movies"
         />
       </div>
+      
+
+       {/* Add the EmailSubscription component here */}
+      <div className="py-14">
+        
+      </div>
+      
     </div>
   );
 };
