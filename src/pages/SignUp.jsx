@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, LogIn, Mail, MessageSquare, User, Info } from 'lucide-react';
+import { Eye, EyeOff, User, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useUserAuth } from "../_utils/auth-context";
+import { useNavigate } from "react-router-dom";
+import { createUser } from "../_utils/firestore";
+
 
 const SignUp = () => {
+  const { emailSignUp } = useUserAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
   });
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle signup logic here
+
+  const handleLogin = async ({email, password, username}) => {
+    try {
+      await emailSignUp(email, password, username);
+      createUser(username)
+      navigate("/")
+      console.log("Successfully signed up!");
+    } catch (error) {
+      console.log("Error during sign up:", error.message);
+    }
   };
 
   const handleChange = (e) => {
@@ -28,11 +41,21 @@ const SignUp = () => {
         <div className="w-full max-w-md">
           <div className="bg-white rounded-2xl p-8 shadow-lg">
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-yellow-500 mb-2">Create account</h1>
-              <p className="text-gray-500">Join us to start streaming your favorite shows</p>
+              <h1 className="text-4xl font-bold text-yellow-500 mb-2">
+                Create account
+              </h1>
+              <p className="text-gray-500">
+                Join us to start streaming your favorite shows
+              </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleLogin(formData);
+              }}
+              className="space-y-6"
+            >
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Username
@@ -43,7 +66,7 @@ const SignUp = () => {
                   value={formData.username}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
-                  requiyellow
+                  required
                 />
               </div>
 
@@ -58,7 +81,7 @@ const SignUp = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
                   placeholder="john.doe@example.com"
-                  requiyellow
+                  required
                 />
               </div>
 
@@ -68,13 +91,13 @@ const SignUp = () => {
                 </label>
                 <div className="relative">
                   <input
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
                     placeholder="Create a password"
-                    requiyellow
+                    required
                   />
                   <button
                     type="button"
@@ -86,7 +109,10 @@ const SignUp = () => {
                 </div>
                 <div className="mt-2 flex items-start space-x-2 text-sm text-gray-500">
                   <Info size={16} className="mt-0.5 flex-shrink-0" />
-                  <p>Password must be at least 8 characters long and include one uppercase letter, number, and special character</p>
+                  <p>
+                    Password must be at least 8 characters long and include one
+                    uppercase letter, number, and special character
+                  </p>
                 </div>
               </div>
 
@@ -97,8 +123,20 @@ const SignUp = () => {
                   className="mt-1 h-4 w-4 text-yellow-500 focus:ring-yellow-500 border-gray-300 rounded"
                 />
                 <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
-                  I agree to the <button type="button" className="text-yellow-500 hover:text-yellow-600 transition">Terms of Service</button> and{' '}
-                  <button type="button" className="text-yellow-500 hover:text-yellow-600 transition">Privacy Policy</button>
+                  I agree to the{" "}
+                  <button
+                    type="button"
+                    className="text-yellow-500 hover:text-yellow-600 transition"
+                  >
+                    Terms of Service
+                  </button>{" "}
+                  and{" "}
+                  <button
+                    type="button"
+                    className="text-yellow-500 hover:text-yellow-600 transition"
+                  >
+                    Privacy Policy
+                  </button>
                 </label>
               </div>
 
@@ -118,8 +156,11 @@ const SignUp = () => {
             </form>
 
             <p className="text-center mt-8 text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link to="/login" className="text-yellow-500 hover:text-yellow-600 transition font-medium">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="text-yellow-500 hover:text-yellow-600 transition font-medium"
+              >
                 Sign in
               </Link>
             </p>

@@ -48,7 +48,13 @@ const Login = () => {
               </p>
             </div>
 
-            <form onSubmit={() => handleLogin("EmailPassword")} className="space-y-6">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleLogin("EmailPassword");
+              }}
+              className="space-y-6"
+            >
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email
@@ -127,7 +133,10 @@ const Login = () => {
 
             <p className="text-center mt-8 text-sm text-gray-600">
               Don't have an account?{" "}
-              <Link to={"/signup"} className="text-yellow-500 hover:text-yellow-600 transition font-medium">
+              <Link
+                to={"/signup"}
+                className="text-yellow-500 hover:text-yellow-600 transition font-medium"
+              >
                 Sign up for free
               </Link>
             </p>
