@@ -29,12 +29,10 @@ const Landing = () => {
   }, [language]);
 
   return (
-    <div className="landing-page">
+    <div>
       <h1 className="text-2xl font-semibold mb-4 text-center">
         {t("Welcome to Movie Recommendation")}
       </h1>
-
-      {/* <p>Current Language: {language}</p> */}
 
       <ReccomendMovieForm></ReccomendMovieForm>
 
