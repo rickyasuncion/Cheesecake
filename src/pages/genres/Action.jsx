@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchData } from '../../_utils/utils.js';
 import MovieListViewAll from '../../components/LandingPage/MovieListViewAll.jsx';
 import { useTranslation } from 'react-i18next';
-import backgroundImage from '../../media/action-header.jpg'; // Correct import
+import backgroundImage from '../../media/action-header.jpg';
 
 const Action = () => {
   const { i18n } = useTranslation();
