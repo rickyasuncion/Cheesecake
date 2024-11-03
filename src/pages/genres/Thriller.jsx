@@ -3,31 +3,32 @@ import { fetchData } from '../../_utils/utils.js';
 import MovieListViewAll from '../../components/LandingPage/MovieListViewAll.jsx';
 import { useTranslation } from 'react-i18next';
 
-const Thriller = () => {
+const Drama = () => {
   const { i18n } = useTranslation();
-  const [thrillerMovies, setThrillerMovies] = useState([]);
+  const [dramaMovies, setDramaMovies] = useState([]);
   const [sortBy, setSortBy] = useState('popularity.desc');
   const [year, setYear] = useState('');
   const [language, setLanguage] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
-  const fetchThrillerMovies = async () => {
+  const fetchDramaMovies = async () => {
     try {
       const response = await fetchData(
-        `https://api.themoviedb.org/3/discover/movie?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}&with_genres=53&sort_by=${sortBy}${year ? `&primary_release_year=${year}` : ''}${language ? `&with_original_language=${language}` : ''}`
+        `https://api.themoviedb.org/3/discover/movie?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}&with_genres=18&sort_by=${sortBy}${year ? `&primary_release_year=${year}` : ''}${language ? `&with_original_language=${language}` : ''}`
       );
       if (response && response.results) {
-        setThrillerMovies(response.results);
+        setDramaMovies(response.results);
       } else {
         console.error("No results found in the response:", response);
       }
     } catch (error) {
-      console.error("Error fetching thriller movies:", error);
+      console.error("Error fetching drama movies:", error);
     }
   };
 
   useEffect(() => {
-    fetchThrillerMovies();
+    console.log("Fetching drama movies with:", { sortBy, year, language }); // Debugging statement
+    fetchDramaMovies();
   }, [i18n.language, sortBy, year, language]);
 
   return (
@@ -35,9 +36,9 @@ const Thriller = () => {
       {/* Header Section */}
       <div className="relative bg-gradient-to-b from-black/50 to-black/80 flex items-center justify-center h-80">
         <div className="relative z-10 text-center">
-          <h1 className="text-5xl font-bold text-yellow-400 tracking-wider">Thriller Movies</h1>
+          <h1 className="text-5xl font-bold text-yellow-400 tracking-wider">Drama Movies</h1>
           <p className="mt-4 text-lg text-gray-300 max-w-md mx-auto">
-            Experience the suspense with our collection of thrilling movies!
+            Experience the emotional depth of our selection of captivating drama movies.
           </p>
         </div>
       </div>
@@ -46,12 +47,12 @@ const Thriller = () => {
       <div className="flex justify-end mt-4 px-8">
         <button
           onClick={() => {
-            setShowFilters(!showFilters);
-            console.log("Filter button clicked. Show Filters:", !showFilters);
+            setShowFilters((prev) => !prev); // Toggle filters
+            console.log("Filter button clicked. Show Filters:", !showFilters); // Debugging statement
           }}
           className="bg-yellow-400 text-gray-900 px-4 py-2 rounded font-semibold hover:bg-yellow-500 transition duration-200 ease-in-out"
         >
-          Filter
+          {showFilters ? 'Hide Filters' : 'Show Filters'}
         </button>
       </div>
 
@@ -62,7 +63,10 @@ const Thriller = () => {
           <label className="block mb-2">Sort By</label>
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
+            onChange={(e) => {
+              setSortBy(e.target.value);
+              console.log("Sort By changed:", e.target.value); // Debugging statement
+            }}
             className="mb-4 w-full p-2 bg-gray-700 text-white rounded"
           >
             <option value="popularity.desc">Popularity</option>
@@ -74,7 +78,10 @@ const Thriller = () => {
             type="number"
             placeholder="Year"
             value={year}
-            onChange={(e) => setYear(e.target.value)}
+            onChange={(e) => {
+              setYear(e.target.value);
+              console.log("Year changed:", e.target.value); // Debugging statement
+            }}
             className="mb-4 w-full p-2 bg-gray-700 text-white rounded"
           />
           <label className="block mb-2">Language</label>
@@ -82,18 +89,21 @@ const Thriller = () => {
             type="text"
             placeholder="Language Code (e.g., en, fr)"
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={(e) => {
+              setLanguage(e.target.value);
+              console.log("Language changed:", e.target.value); // Debugging statement
+            }}
             className="w-full p-2 bg-gray-700 text-white rounded"
           />
         </div>
       )}
 
-      {/* Display all thriller movies using MovieListViewAll */}
+      {/* Display all drama movies using MovieListViewAll */}
       <div className="p-2">
-        <MovieListViewAll movies={thrillerMovies} title="All Thriller Movies" />
+        <MovieListViewAll movies={dramaMovies} title="All Drama Movies" />
       </div>
     </div>
   );
 };
 
-export default Thriller;
+export default Drama;
