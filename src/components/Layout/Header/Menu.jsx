@@ -50,7 +50,7 @@ const Sidebar = () => {
             <NavItem icon={<Film size={20} />} text="Movies" link="/movies" />
             <NavItem icon={<Tv size={20} />} text="Shows" link="/tvShows" />
             <NavItem icon={<Star size={20} />} text="Rated" link="#" />
-            <NavItem icon={<Grid size={20} />} text="Genre" link="#" />
+            <NavItem icon={<Grid size={20} />} text="Genre" link="/genres" />
             <NavItem icon={<List size={20} />} text="Playlist" link="#" />
           </div>
 
