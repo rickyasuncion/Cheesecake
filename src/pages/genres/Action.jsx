@@ -52,10 +52,13 @@ const Action = () => {
       {/* Filter Button */}
       <div className="flex justify-end mt-4 px-8">
         <button
-          onClick={() => setShowFilters(!showFilters)}
+          onClick={() => {
+            setShowFilters((prev) => !prev); // Toggle filter dropdown visibility
+            console.log("Filter button clicked. Show Filters:", !showFilters); // Debugging statement
+          }}
           className="bg-yellow-400 text-gray-900 px-4 py-2 rounded font-semibold hover:bg-yellow-500 transition duration-200 ease-in-out"
         >
-          Filter
+          {showFilters ? 'Hide Filters' : 'Show Filters'}
         </button>
       </div>
 
