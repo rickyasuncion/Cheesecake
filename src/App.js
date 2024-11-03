@@ -29,6 +29,11 @@ import UsersPage from "./pages/users";
 import Kids from "./pages/Kids";
 import Genres from "./pages/Genres";
 import Action from "./pages/genres/Action";
+import Comedy from "./pages/genres/Comedy";
+import Drama from "./pages/genres/Drama";
+import Horror from "./pages/genres/Horror";
+import Romance from "./pages/genres/Romance";
+import Thriller from "./pages/genres/Thriller";
 function App() {
   return (
     <AuthContextProvider>
@@ -72,6 +77,11 @@ function App() {
                   <Route path="/Kids" element={<Kids />} />
                   <Route path="/Genres" element={<Genres />} />
                   <Route path="/genres/action" element={<Action />} />
+                  <Route path="/genres/comedy" element={<Comedy />} />
+                  <Route path="/genres/drama" element={<Drama />} />
+                  <Route path="/genres/horror" element={<Horror />} />
+                  <Route path="/genres/thriller" element={<Thriller />} />
+                  <Route path="/genres/romance" element={<Romance />} />
                 </Routes>
               </main>
 
