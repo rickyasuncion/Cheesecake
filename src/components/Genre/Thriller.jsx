@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchData } from '../../_utils/utils.js';
-import MovieListViewAll from '../../components/LandingPage/MovieListViewAll.jsx';
+import MovieListViewAll from '../LandingPage/MovieListViewAll.jsx';
 import { useTranslation } from 'react-i18next';
 
 const Drama = () => {

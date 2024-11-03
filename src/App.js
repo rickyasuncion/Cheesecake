@@ -27,13 +27,14 @@ import Details from "./components/DetailsPage/Details";
 import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
 import UsersPage from "./pages/users";
 import Kids from "./pages/Kids";
-import Genres from "./pages/Genres";
-import Action from "./pages/genres/Action";
-import Comedy from "./pages/genres/Comedy";
-import Drama from "./pages/genres/Drama";
-import Horror from "./pages/genres/Horror";
-import Romance from "./pages/genres/Romance";
-import Thriller from "./pages/genres/Thriller";
+import Genres from "./components/Genre/Genres";
+import GenrePage from "./components/Genre/GenrePage"
+import Action from "./components/Genre/Action";
+import Comedy from "./components/Genre/Comedy";
+import Drama from "./components/Genre/Drama";
+import Horror from "./components/Genre/Horror";
+import Romance from "./components/Genre/Romance";
+import Thriller from "./components/Genre/Thriller";
 function App() {
   return (
     <AuthContextProvider>
@@ -76,12 +77,13 @@ function App() {
                   <Route path="/users" element={<UsersPage />} />
                   <Route path="/Kids" element={<Kids />} />
                   <Route path="/Genres" element={<Genres />} />
-                  <Route path="/genres/action" element={<Action />} />
-                  <Route path="/genres/comedy" element={<Comedy />} />
-                  <Route path="/genres/drama" element={<Drama />} />
-                  <Route path="/genres/horror" element={<Horror />} />
-                  <Route path="/genres/thriller" element={<Thriller />} />
-                  <Route path="/genres/romance" element={<Romance />} />
+                  <Route path="/GenrePage" element={<GenrePage />} />
+                  <Route path="/Genre/action" element={<Action />} />
+                  <Route path="/Genre/comedy" element={<Comedy />} />
+                  <Route path="/Genre/drama" element={<Drama />} />
+                  <Route path="/Genre/horror" element={<Horror />} />
+                  <Route path="/Genre/thriller" element={<Thriller />} />
+                  <Route path="/Genre/romance" element={<Romance />} />
                 </Routes>
               </main>
 

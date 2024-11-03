@@ -1,21 +1,21 @@
 // src/components/GenresPage.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import actionImage from '../media/Action-movies.jpg';
-import dramaImage from '../media/Drama-movies.jpg';
-import comedyImage from '../media/comedy-movies.jpg';
-import thrillerImage from '../media/Thriller-movie.jpg';
-import horrorImage from '../media/Horror-movies.jpg';
-import romanceImage from '../media/Romance-movies.jpg';
+import actionImage from '../../media/Action-movies.jpg';
+import dramaImage from '../../media/Drama-movies.jpg';
+import comedyImage from '../../media/comedy-movies.jpg';
+import thrillerImage from '../../media/Thriller-movie.jpg';
+import horrorImage from '../../media/Horror-movies.jpg';
+import romanceImage from '../../media/Romance-movies.jpg';
 
 const Genres = () => {
   const genres = [
-    { name: 'Action', path: '/genres/action', imageUrl: actionImage },
-    { name: 'Drama', path: '/genres/drama', imageUrl: dramaImage },
-    { name: 'Comedy', path: '/genres/comedy', imageUrl: comedyImage },
-    { name: 'Thriller', path: '/genres/thriller', imageUrl: thrillerImage },
-    { name: 'Horror', path: '/genres/horror', imageUrl: horrorImage },
-    { name: 'Romance', path: '/genres/romance', imageUrl: romanceImage },
+    { name: 'Action', path: '/Genre/action', imageUrl: actionImage },
+    { name: 'Drama', path: '/Genre/drama', imageUrl: dramaImage },
+    { name: 'Comedy', path: '/Genre/comedy', imageUrl: comedyImage },
+    { name: 'Thriller', path: '/Genre/thriller', imageUrl: thrillerImage },
+    { name: 'Horror', path: '/Genre/horror', imageUrl: horrorImage },
+    { name: 'Romance', path: '/Genre/romance', imageUrl: romanceImage },
   ];
 
   return (
