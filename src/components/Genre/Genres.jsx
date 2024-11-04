@@ -19,8 +19,8 @@ const Genres = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900"> {/* Background for the entire page */}
-      <div className="p-8 mb-4 mx-auto max-w-6xl"> {/* Centered content */}
+    <div className="min-h-screen bg-gray-900"> 
+      <div className="p-8 mb-4 mx-auto max-w-6xl"> 
         <h1 className="text-4xl font-bold mb-6 text-center text-yellow-400">Discover Your Favourite Genre</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {genres.map((genre) => (
