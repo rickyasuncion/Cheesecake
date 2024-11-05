@@ -10,8 +10,8 @@ import {
     Timestamp,
 } from "firebase/firestore";
 
-import { db } from "./firebase";
-import { auth } from "./firebase";
+import { db } from "./firebase.js";
+import { auth } from "./firebase.js";
 
 async function createUser(username) {
     const user = auth.currentUser;
