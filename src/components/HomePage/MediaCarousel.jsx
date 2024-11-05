@@ -81,7 +81,7 @@ const MediaCarousel = ({ movies, text }) => {
                   {" "}
                   <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title}
+                    alt={movie.title ? movie.title : movie.name}
                     className="w-full h-auto"
                   />{" "}
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -95,7 +95,7 @@ const MediaCarousel = ({ movies, text }) => {
                 <div className="p-3">
                   {" "}
                   <h3 className="font-semibold text-gray-800">
-                    {movie.title}
+                  {movie.title ? movie.title : movie.name}
                   </h3>{" "}
                   <p className="text-sm text-gray-400">{genre}</p>{" "}
                 </div>{" "}
