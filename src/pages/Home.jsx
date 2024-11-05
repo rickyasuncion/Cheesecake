@@ -37,9 +37,9 @@ const Home = () => {
     <div className="min-h-screen bg-gray-100">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <FeaturedSection featuredContent={featured} />
-        <MediaCarousel movies={movies1} text="Now In Theaters" />
-        <MediaCarousel movies={movies2} text="Trending Movies" />
-        <MediaCarousel movies={shows1} text="Trending Shows" />
+        <MediaCarousel movies={movies1} text="Now In Theaters" type="movie"/>
+        <MediaCarousel movies={movies2} text="Trending Movies" type="movie"/>
+        <MediaCarousel movies={shows1} text="Trending Shows" type="show"/>
         {/* <MediaCarousel movies={movies} text="Top 10 in Canada" /> */}
       </main>
     </div>
