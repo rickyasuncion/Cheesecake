@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const DetailsInfo = ({ movie, t }) => {
+  const [language, setLanguages] = useState({});
+
+  useEffect(() => {
+    // 請求語言列表
+    const fetchLanguages = async () => {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/configuration/languages?api_key=bbd89781c7835917a2decb4989b56470`
+        );
+        const data = await response.json();
+
+        // 將語言列表轉換成一個對照表
+        const languageMap = {};
+        data.forEach((lang) => {
+          languageMap[lang.iso_639_1.toUpperCase()] = lang.english_name;
+        });
+        setLanguages(languageMap); // 存儲語言對照表
+      } catch (error) {
+        console.error("Error fetching languages:", error);
+      }
+    };
+
+    fetchLanguages();
+  }, []);
+
   return (
     <div>
       <h2 className="text-xl italic mb-4">{movie.tagline}</h2>
@@ -16,6 +41,10 @@ const DetailsInfo = ({ movie, t }) => {
         <p>
           <strong>{t("Genres")}:</strong>{" "}
           {movie.genres.map((genre) => genre.name).join(", ")}
+        </p>
+        <p>
+          <strong>{t("Original Language")}:</strong>{" "}
+          {language[movie.original_language.toUpperCase()] || "N/A"}
         </p>
         <p>
           <strong>{t("Director")}:</strong>{" "}
