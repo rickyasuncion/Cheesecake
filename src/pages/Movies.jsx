@@ -64,11 +64,11 @@ const Movies = () => {
   }, []);
 
   return (
-    <div className="bg-[#171c21] text-secondary pt-5 pb-16">
+    <div className="pt-5 pb-16">
       <div className="container">
         <div className="pt-48 pb-3 relative overflow-hidden rounded-md  isolate">
           <div className="bg-neutral-900/60 absolute top-0 bottom-0 z-10 w-full">
-            <h1 className="px-4 font-semibold text-3xl text-white absolute bottom-3">
+            <h1 className="px-4 font-semibold text-white text-3xl absolute bottom-3">
               {t("All Movies")}
             </h1>
           </div>
@@ -78,7 +78,7 @@ const Movies = () => {
         <div className="mt-5">
           <h2 className="text-lg mb-2 font-medium">{t("New & Upcoming")}</h2>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap text-white">
             {upcomingMoviesGeners &&
               upcomingMoviesGeners.map((genre) => {
                 return (
@@ -98,7 +98,7 @@ const Movies = () => {
         <div>
           <h2 className="text-lg mb-2 font-medium">{t("Popular")}</h2>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap text-white">
             {popularMovieGenres &&
               popularMovieGenres.map((genre) => {
                 return (
@@ -118,7 +118,7 @@ const Movies = () => {
         <div>
           <h2 className="text-lg mb-2 font-medium">{t("Top Rated")}</h2>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap text-white">
             {topRatedMovieGenres &&
               topRatedMovieGenres.map((genre) => {
                 return (
