@@ -4,7 +4,13 @@ import { BiPlay } from "react-icons/bi";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 
-const DetailsHeader = ({ movie, trailerVideo, setTrailerVideo, isFree, englishHomepage }) => {
+const DetailsHeader = ({
+  movie,
+  trailerVideo,
+  setTrailerVideo,
+  isFree,
+  englishHomepage,
+}) => {
   const videoRef = useRef(null);
   const [showTrailer, setShowTrailer] = React.useState(false);
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -65,29 +71,34 @@ const DetailsHeader = ({ movie, trailerVideo, setTrailerVideo, isFree, englishHo
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
         ></iframe>
       )}
-        <div className="p-4 flex gap-4 items-center">
-      <button
-        onClick={handlePlayPause}
-        className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0"
-      >
-        {isPlaying ? <BsPauseFill /> : <BiPlay />}
-      </button>
-      {englishHomepage ? (
-        <Button
-          className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
-          onClick={handleVisitWebsite}
+
+      <h2 className="text-2xl font-bold text-white mb-2 w-full">
+        {movie.title}
+      </h2>
+
+      <div className="p-4 flex gap-4 items-center">
+        <button
+          onClick={handlePlayPause}
+          className="hover:border-neutral-300 hover:text-neutral-300 border-2 border-border rounded-full p-2 text-2xl m-0"
         >
-          Visit Website <ArrowRight className="size-5" />
-        </Button>
-      ) : (
-        <Button
-          className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
-          disabled
-        >
-          No official website available
-        </Button>
-      )}
-    </div>
+          {isPlaying ? <BsPauseFill /> : <BiPlay />}
+        </button>
+        {englishHomepage ? (
+          <Button
+            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+            onClick={handleVisitWebsite}
+          >
+            Visit Website <ArrowRight className="size-5" />
+          </Button>
+        ) : (
+          <Button
+            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"
+            disabled
+          >
+            No official website available
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

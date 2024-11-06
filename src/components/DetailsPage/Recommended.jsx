@@ -9,6 +9,7 @@ const Recommended = ({ recommendedMovies, type, t }) => {
       </h3>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {recommendedMovies.map((recMovie) => {
+          const isRecMovieFree = recMovie?.providers?.CA?.free;
           return (
             <Link to={`/details/${type}/${recMovie.id}`} key={recMovie.id}>
               <div
@@ -18,6 +19,20 @@ const Recommended = ({ recommendedMovies, type, t }) => {
                   margin: "0 auto",
                 }}
               >
+                {recMovie.isFree && (
+                  <div
+                    className="absolute bg-red-600 text-white px-2 py-1 rounded"
+                    style={{
+                      top: "10px",
+                      left: "10px",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      zIndex: 10,
+                    }}
+                  >
+                    {t("Free")}
+                  </div>
+                )}
                 <img
                   src={`https://image.tmdb.org/t/p/w154${recMovie.poster_path}`}
                   alt={recMovie.title || recMovie.name}
