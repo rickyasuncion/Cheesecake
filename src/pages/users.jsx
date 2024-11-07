@@ -1,3 +1,14 @@
+/*
+firebase documentation: https://firebase.google.com/docs/firestore/query-data/get-data
+    used to see how to get documents from firestore
+
+
+Chat GPT prompt: how to get documents from firestore
+    used to get more information on how to get doucments from firestore
+    
+mozilla docs: how to filter an element from an array
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+*/
 import { collection, doc, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { auth, db } from '../_utils/firebase';
