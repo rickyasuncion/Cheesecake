@@ -6,20 +6,27 @@ const UsersPage = () => {
     const [users, setUsers] = useState([]);
     const user = auth.currentUser;
 
+    
     async function getAllUsers() {
         const querySnap = await getDocs(collection(db, 'users'));
         const allUsers = querySnap.docs.map(doc => doc.data())
         setUsers(allUsers)
         console.log(allUsers)
     }
-
-
-
+    
+    
+    
     useEffect(() => {
-        getAllUsers()
-
+        if(user) {
+            getAllUsers()
+        }
     }, [])
+    
 
+
+    if(!user) {
+        return <>Not logged in Please try logging in</>
+    }
     return (
         <div className='py-4 container bg-[#171c21] text-secondary'>
             <h1 className='font-medium text-3xl'>All your movie folks are here!!</h1>
