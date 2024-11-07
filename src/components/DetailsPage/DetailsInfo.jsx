@@ -4,7 +4,6 @@ const DetailsInfo = ({ movie, t }) => {
   const [language, setLanguages] = useState({});
 
   useEffect(() => {
-    // 請求語言列表
     const fetchLanguages = async () => {
       try {
         const response = await fetch(
@@ -12,12 +11,11 @@ const DetailsInfo = ({ movie, t }) => {
         );
         const data = await response.json();
 
-        // 將語言列表轉換成一個對照表
         const languageMap = {};
         data.forEach((lang) => {
           languageMap[lang.iso_639_1.toUpperCase()] = lang.english_name;
         });
-        setLanguages(languageMap); // 存儲語言對照表
+        setLanguages(languageMap);
       } catch (error) {
         console.error("Error fetching languages:", error);
       }
