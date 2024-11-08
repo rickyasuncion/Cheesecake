@@ -1,10 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 const Footer = () => {
   const { t } = useTranslation();
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [messageColor, setMessageColor] = useState('');
+  const [loading, setLoading] = useState(false); 
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    setLoading(true); 
+
+    try {
+      const response = await axios.post('http://127.0.0.1:3001/subscribe', { email });
+      if (response.data && response.data.message) {
+        setMessage(response.data.message);
+        setMessageColor('text-green-500');
+      } else {
+        setMessage('Subscription successful.');
+        setMessageColor('text-green-500');
+      }
+      setEmail('');
+
+      setTimeout(() => {
+        setMessage('');
+        setMessageColor('');
+      }, 3000);
+      
+    } catch (error) {
+      const errorMessage = error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : 'Failed to subscribe. Please try again later.';
+        
+      setMessage(errorMessage);
+      setMessageColor('text-red-500');
+      console.error('Error subscribing:', error);
+
+      setTimeout(() => {
+        setMessage('');
+        setMessageColor('');
+      }, 3000);
+    } finally {
+      setLoading(false); 
+    }
+  };
 
   return (
     <footer className="bg-black text-white">
@@ -33,8 +76,36 @@ const Footer = () => {
             </li>
           </ul>
         </div>
+        
         <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span className="block text-sm text-gray-300 sm:text-center">© 2024 <Link to={'/'} className="hover:underline">Cheesecake</Link>. {t('All Rights Reserved')}</span>
+
+        <div className="flex flex-col items-center space-y-4">
+          <h3 className="text-lg font-semibold">{t('Subscribe to our Newsletter')}</h3>
+          <form className="flex space-x-2 w-full max-w-md" onSubmit={handleSubscribe}>
+            <input
+              type="email"
+              placeholder={t('Enter your email')}
+              className="w-full px-4 py-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition duration-300 ease-in-out">
+              {t('Subscribe')}
+            </Button>
+          </form>
+          {loading ? (
+            <div className="mt-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div> {/* Loading spinner */}
+            </div>
+          ) : (
+            message && <p className={`mt-4 text-sm ${messageColor}`}>{message}</p> 
+          )}
+        </div>
+
+        <span className="block text-sm text-gray-300 sm:text-center mt-6">
+          © 2024 <Link to={'/'} className="hover:underline">Cheesecake</Link>. {t('All Rights Reserved')}
+        </span>
       </div>
     </footer>
   );
