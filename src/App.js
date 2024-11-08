@@ -27,6 +27,7 @@ import Details from "./components/DetailsPage/Details";
 import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
 import UsersPage from "./pages/users";
 import Kids from "./pages/Kids";
+import MovieDetailsPage from "./pages/Test";
 
 function App() {
   return (
@@ -69,6 +70,7 @@ function App() {
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/users" element={<UsersPage />} />
                   <Route path="/Kids" element={<Kids />} />
+                  <Route path="/test" element={<MovieDetailsPage />} />
                 </Routes>
               </main>
 
