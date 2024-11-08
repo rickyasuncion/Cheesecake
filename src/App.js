@@ -6,7 +6,6 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
 import { AuthContextProvider } from "./_utils/auth-context";
-import MovieDetails from "./pages/Details";
 import { LanguageProvider } from "./_utils/LanguageContext";
 import Search from "./pages/Search";
 import Favourties from "./pages/Favourties";
@@ -23,11 +22,11 @@ import SimilarLiked from "./pages/SimilarLiked";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Settings from "./pages/Settings";
-import Details from "./components/DetailsPage/Details";
 import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
 import UsersPage from "./pages/users";
 import Kids from "./pages/Kids";
 import MovieDetailsPage from "./pages/Test";
+import Details from "./pages/Details";
 
 function App() {
   return (
