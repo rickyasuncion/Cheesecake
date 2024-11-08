@@ -71,11 +71,11 @@ const DetailsHero = ({ movie, trailerVideo }) => {
                 className="flex items-center gap-2 bg-red-600 hover:bg-red-700 px-8 py-3 rounded-full font-semibold transition-colors"
               >
                 <Play size={20} />
-                {isPlaying ? "Pause" : "Watch Now"}
+                {isPlaying ? "Pause" : "Watch Trailer"}
               </button>
               <div className="flex items-center gap-2">
                 <Star className="text-yellow-400" fill="currentColor" />
-                <span className="text-xl font-semibold">{movie.rating}</span>
+                <span className="text-xl font-semibold">{movie.vote_average}</span>
                 <span className="text-gray-400">/10</span>
               </div>
             </div>

@@ -27,7 +27,7 @@ const MovieDetailsPage = () => {
       data = await fetchData(
         "https://api.themoviedb.org/3/movie/354912/credits?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
       );
-      setCast(data.results);
+      setCast(data.cast);
       //////////////////////////////////////////////
       data = await fetchData(
         "https://api.themoviedb.org/3/movie/354912/videos?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
@@ -42,7 +42,7 @@ const MovieDetailsPage = () => {
       );
       setSimiliar(data.results);
 
-      updateUserRecentlyViewedMovies(id);
+      // updateUserRecentlyViewedMovies(id);
     };
 
     getData();
@@ -115,7 +115,7 @@ const MovieDetailsPage = () => {
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-3 gap-12">
           <div className="col-span-2 space-y-8">
-            {/* <DetailsInfo /> */}
+            <DetailsInfo overview={movie.overview} cast={cast}/>
             {/* <Reviews /> */}
           </div>
           {/* <Sidebar /> */}
