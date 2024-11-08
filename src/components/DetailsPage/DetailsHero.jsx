@@ -10,7 +10,6 @@ const DetailsHero = ({ movie, trailerVideo }) => {
     if (showTrailer && trailerVideo && videoRef.current) {
       videoRef.current.src = `https://www.youtube.com/embed/${trailerVideo.key}?enablejsapi=1&modestbranding=1&controls=1&showinfo=0&rel=0&autoplay=1`;
     }
-    console.log(movie);
   }, [showTrailer, trailerVideo]);
 
   const handlePlayPause = (event) => {
@@ -68,7 +67,7 @@ const DetailsHero = ({ movie, trailerVideo }) => {
             <div className="flex items-center gap-6">
               <button
                 onClick={handlePlayPause}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 px-8 py-3 rounded-full font-semibold transition-colors"
+                className="flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 px-8 py-3 rounded-full font-semibold transition-colors"
               >
                 <Play size={20} />
                 {isPlaying ? "Pause" : "Watch Trailer"}

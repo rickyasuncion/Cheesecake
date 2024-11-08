@@ -14,6 +14,7 @@ const MovieDetailsPage = () => {
 
   const [movie, setMovie] = useState([]);
   const [cast, setCast] = useState([]);
+  const [crew, setCrew] = useState([]);
   const [trailer, setTrailer] = useState([]);
   const [similiar, setSimiliar] = useState([]);
 
@@ -28,6 +29,7 @@ const MovieDetailsPage = () => {
         "https://api.themoviedb.org/3/movie/354912/credits?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
       );
       setCast(data.cast);
+      setCrew(data.crew);
       //////////////////////////////////////////////
       data = await fetchData(
         "https://api.themoviedb.org/3/movie/354912/videos?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
@@ -50,12 +52,6 @@ const MovieDetailsPage = () => {
   
   // Sample movie data
   const movieData = {
-    title: "Coco", //
-    tagline: "The celebration of a lifetime", //
-    description: "Despite his family's baffling generations-old ban on music, Miguel dreams of becoming an accomplished musician like his idol, Ernesto de la Cruz. Desperate to prove his talent, Miguel finds himself in the stunning and colorful Land of the Dead following a mysterious chain of events. Along the way, he meets charming trickster Hector, and together, they set off on an extraordinary journey to unlock the real story behind Miguel's family history.", //
-    releaseDate: "11/24/2017", //
-    revenue: "$807.8M", //
-    runtime: "1hr 45m", //
     // rating: "8.5",
     // totalReviews: 2847,
     // ratingDistribution: {
@@ -65,9 +61,6 @@ const MovieDetailsPage = () => {
     //   2: 150,
     //   1: 97
     // },
-    genres: ["Family", "Animation", "Music", "Adventure"], //
-    director: "Lee Unkrich",
-    cast: ["Anthony Gonzalez", "Gael García Bernal", "Benjamin Bratt", "Alanna Ubach", "Renee Victor"],
     reviews: [
       {
         id: 1,
@@ -99,13 +92,6 @@ const MovieDetailsPage = () => {
         replies: 5,
         isVerified: false
       }
-    ],
-    similarMovies: [
-      { title: "Ferdinand", genre: "Animation" },
-      { title: "The Shape of Water", genre: "Drama" },
-      { title: "Thor: Ragnarok", genre: "Action" },
-      { title: "Wonder", genre: "Drama" },
-      { title: "Moana", genre: "Animation" }
     ]
   };
 
@@ -118,9 +104,9 @@ const MovieDetailsPage = () => {
             <DetailsInfo overview={movie.overview} cast={cast}/>
             {/* <Reviews /> */}
           </div>
-          {/* <Sidebar /> */}
+          <Sidebar movie={movie} crews={crew}/>
         </div>
-        {/* <Similiar /> */}
+        <Similiar similarMovies={similiar}/>
       </div>
     </div>
   );
