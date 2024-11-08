@@ -39,7 +39,7 @@ const Details = () => {
       setTrailer(data);
       //////////////////////////////////////////////
       data = await fetchData(
-        "https://api.themoviedb.org/3/movie/354912/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
+        `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
       );
       setSimiliar(data.results);
 
@@ -47,7 +47,7 @@ const Details = () => {
     };
 
     getData();
-  }, []);
+  }, [id]);
   
   // Sample movie data
   const movieData = {
