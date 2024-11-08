@@ -3,12 +3,12 @@ import React from "react";
 import ReviewItem from "./ReviewItem";
 import { Flag, MessageCircle, Star, ThumbsUp } from "lucide-react";
 
-const ReviewsList = ({ reviews }) => {
+const ReviewsList = ({ movie, reviews }) => {
   if (reviews.length === 0) return <p>No reviews yet.</p>;
 
   return (
     <div className="space-y-6">
-      {movieData.reviews.map((review) => (
+      {movie.reviews.map((review) => (
         <div key={review.id} className="bg-gray-800 rounded-lg p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">

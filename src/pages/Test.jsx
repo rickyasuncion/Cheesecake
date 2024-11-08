@@ -22,7 +22,7 @@ const MovieDetailsPage = () => {
       let data = await fetchData(
         "https://api.themoviedb.org/3/movie/354912?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
       );
-      setMovie(data.results);
+      setMovie(data);
       //////////////////////////////////////////////
       data = await fetchData(
         "https://api.themoviedb.org/3/movie/354912/credits?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
@@ -35,7 +35,7 @@ const MovieDetailsPage = () => {
       data = data.results.find(
         (video) => video.site === "YouTube" && video.type === "Trailer"
       )
-      setTrailer(data.key);
+      setTrailer(data);
       //////////////////////////////////////////////
       data = await fetchData(
         "https://api.themoviedb.org/3/movie/354912/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
@@ -111,16 +111,16 @@ const MovieDetailsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <DetailsHero />
+      <DetailsHero movie={movie} trailerVideo={trailer}/>
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-3 gap-12">
           <div className="col-span-2 space-y-8">
-            <DetailsInfo />
-            <Reviews />
+            {/* <DetailsInfo /> */}
+            {/* <Reviews /> */}
           </div>
-          <Sidebar />
+          {/* <Sidebar /> */}
         </div>
-        <Similiar />
+        {/* <Similiar /> */}
       </div>
     </div>
   );

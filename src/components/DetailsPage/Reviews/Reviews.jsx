@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { createReview, getReviews } from "../../../_utils/firestore";
 import ReviewModal from "./ReviewModal";
 import ReviewsList from "./ReviewsList";
+import { Flag, MessageCircle, Star, ThumbsUp } from "lucide-react";
 
-const Reviews = ({ media_type, media_id }) => {
+const Reviews = ({ movie, media_type, media_id }) => {
   const [reviews, setReviews] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rating, setRating] = useState(0);
@@ -30,8 +31,8 @@ const Reviews = ({ media_type, media_id }) => {
   };
 
     // Calculate average rating
-    const totalReviews = Object.values(movieData.ratingDistribution).reduce((a, b) => a + b, 0);
-    const averageRating = Object.entries(movieData.ratingDistribution)
+    const totalReviews = Object.values(movie.ratingDistribution).reduce((a, b) => a + b, 0);
+    const averageRating = Object.entries(movie.ratingDistribution)
       .reduce((acc, [rating, count]) => acc + (Number(rating) * count), 0) / totalReviews;
 
   return (
@@ -84,7 +85,7 @@ const Reviews = ({ media_type, media_id }) => {
                   className="h-full bg-yellow-400"
                   style={{
                     width: `${
-                      (movieData.ratingDistribution[rating] /
+                      (movie.ratingDistribution[rating] /
                         totalReviews) *
                       100
                     }%`,
@@ -93,7 +94,7 @@ const Reviews = ({ media_type, media_id }) => {
               </div>
               <div className="w-12 text-sm text-gray-400">
                 {Math.round(
-                  (movieData.ratingDistribution[rating] /
+                  (movie.ratingDistribution[rating] /
                     totalReviews) *
                     100
                 )}
@@ -107,7 +108,7 @@ const Reviews = ({ media_type, media_id }) => {
 
     {/* Reviews List */}
     <div className="space-y-6">
-      {movieData.reviews.map((review) => (
+      {movie.reviews.map((review) => (
         <div key={review.id} className="bg-gray-800 rounded-lg p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
