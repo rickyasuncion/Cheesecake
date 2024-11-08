@@ -1,40 +1,26 @@
 import React from "react";
 
-const DetailsInfo = ({ movie, t }) => {
+  const DetailsInfo = ({ overview, cast }) => {
+    const filteredCast = cast.filter((actor) => actor.known_for_department === "Acting").slice(0, 5);
+
   return (
-    <div>
-      <h2 className="text-xl italic mb-4">{movie.tagline}</h2>
-      <p className="mb-4">{movie.overview}</p>
-      <div className="mb-4">
-        <p>
-          <strong>{t("Release Date")}:</strong>{" "}
-          {new Date(movie.release_date).toLocaleDateString()}
-        </p>
-        <p>
-          <strong>{t("Runtime")}:</strong> {movie.runtime}
-        </p>
-        <p>
-          <strong>{t("Genres")}:</strong>{" "}
-          {movie.genres.map((genre) => genre.name).join(", ")}
-        </p>
-        <p>
-          <strong>{t("Director")}:</strong>{" "}
-          {movie.crew?.find((member) => member.job === "Director")?.name ||
-            "N/A"}
-        </p>
-        <p>
-          <strong>{t("Cast")}:</strong>{" "}
-          {movie.cast
-            ?.slice(0, 5)
-            .map((actor) => actor.name)
-            .join(", ") || "N/A"}
-        </p>
-        <p>
-          <strong>{t("Vote Average")}:</strong> {movie.vote_average} (
-          {movie.vote_count} {t("votes")})
-        </p>
+    <>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Overview</h2>
+        <p className="text-gray-300 leading-relaxed">{overview}</p>
       </div>
-    </div>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Cast</h2>
+        <div className="grid grid-cols-2 gap-4">
+          {filteredCast.map((cast, index) => (
+            <div key={index} className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-gray-700" />
+              <span className="text-gray-300">{cast.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 

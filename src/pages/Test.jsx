@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Play, Star, ThumbsUp, MessageCircle, Flag } from 'lucide-react';
 import Sidebar from '../components/DetailsPage/Sidebar';
 import Reviews from '../components/DetailsPage/Reviews/Reviews';
 import DetailsInfo from '../components/DetailsPage/DetailsInfo';
@@ -8,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { fetchData } from '../_utils/utils';
 import { updateUserRecentlyViewedMovies } from '../_utils/firestore';
 
-const Details = () => {
+const MovieDetailsPage = () => {
   const { type, id } = useParams();
 
   const [movie, setMovie] = useState([]);
@@ -20,18 +21,18 @@ const Details = () => {
   useState(() => {
     const getData = async () => {
       let data = await fetchData(
-        `https://api.themoviedb.org/3/movie/${id}?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
+        "https://api.themoviedb.org/3/movie/354912?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
       );
       setMovie(data);
       //////////////////////////////////////////////
       data = await fetchData(
-        `https://api.themoviedb.org/3/movie/${id}/credits?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
+        "https://api.themoviedb.org/3/movie/354912/credits?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
       );
       setCast(data.cast);
       setCrew(data.crew);
       //////////////////////////////////////////////
       data = await fetchData(
-        `https://api.themoviedb.org/3/movie/${id}/videos?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
+        "https://api.themoviedb.org/3/movie/354912/videos?api_key=bbd89781c7835917a2decb4989b56470&language=en-US"
       );
       data = data.results.find(
         (video) => video.site === "YouTube" && video.type === "Trailer"
@@ -111,4 +112,4 @@ const Details = () => {
   );
 };
 
-export default Details;
+export default MovieDetailsPage;
