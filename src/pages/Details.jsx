@@ -109,7 +109,7 @@ const Details = () => {
             <DetailsInfo overview={movie.overview} cast={cast} />
             {/* <Reviews /> */}
           </div>
-          <Sidebar movie={movie} crews={crew} type={type}/>
+          <Sidebar movie={movie} cast={cast} crews={crew} type={type}/>
         </div>
         <Similiar similarMovies={similiar} />
       </div>
