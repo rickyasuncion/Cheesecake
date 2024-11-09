@@ -50,8 +50,8 @@ const Details = () => {
     };
 
     getData();
-  }, []);
-
+  }, [id]);
+  
   // Sample movie data
   const movieData = {
     // rating: "8.5",
