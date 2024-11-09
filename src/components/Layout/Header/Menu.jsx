@@ -31,16 +31,14 @@ const Sidebar = () => {
       <SheetContent side="right" className="bg-white text-gray-400">
         <div className="flex items-center mb-8">
           <div className="relative">
-            <img
-              src="/api/placeholder/48/48"
+            {/* <img
               alt="Profile"
               className="rounded-full"
-            />
-            <div className="absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full" />
+            /> */}
           </div>
           <div className="ml-3">
             <h2 className="text-xl font-semibold text-yellow-400">Hi, User</h2>
-            <p className="text-gray-400 text-sm">Searching</p>
+            <p className="text-gray-400 text-sm">Welcome</p>
           </div>
         </div>
 
@@ -51,13 +49,12 @@ const Sidebar = () => {
             <NavItem icon={<Tv size={20} />} text="Shows" link="/tvShows" />
             <NavItem icon={<Star size={20} />} text="Rated" link="#" />
             <NavItem icon={<Grid size={20} />} text="Genre" link="#" />
-            <NavItem icon={<List size={20} />} text="Playlist" link="#" />
+            <NavItem icon={<List size={20} />} text="Watchlist" link="#" />
           </div>
 
           <div className="mt-8 space-y-1">
-            <NavItem icon={<Heart size={20} />} text="Likes" link="#" />
             <NavItem
-              icon={<Bookmark size={20} />}
+              icon={<Heart size={20} />}
               text="Favorites"
               link="/favourties"
             />

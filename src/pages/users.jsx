@@ -1,3 +1,14 @@
+/*
+firebase documentation: https://firebase.google.com/docs/firestore/query-data/get-data
+    used to see how to get documents from firestore
+
+
+Chat GPT prompt: how to get documents from firestore
+    used to get more information on how to get doucments from firestore
+    
+mozilla docs: how to filter an element from an array
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+*/
 import { collection, doc, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { auth, db } from '../_utils/firebase';
@@ -6,20 +17,27 @@ const UsersPage = () => {
     const [users, setUsers] = useState([]);
     const user = auth.currentUser;
 
+    
     async function getAllUsers() {
         const querySnap = await getDocs(collection(db, 'users'));
         const allUsers = querySnap.docs.map(doc => doc.data())
         setUsers(allUsers)
         console.log(allUsers)
     }
-
-
-
+    
+    
+    
     useEffect(() => {
-        getAllUsers()
-
+        if(user) {
+            getAllUsers()
+        }
     }, [])
+    
 
+
+    if(!user) {
+        return <>Not logged in Please try logging in</>
+    }
     return (
         <div className='py-4 container bg-[#171c21] text-secondary'>
             <h1 className='font-medium text-3xl'>All your movie folks are here!!</h1>

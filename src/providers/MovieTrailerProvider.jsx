@@ -12,6 +12,7 @@ export const MovieTrailerContextProvider = ({ children }) => {
     const toggleTrailerState = (state) => {
         setShouldPlayTrailer(state)
     };
+    
 
     return (
         <context.Provider value={{ shouldPlayTrailer, toggleTrailerState }}>

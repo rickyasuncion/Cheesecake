@@ -78,3 +78,12 @@ TMDb API Documentation: https://developers.themoviedb.org/3/getting-started/intr
 Tailwind CSS: https://tailwindcss.com/docs
 
 React Router: https://reactrouter.com/web/guides/quick-start
+
+## Acknowledgment of AI Assistance
+This project was written with assistance from AI tools, including ChatGPT by OpenAI. AI was used to help:
+
+Generate code snippets and boilerplate structures
+Debug and optimize functions
+Provide guidance on technical approaches and best practices
+Write documentation and improve readability
+The AI played a role as a co-developer in this project, helping streamline the coding process and reduce development time. However, all code was reviewed and tested by a human developer to ensure quality and accuracy.
