@@ -69,7 +69,7 @@ function App() {
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/users" element={<UsersPage />} />
                   <Route path="/Kids" element={<Kids />} />
-                  <Route path="/test" element={<TVShowDetails />} />
+                  {/* <Route path="/test" element={<TVShowDetails />} /> */}
                 </Routes>
               </main>
 

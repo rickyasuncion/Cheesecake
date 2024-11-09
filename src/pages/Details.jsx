@@ -106,10 +106,10 @@ const Details = () => {
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-3 gap-12">
           <div className="col-span-2 space-y-8">
-            <DetailsInfo overview={movie.overview} cast={cast} />
+            <DetailsInfo movie={movie} cast={cast} type={type} id={id} />
             {/* <Reviews /> */}
           </div>
-          <Sidebar movie={movie} crews={crew} type={type}/>
+          <Sidebar movie={movie} cast={cast} crews={crew} type={type} />
         </div>
         <Similiar similarMovies={similiar} />
       </div>
