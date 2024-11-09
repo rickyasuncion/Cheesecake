@@ -20,7 +20,16 @@ const GENRES = {
   53: "Thriller",
   10752: "War",
   37: "Western",
+  10759: "Action & Adventure",
+  10762: "Kids",
+  10763: "News",
+  10764: "Reality",
+  10765: "Sci-Fi & Fantasy",
+  10766: "Soap",
+  10767: "Talk",
+  10768: "War & Politics"
 };
+
 
 const Sidebar = ({ movie, cast, crews, type }) => {
   const filteredCast = cast.filter((actor) => actor.known_for_department === "Acting").slice(0, 5);
@@ -87,21 +96,24 @@ const Sidebar = ({ movie, cast, crews, type }) => {
             {movie.release_date}
           </div>
           <div>
-            <span className="text-gray-500">Status:</span> $
-            {movie.revenue && movie.revenue.toLocaleString()}
+            <span className="text-gray-500">Status:</span>{" "}
+            {movie.status}
           </div>
           <div>
-            <span className="text-gray-500">Network:</span> {movie.runtime} mins
+            <span className="text-gray-500">Network:</span>{" "}
+            {movie.networks?.map((network) => network.name).join(", ")}
           </div>
           <div>
-            <span className="text-gray-500">Creator:</span> {movie.runtime} mins
+            <span className="text-gray-500">Creator:</span>{" "}
+            {movie.created_by?.map((creator) => creator.name).join(", ")}
           </div>
           <div>
-            <span className="text-gray-500">Episodes:</span> {movie.runtime}{" "}
-            mins
+            <span className="text-gray-500">Episodes:</span>{" "}
+            {movie.number_of_episodes} mins
           </div>
           <div>
-            <span className="text-gray-500">Seasons:</span> {movie.runtime} mins
+            <span className="text-gray-500">Seasons:</span>{" "}
+            {movie.number_of_seasons} mins
           </div>
           <div>
             <span className="text-gray-500">Episode Runtime:</span>{" "}
