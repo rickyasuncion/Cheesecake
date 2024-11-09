@@ -38,13 +38,13 @@ const Sidebar = ({ movie, crews }) => {
         <h3 className="text-lg font-semibold mb-2">Details</h3>
         <div className="space-y-3 text-gray-300">
           <div>
-            <span className="text-gray-500">Release Date:</span> {movie.release_date}
+            <span className="text-gray-500">Release Date:</span> {movie.release_date || movie.first_air_date}
           </div>
           <div>
             <span className="text-gray-500">Revenue:</span> ${movie.revenue && movie.revenue.toLocaleString()}
           </div>
           <div>
-            <span className="text-gray-500">Runtime:</span> {movie.runtime} mins
+            <span className="text-gray-500">Runtime:</span> {movie.runtime} mins  
           </div>
           <div>
             <span className="text-gray-500">Director:</span> {directors.length > 0 ? directors.map((director) => director.name).join(", ") : "No Director"}
