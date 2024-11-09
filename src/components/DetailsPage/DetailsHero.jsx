@@ -28,7 +28,7 @@ const DetailsHero = ({ movie, trailerVideo }) => {
       } else {
         console.error("Video reference is null or contentWindow is undefined");
       }
-    } 
+    }
   };
 
   return (
@@ -62,7 +62,9 @@ const DetailsHero = ({ movie, trailerVideo }) => {
           }`}
         >
           <div className="max-w-3xl">
-            <h1 className="text-6xl font-bold mb-4">{movie.title}</h1>
+            <h1 className="text-6xl font-bold mb-4">
+              {movie.title || movie.name}
+            </h1>
             <p className="text-2xl text-gray-300 mb-6">{movie.tagline}</p>
             <div className="flex items-center gap-6">
               <button
@@ -74,7 +76,9 @@ const DetailsHero = ({ movie, trailerVideo }) => {
               </button>
               <div className="flex items-center gap-2">
                 <Star className="text-yellow-400" fill="currentColor" />
-                <span className="text-xl font-semibold">{movie.vote_average}</span>
+                <span className="text-xl font-semibold">
+                  {movie.vote_average}
+                </span>
                 <span className="text-gray-400">/10</span>
               </div>
             </div>

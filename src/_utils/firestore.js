@@ -17,8 +17,8 @@ async function createUser(username) {
   if (user) {
     try {
       const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
 
+      const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         return;
       }

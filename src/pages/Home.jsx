@@ -39,7 +39,7 @@ const Home = () => {
         <FeaturedSection featuredContent={featured} />
         <MediaCarousel movies={movies1} text="Now In Theaters" type="movie"/>
         <MediaCarousel movies={movies2} text="Trending Movies" type="movie"/>
-        <MediaCarousel movies={shows1} text="Trending Shows" type="show"/>
+        <MediaCarousel movies={shows1} text="Trending Shows" type="tv"/>
         {/* <MediaCarousel movies={movies} text="Top 10 in Canada" /> */}
       </main>
     </div>
