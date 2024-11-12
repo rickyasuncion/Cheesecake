@@ -9,13 +9,14 @@ Chat GPT prompt: how to get documents from firestore
 mozilla docs: how to filter an element from an array
     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 */
-import { arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { IoMdAdd } from "react-icons/io";
 import {Button} from '../components/ui/button'
 import { auth, db } from '../_utils/firebase';
 import { useUserAuth } from '../_utils/auth-context';
 import { IoCheckmarkCircle } from "react-icons/io5";
+import { RxCross2 } from "react-icons/rx";
 
 import { useToast } from '../components/ui/use-toast';
 
@@ -69,6 +70,22 @@ const UsersPage = () => {
         getAndSetFriends();
     }
 
+    async function removeFriend(id) {
+        if(!friends.includes(id)) {
+            return;
+            console.log('not a friend. Therefore cannot remove')
+        }
+
+        await updateDoc(doc(db,'users', user.uid), {
+            friends: arrayRemove(id)
+        })
+        await updateDoc(doc(db, 'users', id), {
+            friends: arrayRemove(user.uid)
+        })
+        getAndSetFriends()
+        toast({description: 'User removed successfully'})
+    }
+
     return (
         <div className='py-4 container '>
             <h1 className='font-medium text-3xl'>All your movie folks are here!!</h1>
@@ -80,7 +97,9 @@ const UsersPage = () => {
                     return <div className='bg-secondary p-3 rounded-sm max-w-sm flex items-center  justify-between ' key={user.uid}>
                         {user.displayName || user.email}
                         {friends.find(friendId => friendId === user.uid) ? 
-                          <IoCheckmarkCircle  className='size-7 text-green-500'/>                          : 
+                        <Button variant="destructive" className="p-2 h-auto" onClick={() => removeFriend(user.uid)}>
+                            <RxCross2 />                         
+                        </Button>:
                         <button className='p-2 rounded-sm bg-neutral-200' onClick={() => addFriend(user.uid)} disabled={friends.find(friendId => friendId === user.uid)}>
                          <IoMdAdd />
                         </button>
