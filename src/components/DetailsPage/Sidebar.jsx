@@ -72,7 +72,7 @@ const Sidebar = ({ movie, cast, crews, type }) => {
           <div className="space-y-3 text-gray-300">
             <div>
               <span className="text-gray-500">First Aired:</span>{" "}
-              {movie.release_date}
+              {movie.first_air_date}
             </div>
             <div>
               <span className="text-gray-500">Status:</span> {movie.status}
@@ -87,30 +87,14 @@ const Sidebar = ({ movie, cast, crews, type }) => {
             </div>
             <div>
               <span className="text-gray-500">Episodes:</span>{" "}
-              {movie.number_of_episodes} 
+              {movie.number_of_episodes}
             </div>
             <div>
               <span className="text-gray-500">Seasons:</span>{" "}
-              {movie.number_of_seasons} 
-            </div>
-            <div>
-              <span className="text-gray-500">Episode Runtime:</span>{" "}
-              {movie.runtime} 
+              {movie.number_of_seasons}
             </div>
           </div>
         )}
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Cast</h3>
-        <div className="grid gap-4">
-          {filteredCast.map((cast, index) => (
-            <div key={index} className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-gray-700" />
-              <span className="text-gray-300">{cast.name}</span>
-            </div>
-          ))}
-        </div>
       </div>
 
       <div>

@@ -111,7 +111,7 @@ const Details = () => {
           </div>
           <Sidebar movie={movie} cast={cast} crews={crew} type={type} />
         </div>
-        <Similiar similarMovies={similiar} />
+        <Similiar similarMovies={similiar} type={type}/>
       </div>
     </div>
   );
