@@ -231,6 +231,10 @@ const MovieDetails = ({ id: propId }) => {
           className="p-4 flex gap-4 items-center"
           style={{ zIndex: 2, justifyContent: "flex-start" }}
         >
+          <h2 className="text-2xl font-bold text-white mb-2 w-full">
+            {movie.title}
+          </h2>
+
           {englishHomepage ? (
             <Button
               className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base"

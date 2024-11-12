@@ -41,10 +41,10 @@ const FreeMovies = () => {
             const providerData = await providerResponse.json();
             const isFreeInCA =
               providerData.results.CA && providerData.results.CA.free;
-            const isFreeInUS =
-              providerData.results.US && providerData.results.US.free;
+            // const isFreeInUS =
+            //   providerData.results.US && providerData.results.US.free;
 
-            if (isFreeInCA || isFreeInUS) {
+            if (isFreeInCA) {
               freeMovies.push({
                 ...movie,
                 isFree: true,
@@ -122,7 +122,7 @@ const FreeMovies = () => {
                 state={{ isFree: movie.isFree }}
               >
                 <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  src={`https://image.tmdb.org/t/p/w400${movie.poster_path}`}
                   alt={movie.title}
                 />
               </Link>
