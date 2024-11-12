@@ -28,6 +28,7 @@ import Kids from "./pages/Kids";
 import Details from "./pages/Details";
 import TVShowDetails from "./pages/Test";
 import { Toaster } from "./components/ui/toaster";
+import Chat from "./pages/Chat";
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/users" element={<UsersPage />} />
                   <Route path="/Kids" element={<Kids />} />
+                  <Route path="/chat/:userId" element={<Chat/>}></Route>
                   {/* <Route path="/test" element={<TVShowDetails />} /> */}
                 </Routes>
               </main>
