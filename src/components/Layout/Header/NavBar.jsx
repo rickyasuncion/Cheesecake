@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import GenresDropdown from "./GenresDropdown";
 
 const NavBar = () => {
   const { t } = useTranslation();
+  const [isGenresDropdownOpen, setIsGenresDropdownOpen] = useState(false);
+  const genresRef = useRef(null);
+
+  const toggleGenresDropdown = () => {
+    setIsGenresDropdownOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (genresRef.current && !genresRef.current.contains(event.target)) {
+        setIsGenresDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="flex items-center space-x-6">
@@ -12,39 +30,29 @@ const NavBar = () => {
       </Link>
       <nav className="hidden md:flex space-x-4 text-sm">
         <Link to={"/movies"} className="hover:text-yellow-400">
-          Movies
+          {t("Movies")}
         </Link>
         <Link to="/tvShows" className="hover:text-yellow-400">
-          TV Shows
+          {t("TV Shows")}
         </Link>
         <Link to="/free-movies" className="hover:text-yellow-400">
-          Free Movies
+          {t("Free Movies")}
         </Link>
         <Link to="/Kids" className="hover:text-yellow-400">
-          Kids
+          {t("Kids")}
         </Link>
-        <div className="relative group">
-          <button className="hover:text-yellow-400">Genres</button>
-          <div className="absolute hidden group-hover:block text-white w-40 bg-gray-800 rounded-md shadow-lg p-1">
-            <Link
-              to="/home"
-              className="block px-3 py-1 text-sm hover:bg-gray-700 rounded"
-            >
-              Action
-            </Link>
-            <Link
-              to="/home"
-              className="block px-3 py-1 text-sm hover:bg-gray-700 rounded"
-            >
-              Drama
-            </Link>
-            <Link
-              to="/home"
-              className="block px-3 py-1 text-sm hover:bg-gray-700 rounded"
-            >
-              Comedy
-            </Link>
-          </div>
+
+        {/* Genres Dropdown */}
+        <div className="relative" ref={genresRef}>
+          <button
+            onClick={toggleGenresDropdown}
+            className="hover:text-yellow-400"
+          >
+            {t("Genres")}
+          </button>
+          {isGenresDropdownOpen && (
+            <GenresDropdown toggleGenresDropdown={toggleGenresDropdown} />
+          )}
         </div>
       </nav>
     </div>
