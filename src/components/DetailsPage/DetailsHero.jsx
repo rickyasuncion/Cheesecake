@@ -77,7 +77,7 @@ const DetailsHero = ({ movie, trailerVideo }) => {
               <div className="flex items-center gap-2">
                 <Star className="text-yellow-400" fill="currentColor" />
                 <span className="text-xl font-semibold">
-                  {movie.vote_average}
+                  {movie.vote_average && movie.vote_average.toFixed(2)}
                 </span>
                 <span className="text-gray-400">/10</span>
               </div>

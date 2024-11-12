@@ -31,7 +31,11 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
         <div className="grid grid-cols-2 gap-4">
           {filteredCast.map((cast, index) => (
             <div key={index} className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-gray-700" />
+              <img
+                src={`https://image.tmdb.org/t/p/w1280${cast.profile_path}`}
+                className="w-12 h-12 rounded-full bg-gray-700 object-cover"
+                alt="Profile"
+              />
               <span className="text-gray-300">{cast.name}</span>
             </div>
           ))}
