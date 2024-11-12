@@ -50,8 +50,8 @@ const Details = () => {
     };
 
     getData();
-  }, [id]);
-  
+  }, []);
+
   // Sample movie data
   const movieData = {
     // rating: "8.5",
@@ -106,12 +106,12 @@ const Details = () => {
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-3 gap-12">
           <div className="col-span-2 space-y-8">
-            <DetailsInfo movie={movie} cast={cast} type={type} id={id} />
+            <DetailsInfo overview={movie.overview} cast={cast} />
             {/* <Reviews /> */}
           </div>
-          <Sidebar movie={movie} cast={cast} crews={crew} type={type} />
+          <Sidebar movie={movie} crews={crew} />
         </div>
-        <Similiar similarMovies={similiar} type={type}/>
+        <Similiar similarMovies={similiar} />
       </div>
     </div>
   );
