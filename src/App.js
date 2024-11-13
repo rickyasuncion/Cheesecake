@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ThemeProvider } from "./pages/ThemeContext";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -26,15 +26,21 @@ import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
 import UsersPage from "./pages/users";
 import Kids from "./pages/Kids";
 import Details from "./pages/Details";
-// import SearchPage from "./pages/Test";
+import { Toaster } from "./components/ui/toaster";
+import Chat from "./pages/Chat";
+import { SocketContextProvider } from "./providers/SocketProvider";
 
 function App() {
+
+
+
   return (
     <AuthContextProvider>
       <ThemeProvider>
         <MovieTrailerContextProvider>
           <LanguageProvider>
             <BrowserRouter>
+      <SocketContextProvider>
               <Header />
               <main>
                 <Routes>
@@ -69,16 +75,20 @@ function App() {
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/users" element={<UsersPage />} />
                   <Route path="/Kids" element={<Kids />} />
-                  {/* <Route path="/test" element={<SearchPage />} /> */}
+                  <Route path="/chat/:roomId" element={<Chat />}></Route>
                 </Routes>
               </main>
+              
+              <Toaster/>
 
               <Footer />
+    </SocketContextProvider>
             </BrowserRouter>
           </LanguageProvider>
         </MovieTrailerContextProvider>
       </ThemeProvider>
     </AuthContextProvider>
+
   );
 }
 

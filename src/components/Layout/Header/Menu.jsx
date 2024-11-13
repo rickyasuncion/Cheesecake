@@ -37,7 +37,9 @@ const Sidebar = () => {
             /> */}
           </div>
           <div className="ml-3">
-            <h2 className="text-xl font-semibold text-yellow-400">Hi, User</h2>
+            <h2 className="text-xl font-semibold text-yellow-400">
+              Hi, {user?.displayName || user?.email}
+            </h2>
             <p className="text-gray-400 text-sm">Welcome</p>
           </div>
         </div>
