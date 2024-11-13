@@ -76,7 +76,6 @@ function App() {
                   <Route path="/users" element={<UsersPage />} />
                   <Route path="/Kids" element={<Kids />} />
                   <Route path="/chat/:roomId" element={<Chat />}></Route>
-                  {/* <Route path="/test" element={<TVShowDetails />} /> */}
                 </Routes>
               </main>
               
