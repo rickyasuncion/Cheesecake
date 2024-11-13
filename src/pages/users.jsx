@@ -107,7 +107,7 @@ const UsersPage = () => {
               >
                 {user.displayName || user.email}
                 <div className="flex gap-2 items-center">
-                  {friends.find((friendId) => friendId === user.uid) && (
+                  {friends && friends.find((friendId) => friendId === user.uid) && (
                     <Button variant="outline" className="p-2  h-auto" asChild>
                       <Link to={`/chat/${user.uid}`}>
                         <IoChatbubblesOutline />
@@ -115,7 +115,7 @@ const UsersPage = () => {
                     </Button>
                   )}
 
-                  {friends.find((friendId) => friendId === user.uid) ? (
+                  {friends && friends.find((friendId) => friendId === user.uid) ? (
                     <Button
                       variant="destructive"
                       className="p-2 h-auto"
@@ -127,7 +127,7 @@ const UsersPage = () => {
                     <button
                       className="p-2 rounded-sm bg-neutral-200"
                       onClick={() => addFriend(user.uid)}
-                      disabled={friends.find(
+                      disabled={friends && friends.find(
                         (friendId) => friendId === user.uid
                       )}
                     >
