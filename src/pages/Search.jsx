@@ -6,11 +6,11 @@ import { fetchData } from '../_utils/utils';
 const Search = () => {
   const { searched } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
-  const [media, setMedia] = useState('');
   const [activeM, setActiveM] = useState(false);
   const [activeT, setActiveT] = useState(false);
   const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
+  const recentSearches = JSON.parse(localStorage.getItem('recentSearches'));
 
   useEffect(() => {
     const getData = async () => {
@@ -37,6 +37,11 @@ const Search = () => {
 
   const submitHandler = (e)=>{
     e.preventDefault();
+    let recent = recentSearches ? [...recentSearches, searchQuery] : [searchQuery]
+    if (recent.length > 3) {
+      recent = recent.splice(1,3);
+    }
+    localStorage.setItem('recentSearches', JSON.stringify(recent));
     window.location.href = `/search/${searchQuery}`;
   }
 
@@ -51,7 +56,7 @@ const Search = () => {
     }
   };
 
-  const recentSearches = ['Searching', 'The Purge', 'American Sniper'];
+  // const recentSearches = ['Searching', 'The Purge', 'American Sniper'];
 
   const MediaCard = ({ title, name, media_type, poster_path, first_air_date, release_date }) => (
     <div className="flex flex-col space-y-2">
@@ -104,7 +109,7 @@ const Search = () => {
         </div>
 
         {/* Recent Searches */}
-        {!searchQuery && (
+        {recentSearches && (
           <div className="mb-12">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-medium text-gray-900">Recent Searches</h2>
