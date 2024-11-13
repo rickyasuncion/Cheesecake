@@ -43,6 +43,8 @@ export const SocketContextProvider = ({ children }) => {
     setSocket(socketConnection);
 
     return () => {
+      socketConnection.off("create-user-socket-pair");
+      socketConnection.off("room-join-request");
       socketConnection.disconnect();
     };
   }, [user]);
