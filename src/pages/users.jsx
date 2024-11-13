@@ -16,26 +16,25 @@ import {
   doc,
   getDoc,
   getDocs,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
-import { Button } from "../components/ui/button";
-import { auth, db } from "../_utils/firebase";
-import { useUserAuth } from "../_utils/auth-context";
-import { IoCheckmarkCircle } from "react-icons/io5";
-import { RxCross2 } from "react-icons/rx";
 import { IoChatbubblesOutline } from "react-icons/io5";
+import { RxCross2 } from "react-icons/rx";
+import { useUserAuth } from "../_utils/auth-context";
+import { db } from "../_utils/firebase";
+import { Button } from "../components/ui/button";
 
-import { useToast } from "../components/ui/use-toast";
 import { Link } from "react-router-dom";
+import { useToast } from "../components/ui/use-toast";
 
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const { toast } = useToast();
   const [friends, setFriends] = useState([]);
   const { user } = useUserAuth();
+  const roomId = useMemo(() => Math.random() + Date.now(), []);
 
   async function getAndSetFriends() {
     const docSnap = await getDoc(doc(db, "users", user.uid));
@@ -109,7 +108,7 @@ const UsersPage = () => {
                 <div className="flex gap-2 items-center">
                   {friends.find((friendId) => friendId === user.uid) && (
                     <Button variant="outline" className="p-2  h-auto" asChild>
-                      <Link to={`/chat/${user.uid}`}>
+                      <Link to={`/chat/${roomId}?friendId=${user.uid}`}>
                         <IoChatbubblesOutline />
                       </Link>
                     </Button>
