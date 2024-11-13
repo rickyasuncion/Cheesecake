@@ -35,10 +35,7 @@ const Details = () => {
       );
       let video = data.results.find(
         (video) => video.site === "YouTube" && video.type === "Trailer"
-      );
-      if (video) {
-        video = data.results[0];
-      }
+      ) || data.results[0];
       setTrailer(video);
       //////////////////////////////////////////////
       data = await fetchData(

@@ -42,6 +42,7 @@ const Similiar = ({ similarMovies, type }) => {
       <div className="grid grid-cols-8 gap-6">
         {similarMovies.map((movie, index) => (
           <div key={index} className="space-y-2">
+            <a href={`/details/${type}/${movie.id}`}>
             <div className="aspect-[2/3] bg-gray-800 rounded-lg overflow-hidden">
               <img
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -49,7 +50,6 @@ const Similiar = ({ similarMovies, type }) => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <a href={`/details/${type}/${movie.id}`}>
               <h3 className="font-medium">{movie.title || movie.name}</h3>
             </a>
             <p className="text-sm text-gray-400">
