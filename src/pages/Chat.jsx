@@ -20,28 +20,32 @@ const Chat = () => {
   function handleSendMessage(e) {
     e.preventDefault();
     if (socket) {
-      console.log("sending");
       socket.emit("message", { roomId, message: input });
     }
   }
 
   useEffect(() => {
-    if (socket && user) {
-      console.log("here");
-      socket.emit("join-room", {
-        roomId,
-        username: user.dispalyName || user.email,
-      });
+    socket?.on("message", (msg) => {
+      setMessages((prev) => [...prev, msg]);
+    });
 
-      socket.emit("ping-user", {
-        roomId,
-        userId: friendId,
-        pingedBy: user.dispalyName || user.email,
-      });
+    socket?.emit("join-room", {
+      roomId,
+      username: user.dispalyName || user.email,
+    });
 
-      socket.on("message", (msg) => setMessages((prev) => [...prev, msg]));
-    }
-  }, [socket, user]);
+    socket?.emit("ping-user", {
+      roomId,
+      userId: friendId,
+      pingedBy: user.dispalyName || user.email,
+    });
+
+    return () => {
+      socket.off("join-room");
+      socket.off("ping-user");
+      socket?.off("message");
+    };
+  }, []);
 
   return (
     <div className="py-10 container">
