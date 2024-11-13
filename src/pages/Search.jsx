@@ -66,8 +66,10 @@ const Search = () => {
     poster_path,
     first_air_date,
     release_date,
+    id
   }) => (
     <div className="flex flex-col space-y-2">
+      <a href={`/details/${media_type}/${id}`}>
       <div className="relative group">
         <img
           src={`https://image.tmdb.org/t/p/w500${poster_path}`}
@@ -77,6 +79,7 @@ const Search = () => {
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200 rounded-lg" />
       </div>
       <h3 className="font-medium text-gray-900">{title || name}</h3>
+      </a>
       <div className="flex justify-between">
         <p className="text-sm text-gray-500">{media_type}</p>
         <p className="text-sm text-gray-500">
