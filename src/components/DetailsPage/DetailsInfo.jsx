@@ -1,6 +1,7 @@
 import { ChevronDown, Star } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../_utils/utils";
+import Reviews from "./Reviews/Reviews";
 
 const DetailsInfo = ({ movie, cast, type, id }) => {
   const filteredCast = cast.filter((actor) => actor.known_for_department === "Acting").slice(0, 5);
@@ -106,20 +107,6 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
     </>
   );
 
-  const ReviewsTab = () => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold">Reviews</h2>
-        <button className="px-4 py-2 bg-gray-800 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
-          Write a Review
-        </button>
-      </div>
-      <div className="p-6 bg-gray-800 rounded-lg text-gray-400 text-center">
-        No reviews yet. Be the first to review!
-      </div>
-    </div>
-  );
-
   const renderTabContent = () => {
     switch (selectedTab) {
       case "Overview":
@@ -127,7 +114,7 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
       case "episodes":
         return <EpisodesTab />;
       case "reviews":
-        return <ReviewsTab />;
+        return <Reviews title={movie.title || movie.name} type={type} id={id}/>;
       default:
         return <OverviewTab />;
     }
