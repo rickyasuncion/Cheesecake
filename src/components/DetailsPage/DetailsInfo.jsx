@@ -107,8 +107,6 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
     </>
   );
 
-  const ReviewsTab = () => <Reviews />;
-
   const renderTabContent = () => {
     switch (selectedTab) {
       case "Overview":
@@ -116,7 +114,7 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
       case "episodes":
         return <EpisodesTab />;
       case "reviews":
-        return <ReviewsTab />;
+        return <Reviews title={movie.title || movie.name} type={type} id={id}/>;
       default:
         return <OverviewTab />;
     }

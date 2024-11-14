@@ -32,8 +32,6 @@ async function createReview({
     });
 
     updateUserReviews(docRef.id);
-
-    console.log("Review created successfully!");
   } catch (error) {
     console.error("Error creating review:", error);
   }
@@ -45,7 +43,6 @@ async function getReviews(media_type, media_id) {
     const querySnapshot = await getDocs(reviewsRef);
     const reviews = querySnapshot.docs.map((doc) => doc.data());
 
-    console.log(reviews);
     return reviews;
   } catch (error) {
     console.error("Error retrieving reviews:", error);

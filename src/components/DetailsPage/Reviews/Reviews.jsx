@@ -9,7 +9,7 @@ const Reviews = ({ title, type, id }) => {
   const [isWritingReview, setIsWritingReview] = useState(false);
   const [reviews, setReviews] = useState([]);
 
-  const reviewsRef = collection(db, "reviews", "movie", "12345");
+  const reviewsRef = collection(db, "reviews", type, id);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(reviewsRef, (snapshot) => {

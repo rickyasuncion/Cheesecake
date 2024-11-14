@@ -1,16 +1,18 @@
 import { Star, X } from "lucide-react";
 import { useState } from "react";
 import { createReview } from "../../../_utils/firestore_reviews";
+import { getUserData } from "../../../_utils/firestore";
 
 const ReviewForm = ({setIsWritingReview, type, id}) => {
     const [rating, setRating] = useState(0);
     const [content, setContent] = useState("");
-
-    const btnHandler = () => {
+    
+    const btnHandler = async () => {
+        const user = await getUserData()
         const revObj = {
-          media_type: "movie",
-          media_id: "12345",
-          displayName: "John Doe",
+          media_type: type,
+          media_id: id,
+          displayName: user.displayName,
           content: content,
           rating: rating,
         };
@@ -49,7 +51,6 @@ const ReviewForm = ({setIsWritingReview, type, id}) => {
             ))}
           </div>
         </div>
-
         <div className="mb-6">
           <label className="block text-gray-400 mb-2">Your Review</label>
           <textarea
@@ -60,7 +61,6 @@ const ReviewForm = ({setIsWritingReview, type, id}) => {
             placeholder="Share your thoughts about this title..."
           />
         </div>
-
         <div className="flex justify-end gap-4">
           <button
             onClick={() => setIsWritingReview(false)}
