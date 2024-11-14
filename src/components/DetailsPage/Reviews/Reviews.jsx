@@ -1,48 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Star, ThumbsUp, MessageCircle, Flag } from "lucide-react";
+import { Star } from "lucide-react";
 import ReviewForm from "./ReviewForm";
-import { getReviews } from "../../../_utils/firestore_reviews";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../../../_utils/firebase";
 
-const Reviews = ({ title }) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' }
+const Reviews = ({ title, type, id }) => {
+  const options = { year: "numeric", month: "long", day: "numeric" };
   const [isWritingReview, setIsWritingReview] = useState(false);
   const [reviews, setReviews] = useState([]);
 
-  useEffect(()=>{
-    const getData = async () => {
-      let data = await getReviews("movie", "12345");
-      setReviews(data);
-    }
+  const reviewsRef = collection(db, "reviews", "movie", "12345");
 
-    getData();
-  }, [])
-
-  const sampleReviews = [
-    {
-      id: 1,
-      author: "MovieBuff52",
-      avatar: "/api/placeholder/40/40",
-      rating: 4.5,
-      date: "2024-03-15",
-      content:
-        "This show continues to push boundaries and exceed expectations. The character development is masterful, and the plot twists keep you guessing. The cinematography deserves special mention - every frame is like a painting.",
-      likes: 234,
-      replies: 45,
-      isVerified: true,
-    },
-    {
-      id: 2,
-      author: "CinematicCritic",
-      avatar: "/api/placeholder/40/40",
-      rating: 5,
-      date: "2024-03-10",
-      content:
-        "An absolute masterpiece that sets new standards for television. The attention to detail in both writing and production is remarkable. Each episode feels like a mini-movie.",
-      likes: 189,
-      replies: 28,
-      isVerified: true,
-    },
-  ];
+  useEffect(() => {
+    const unsubscribe = onSnapshot(reviewsRef, (snapshot) => {
+      const reviewsData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setReviews(reviewsData);
+    });
+    return () => unsubscribe();
+  }, [reviewsRef]);
 
   return (
     <section className="max-w-3xl mx-auto bg-gray-900 p-6 rounded-xl">
@@ -73,7 +51,11 @@ const Reviews = ({ title }) => {
 
         {/* Write Review Form */}
         {isWritingReview && (
-          <ReviewForm setIsWritingReview={setIsWritingReview} />
+          <ReviewForm
+            setIsWritingReview={setIsWritingReview}
+            type={type}
+            id={id}
+          />
         )}
 
         {/* Reviews List */}
@@ -90,9 +72,16 @@ const Reviews = ({ title }) => {
                     />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold">{review.displayName}</span>
+                        <span className="font-semibold">
+                          {review.displayName}
+                        </span>
                       </div>
-                      <div className="text-sm text-gray-400">{review.date.toDate().toLocaleDateString(('en-US', options))}</div>
+                      <div className="text-sm text-gray-400">
+                        {review.date &&
+                          review.date
+                            .toDate()
+                            .toLocaleDateString(("en-US", options))}
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
