@@ -1,12 +1,12 @@
 import {
-    doc,
-    setDoc,
-    updateDoc,
-    getDoc,
-    getDocs,
-    collection,
-    addDoc,
-    arrayUnion
+  doc,
+  setDoc,
+  updateDoc,
+  getDoc,
+  getDocs,
+  collection,
+  addDoc,
+  arrayUnion,
 } from "firebase/firestore";
 
 import { db } from "./firebase";
@@ -38,37 +38,6 @@ async function createUser(username) {
     } catch (error) {
       console.error("Error creating user:", error);
     }
-  }
-}
-
-async function createReview({
-  title,
-  content,
-  media_type,
-  media_id,
-  rating,
-  containsSpoilers,
-}) {
-  const user = auth.currentUser;
-  if (!user) return;
-  try {
-    const userDocRef = collection(db, "reviews", media_type, media_id);
-
-    await addDoc(userDocRef, {
-      media_type: media_type,
-      media_id: media_id,
-      uid: user.uid,
-      displayName: user.displayName,
-      title: title,
-      content: content,
-      rating: rating,
-      containsSpoilers: containsSpoilers,
-      date: Date.now(),
-    });
-
-    console.log("Review created successfully!");
-  } catch (error) {
-    console.error("Error creating review:", error);
   }
 }
 
@@ -177,34 +146,6 @@ async function getUserRecentlyViewedShows() {
   }
 }
 
-async function getReviews(media_type, media_id) {
-  try {
-    const reviewsRef = collection(db, "reviews", media_type, media_id);
-    const querySnapshot = await getDocs(reviewsRef);
-    const reviews = querySnapshot.docs.map((doc) => doc.data());
-
-    console.log(reviews);
-    return reviews;
-  } catch (error) {
-    console.error("Error retrieving reviews:", error);
-    return [];
-  }
-}
-
-// async function getReviewsMedia(media_type) {
-//   try {
-//     const reviewsRef = doc(db, "reviews", media_type);
-//     const querySnapshot = await getDocs(reviewsRef);
-//     const reviews = querySnapshot.docs.map((doc) => doc.data());
-
-//     console.log(reviews);
-//     return reviews;
-//   } catch (error) {
-//     console.error("Error retrieving reviews:", error);
-//     return [];
-//   }
-// }
-
 async function updateUserFavourites(favouriteObject) {
   try {
     const favourites = await getUserFavourites();
@@ -221,17 +162,18 @@ async function updateUserFavourites(favouriteObject) {
   }
 }
 
-async function updateUserReviews(reviewObject) {
+async function updateUserReviews(reviewId) {
   try {
     const reviews = await getUserReviews();
-    if (reviews) {
+    let data;
+    if (reviews.length > 0) {
       console.log(reviews);
-      const data = { reviews: [...reviews, reviewObject] };
+      data = { reviews: [...reviews, reviewId] };
 
-      await updateUser(data);
     } else {
-      console.log("No reviews found!");
+      data = { reviews: [...reviews, reviewId] };
     }
+    await updateUser(data);
   } catch (error) {
     console.error("Error updating reviews:", error);
   }
@@ -386,11 +328,9 @@ async function getUserNotifications() {
 
 export {
   createUser,
-  createReview,
   getUserData,
   getUserFavourites,
   getUserReviews,
-  getReviews,
   getUserRecentlyViewedMovies,
   getUserRecentlyViewedShows,
   updateUserFavourites,

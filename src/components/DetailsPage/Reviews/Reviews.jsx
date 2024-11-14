@@ -1,170 +1,120 @@
 import React, { useEffect, useState } from "react";
-import { createReview, getReviews } from "../../../_utils/firestore";
-import ReviewModal from "./ReviewModal";
-import ReviewsList from "./ReviewsList";
-import { Flag, MessageCircle, Star, ThumbsUp } from "lucide-react";
+import { Star, ThumbsUp, MessageCircle, Flag } from "lucide-react";
+import ReviewForm from "./ReviewForm";
+import { getReviews } from "../../../_utils/firestore_reviews";
 
-const Reviews = ({ movie, media_type, media_id }) => {
+const Reviews = ({ title }) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' }
+  const [isWritingReview, setIsWritingReview] = useState(false);
   const [reviews, setReviews] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [containsSpoilers, setContainsSpoilers] = useState(false);
 
-  useEffect(() => {
-    const fetchReviews = async () => {
-      const reviewsData = await getReviews(media_type, media_id);
-      setReviews(reviewsData);
-    };
+  useEffect(()=>{
+    const getData = async () => {
+      let data = await getReviews("movie", "12345");
+      setReviews(data);
+    }
 
-    fetchReviews();
-  }, [media_type, media_id, isModalOpen]);
+    getData();
+  }, [])
 
-  const handleSubmit = () => {
-    createReview({ title, content, media_type, media_id, rating, containsSpoilers });
-    setIsModalOpen(false);
-    setRating(0);
-    setTitle("");
-    setContent("");
-    setContainsSpoilers(false);
-  };
-
-    // Calculate average rating
-    const totalReviews = Object.values(movie.ratingDistribution).reduce((a, b) => a + b, 0);
-    const averageRating = Object.entries(movie.ratingDistribution)
-      .reduce((acc, [rating, count]) => acc + (Number(rating) * count), 0) / totalReviews;
+  const sampleReviews = [
+    {
+      id: 1,
+      author: "MovieBuff52",
+      avatar: "/api/placeholder/40/40",
+      rating: 4.5,
+      date: "2024-03-15",
+      content:
+        "This show continues to push boundaries and exceed expectations. The character development is masterful, and the plot twists keep you guessing. The cinematography deserves special mention - every frame is like a painting.",
+      likes: 234,
+      replies: 45,
+      isVerified: true,
+    },
+    {
+      id: 2,
+      author: "CinematicCritic",
+      avatar: "/api/placeholder/40/40",
+      rating: 5,
+      date: "2024-03-10",
+      content:
+        "An absolute masterpiece that sets new standards for television. The attention to detail in both writing and production is remarkable. Each episode feels like a mini-movie.",
+      likes: 189,
+      replies: 28,
+      isVerified: true,
+    },
+  ];
 
   return (
-    <div className="border-t border-gray-800 pt-8">
-    <div className="flex items-center justify-between mb-8">
-      <h2 className="text-2xl font-semibold">Reviews</h2>
-      <button className="px-6 py-2 bg-red-600 hover:bg-red-700 rounded-full transition-colors">
-        Write a Review
-      </button>
-    </div>
-
-    {/* Rating Distribution */}
-    <div className="bg-gray-800 rounded-lg p-6 mb-8">
-      <div className="grid grid-cols-2 gap-8">
-        {/* Left side - Average rating */}
-        <div className="flex flex-col items-center justify-center border-r border-gray-700">
-          <div className="text-5xl font-bold mb-2">
-            {averageRating.toFixed(1)}
+    <section className="max-w-3xl mx-auto bg-gray-900 p-6 rounded-xl">
+      {/* Header */}
+      <div className="mb-6 border-b border-gray-800 pb-6">
+        <h2 className="text-2xl font-semibold mb-1">{title}</h2>
+        <div className="flex items-center gap-4 text-gray-400">
+          <div className="flex items-center gap-2">
+            <Star className="text-yellow-400" fill="currentColor" size={16} />
+            <span>4.8</span>
           </div>
-          <div className="flex items-center gap-1 mb-2">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star
-                key={star}
-                size={20}
-                className={
-                  star <= Math.round(averageRating)
-                    ? "text-yellow-400"
-                    : "text-gray-600"
-                }
-                fill={
-                  star <= Math.round(averageRating)
-                    ? "currentColor"
-                    : "none"
-                }
-              />
-            ))}
-          </div>
-          <div className="text-gray-400 text-sm">
-            {totalReviews.toLocaleString()} reviews
-          </div>
-        </div>
-
-        {/* Right side - Rating bars */}
-        <div className="space-y-2">
-          {[5, 4, 3, 2, 1].map((rating) => (
-            <div key={rating} className="flex items-center gap-2">
-              <div className="w-4">{rating}</div>
-              <div className="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-yellow-400"
-                  style={{
-                    width: `${
-                      (movie.ratingDistribution[rating] /
-                        totalReviews) *
-                      100
-                    }%`,
-                  }}
-                />
-              </div>
-              <div className="w-12 text-sm text-gray-400">
-                {Math.round(
-                  (movie.ratingDistribution[rating] /
-                    totalReviews) *
-                    100
-                )}
-                %
-              </div>
-            </div>
-          ))}
+          <span>•</span>
+          <span>42 reviews</span>
         </div>
       </div>
-    </div>
 
-    {/* Reviews List */}
-    <div className="space-y-6">
-      {movie.reviews.map((review) => (
-        <div key={review.id} className="bg-gray-800 rounded-lg p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gray-700" />
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{review.author}</span>
-                  {review.isVerified && (
-                    <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">
-                      Verified
-                    </span>
-                  )}
+      {/* Content */}
+      <div>
+        {/* Write Review Button */}
+        {!isWritingReview && (
+          <button
+            onClick={() => setIsWritingReview(true)}
+            className="w-full py-3 bg-yellow-600 hover:bg-yellow-700 rounded-lg mb-8 transition-colors"
+          >
+            Write a Review
+          </button>
+        )}
+
+        {/* Write Review Form */}
+        {isWritingReview && (
+          <ReviewForm setIsWritingReview={setIsWritingReview} />
+        )}
+
+        {/* Reviews List */}
+        <div className="space-y-6">
+          {reviews &&
+            reviews.map((review) => (
+              <div key={review.id} className="bg-gray-800 rounded-lg p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={review.avatar}
+                      alt={review.author}
+                      className="w-10 h-10 rounded-full bg-gray-700"
+                    />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold">{review.displayName}</span>
+                      </div>
+                      <div className="text-sm text-gray-400">{review.date.toDate().toLocaleDateString(('en-US', options))}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Star
+                      className="text-yellow-400"
+                      fill="currentColor"
+                      size={16}
+                    />
+                    <span>{review.rating}</span>
+                  </div>
                 </div>
-                <div className="text-sm text-gray-400">
-                  {review.date}
-                </div>
+                <p className="text-gray-300 mb-4">{review.content}</p>
               </div>
+            ))}
+          {reviews.length === 0 && (
+            <div className="p-6 bg-gray-800 rounded-lg text-gray-400 text-center">
+              No reviews yet. Be the first to review!
             </div>
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  size={16}
-                  className={
-                    i < review.rating
-                      ? "text-yellow-400"
-                      : "text-gray-600"
-                  }
-                  fill={i < review.rating ? "currentColor" : "none"}
-                />
-              ))}
-            </div>
-          </div>
-          <p className="text-gray-300 mb-4">{review.content}</p>
-          <div className="flex items-center gap-6 text-sm text-gray-400">
-            <button className="flex items-center gap-2 hover:text-white transition-colors">
-              <ThumbsUp size={16} />
-              <span>{review.likes}</span>
-            </button>
-            <button className="flex items-center gap-2 hover:text-white transition-colors">
-              <MessageCircle size={16} />
-              <span>{review.replies}</span>
-            </button>
-            <button className="flex items-center gap-2 hover:text-white transition-colors">
-              <Flag size={16} />
-              <span>Report</span>
-            </button>
-          </div>
+          )}
         </div>
-      ))}
-    </div>
-
-    <button className="w-full mt-6 py-3 border border-gray-700 rounded-lg text-gray-400 hover:text-white hover:border-gray-600 transition-colors">
-      Load More Reviews
-    </button>
-  </div>
+      </div>
+    </section>
   );
 };
 
