@@ -19,11 +19,13 @@ const MoviesWithGenre = () => {
   const [movies, setMovies] = useState([]);
   const [genreList, setGenreList] = useState([]);
   const [headerImage, setHeaderImage] = useState("");
+  const [yearFilter, setYearFilter] = useState("");
+  const [minRating, setMinRating] = useState("");
+  const [showFilter, setShowFilter] = useState(false);
   const { t, i18n } = useTranslation();
 
-  // Genre images mapped to genre IDs
   const genreImages = {
-    27: horrorHeader, // Horror
+    27: horrorHeader,
     878: sciFiHeader,  // Sci-Fi
     9648: mysteryHeader, // Mystery
     10752: warHeader,  // War
@@ -36,35 +38,44 @@ const MoviesWithGenre = () => {
     28: actionHeader,   // Action
   };
 
-  useEffect(() => {
-    // Set the appropriate header image based on the genre ID
-    setHeaderImage(genreImages[Number(genreId)] || "/default-header.jpg");
-    
-    const url = `https://api.themoviedb.org/3/movie/${type}?language=${i18n.language}&api_key=bbd89781c7835917a2decb4989b56470`;
+  // Function to fetch movies
+  const fetchMovies = (withFilters = false) => {
+    setMovies([]); // Clear previous movies
 
-    // Fetch 5 pages
+    let url = `https://api.themoviedb.org/3/discover/movie?language=${i18n.language}&api_key=bbd89781c7835917a2decb4989b56470&with_genres=${genreId}`;
+
+    if (withFilters) {
+      if (yearFilter) url += `&year=${yearFilter}`;
+      if (minRating) url += `&vote_average.gte=${minRating}`;
+    }
+
+    // Fetch 5 pages of movies
     for (let i = 1; i <= 5; i++) {
       fetch(url + `&page=${i}`)
         .then((res) => res.json())
         .then((data) => {
-          const requiredMovies = data.results.filter((movie) =>
-            movie.genre_ids.includes(Number(genreId))
-          );
           setMovies((prev) => [
             ...prev,
-            ...requiredMovies.filter(
+            ...data.results.filter(
               (movie) => !prev.find((m) => m.id === movie.id)
             ),
           ]);
         });
     }
+  };
+
+  useEffect(() => {
+    setHeaderImage(genreImages[Number(genreId)] || "/default-header.jpg");
 
     fetch(
       `https://api.themoviedb.org/3/genre/movie/list?language=${i18n.language}&api_key=bbd89781c7835917a2decb4989b56470`
     )
       .then((res) => res.json())
       .then((data) => setGenreList(data.genres));
-  }, [type, genreId, i18n.language]);
+
+    // Initial fetch without filters
+    fetchMovies();
+  }, [genreId, i18n.language]);
 
   return (
     <div className="bg-[#171c21] text-secondary pt-5 pb-16">
@@ -79,8 +90,66 @@ const MoviesWithGenre = () => {
           <img
             src={headerImage}
             alt="Genre Header"
-            className="absolute top-0 bottom-0 z-5 w-full h-64 object-cover" // Consistent size for header image
+            className="absolute top-0 bottom-0 z-5 w-full h-64 object-cover"
           />
+        </div>
+
+        {/* Filter Button */}
+        <div className="relative flex justify-end my-4">
+          <button
+            onClick={() => setShowFilter((prev) => !prev)}
+            className="bg-yellow-500 text-black font-semibold py-2 px-4 rounded hover:bg-yellow-600"
+          >
+            {t("Filter")}
+          </button>
+
+          {showFilter && (
+            <div className="absolute top-full right-0 mt-2 bg-white text-black shadow-lg rounded w-60 p-4 z-20">
+              <div className="mb-4">
+                <label className="block text-sm font-semibold mb-1">{t("Year")}</label>
+                <select
+                  value={yearFilter}
+                  onChange={(e) => setYearFilter(e.target.value)}
+                  className="w-full p-2 border rounded text-black"
+                >
+                  <option value="">{t("All Years")}</option>
+                  {[...Array(50)].map((_, i) => {
+                    const year = new Date().getFullYear() - i;
+                    return (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-semibold mb-1">
+                  {t("Minimum Rating")}
+                </label>
+                <input
+                  type="number"
+                  value={minRating}
+                  onChange={(e) => setMinRating(e.target.value)}
+                  className="w-full p-2 border rounded text-black"
+                  placeholder={t("Enter Rating (1-10)")}
+                  min="1"
+                  max="10"
+                />
+              </div>
+
+              <button
+                onClick={() => {
+                  setShowFilter(false);
+                  fetchMovies(true); // Fetch with filters
+                }}
+                className="bg-yellow-500 text-black font-semibold py-2 px-4 rounded w-full hover:bg-yellow-600"
+              >
+                {t("Show Results")}
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="flex gap-3 flex-wrap mt-10">
@@ -95,7 +164,7 @@ const MoviesWithGenre = () => {
                   name={movie.name}
                   poster_path={movie.poster_path}
                   href={`/details/movie/${movie.id}`}
-                  className=" flex-1 min-w-44 max-w-60"
+                  className="flex-1 min-w-44 max-w-60"
                 />
               );
             })}
