@@ -12,7 +12,7 @@ import {
 import { db } from "./firebase";
 import { auth } from "./firebase";
 
-async function createUser(username) {
+async function createUser() {
   const user = auth.currentUser;
   if (user) {
     try {
@@ -24,9 +24,6 @@ async function createUser(username) {
       }
 
       await setDoc(userDocRef, {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName || username,
         favourites: [],
         reviews: [],
         recentlyViewedMovie: [],

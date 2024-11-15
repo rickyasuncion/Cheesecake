@@ -10,17 +10,17 @@ const SignUp = () => {
   const { emailSignUp } = useUserAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     password: '',
   });
   const navigate = useNavigate();
 
 
-  const handleLogin = async ({email, password, username}) => {
+  const handleLogin = async ({name, email, password}) => {
     try {
-      await emailSignUp(email, password, username);
-      createUser(username)
+      await emailSignUp(name, email, password);
+      createUser()
       navigate("/")
       console.log("Successfully signed up!");
     } catch (error) {
@@ -62,8 +62,8 @@ const SignUp = () => {
                 </label>
                 <input
                   type="text"
-                  name="username"
-                  value={formData.username}
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
                   required
