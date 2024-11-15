@@ -3,6 +3,12 @@ import { useParams } from "react-router-dom";
 import { MovieCard } from "../components/ui/MovieCard";
 import { useTranslation } from "react-i18next";
 import horrorHeader from "../media/horror-header.jpg";
+import actionHeader from "../media/action-header.jpg";
+import animationHeader from "../media/animation-header.jpg";
+import dramaHeader from "../media/drama-header.jpg";
+import thrillerHeader from "../media/thriller-header.jpg";
+import romanceHeader from "../media/romance-header.jpg";
+// Add more genre imports as needed
 
 const MoviesWithGenre = () => {
   const { type, genreId } = useParams();
@@ -16,9 +22,27 @@ const MoviesWithGenre = () => {
 
   const genreImages = {
     27: horrorHeader,
+    28: actionHeader,
+    16: animationHeader,
+    18: dramaHeader,
+    53: thrillerHeader,
+    10749: romanceHeader,
+    // Add more mappings for other genres
   };
 
-  // Function to fetch movies
+  useEffect(() => {
+    setHeaderImage(genreImages[Number(genreId)] || "/default-header.jpg");
+
+    fetch(
+      `https://api.themoviedb.org/3/genre/movie/list?language=${i18n.language}&api_key=bbd89781c7835917a2decb4989b56470`
+    )
+      .then((res) => res.json())
+      .then((data) => setGenreList(data.genres));
+
+    // Fetch movies without filters initially
+    fetchMovies();
+  }, [genreId, i18n.language]);
+
   const fetchMovies = (withFilters = false) => {
     setMovies([]); // Clear previous movies
 
@@ -29,7 +53,6 @@ const MoviesWithGenre = () => {
       if (minRating) url += `&vote_average.gte=${minRating}`;
     }
 
-    // Fetch 5 pages of movies
     for (let i = 1; i <= 5; i++) {
       fetch(url + `&page=${i}`)
         .then((res) => res.json())
@@ -44,19 +67,6 @@ const MoviesWithGenre = () => {
     }
   };
 
-  useEffect(() => {
-    setHeaderImage(genreImages[Number(genreId)] || "/default-header.jpg");
-
-    fetch(
-      `https://api.themoviedb.org/3/genre/movie/list?language=${i18n.language}&api_key=bbd89781c7835917a2decb4989b56470`
-    )
-      .then((res) => res.json())
-      .then((data) => setGenreList(data.genres));
-
-    // Initial fetch without filters
-    fetchMovies();
-  }, [genreId, i18n.language]);
-
   return (
     <div className="bg-[#171c21] text-secondary pt-5 pb-16">
       <div className="container">
@@ -70,7 +80,7 @@ const MoviesWithGenre = () => {
           <img
             src={headerImage}
             alt="Genre Header"
-            className="absolute top-0 bottom-0 z-5"
+            className="absolute top-0 bottom-0 z-5 w-full h-full object-cover"
           />
         </div>
 
@@ -122,7 +132,7 @@ const MoviesWithGenre = () => {
               <button
                 onClick={() => {
                   setShowFilter(false);
-                  fetchMovies(true); // Fetch with filters
+                  fetchMovies(true);
                 }}
                 className="bg-yellow-500 text-black font-semibold py-2 px-4 rounded w-full hover:bg-yellow-600"
               >
