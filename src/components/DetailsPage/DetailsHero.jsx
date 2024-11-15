@@ -1,4 +1,4 @@
-import { Play, Star } from "lucide-react";
+import { Heart, Play, Star } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 
 const DetailsHero = ({ movie, trailerVideo }) => {
@@ -80,6 +80,9 @@ const DetailsHero = ({ movie, trailerVideo }) => {
                   {movie.vote_average && movie.vote_average.toFixed(2)}
                 </span>
                 <span className="text-gray-400">/10</span>
+                <button>
+                  <Heart />
+                </button>
               </div>
             </div>
           </div>

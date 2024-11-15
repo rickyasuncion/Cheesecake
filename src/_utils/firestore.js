@@ -24,9 +24,6 @@ async function createUser(username) {
       }
 
       await setDoc(userDocRef, {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName || username,
         favourites: [],
         reviews: [],
         recentlyViewedMovie: [],

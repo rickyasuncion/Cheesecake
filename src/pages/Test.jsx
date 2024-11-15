@@ -204,7 +204,7 @@ const Test = () => {
       {showSimilarPanel && selectedMovie && (
         <>
           <div />
-          <div className="fixed inset-y-40 right-56 w-80 bg-white shadow-xl border-l border-gray-200 p-4 transform transition-transform">
+          <div className="w-80 bg-white shadow-xl border-l border-gray-200 p-4 transform transition-transform">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">
                 Similar to {selectedMovie.title}

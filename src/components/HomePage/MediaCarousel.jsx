@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const GENRES = {
@@ -94,11 +94,15 @@ const MediaCarousel = ({ movies, text, type }) => {
                     alt={movie.title ? movie.title : movie.name}
                     className="w-full h-auto"
                   />{" "}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
                     {" "}
                     <button onClick={()=> navigate(`/details/${type}/${movie.id}`)} className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform">
                       {" "}
                       View Details{" "}
+                    </button>{" "}
+                    <button onClick={()=> console.log("add to fav")} className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform">
+                      {" "}
+                      Add to Favourites{" "}
                     </button>{" "}
                   </div>{" "}
                 </div>{" "}
