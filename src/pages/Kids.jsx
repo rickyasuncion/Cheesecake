@@ -18,7 +18,7 @@ const Kids = () => {
       const response = await fetchData(
         `https://api.themoviedb.org/3/discover/movie?api_key=bbd89781c7835917a2decb4989b56470&language=en-US&with_genres=16`
       );
-      setAnimatedMovies(filterResults(response));
+      setAnimatedMovies(response);
     } catch (error) {
       console.error("Error fetching animated movies:", error);
     }

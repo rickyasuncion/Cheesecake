@@ -9,7 +9,7 @@ const FeaturedSection = ({ featuredContent }) => {
 
   const nextFeatured = () => {
     setCurrentFeaturedIndex((prev) =>
-      prev === featuredContent.length - 1 ? 0 : prev + 1
+      prev === (featuredContent.length - 1) ? 0 : prev + 1
     );
   };
 

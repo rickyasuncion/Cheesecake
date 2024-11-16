@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 const GENRES = {
   28: "Action",
@@ -33,8 +32,6 @@ const GENRES = {
 
 const Similiar = ({ similarMovies, type }) => {
   similarMovies = similarMovies.splice(0, 8);
-
-  const navigate = useNavigate();
 
   return (
     <div className="mt-16">

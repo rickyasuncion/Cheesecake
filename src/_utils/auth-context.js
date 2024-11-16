@@ -10,7 +10,6 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
-  sendEmailVerification,
 } from "firebase/auth";
 import { auth } from "./firebase";
 

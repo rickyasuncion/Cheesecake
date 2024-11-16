@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  deleteUserFavourite,
+  updateUserFavourites,
+} from "../../_utils/firestore";
 
 const GENRES = {
   28: "Action",
@@ -29,12 +33,12 @@ const GENRES = {
   10765: "Sci-Fi & Fantasy",
   10766: "Soap",
   10767: "Talk",
-  10768: "War & Politics"
+  10768: "War & Politics",
 };
 
-const MediaCarousel = ({ movies, text, type }) => {
+const MediaCarousel = ({ movies, text, type, userData }) => {
+  movies = movies.slice(0, 18);
   const navigate = useNavigate();
-  movies = movies.slice(0,18)
   const moviesPerPage = 6;
 
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
@@ -43,6 +47,7 @@ const MediaCarousel = ({ movies, text, type }) => {
     setCurrentMovieIndex((prev) =>
       prev >= movies.length - moviesPerPage ? 0 : prev + moviesPerPage
     );
+    console.log(userData);
   };
 
   const prevMovies = () => {
@@ -57,19 +62,29 @@ const MediaCarousel = ({ movies, text, type }) => {
   );
 
   return (
-    <>
+    <div>
       <div className="flex justify-between items-center my-4">
         <h2 className="text-2xl text-gray-400">{text}</h2>
         <div className="flex space-x-2">
           <button
             onClick={prevMovies}
-            className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition"
+            className={`p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition ${
+              movies.length <= moviesPerPage
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
+            disabled={movies.length <= moviesPerPage}
           >
             <ChevronLeft size={20} />
           </button>
           <button
             onClick={nextMovies}
-            className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition"
+            className={`p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition ${
+              movies.length <= moviesPerPage
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
+            disabled={movies.length <= moviesPerPage}
           >
             <ChevronRight size={20} />
           </button>
@@ -79,46 +94,71 @@ const MediaCarousel = ({ movies, text, type }) => {
       <div className="relative overflow-hidden">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {visibleMovies.map((movie) => {
-            const genre = movie.genre_ids && movie.genre_ids.length ? GENRES[movie.genre_ids[0]] : "Unknown Genre";
+            const genre =
+              movie.genre_ids && movie.genre_ids.length
+                ? GENRES[movie.genre_ids[0]]
+                : "Unknown Genre";
+
+            let favoured = false;
+            if (userData) {
+              favoured = userData.favourites.some(
+                (fav) => fav.type === type && fav.id === movie.id
+              );
+            }
 
             return (
               <div
                 key={movie.id}
                 className="rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition transform hover:scale-105 duration-300"
               >
-                {" "}
                 <div className="relative group">
-                  {" "}
                   <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title ? movie.title : movie.name}
+                    alt={movie.title || movie.name || "Movie Poster"}
                     className="w-full h-auto"
-                  />{" "}
+                  />
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
-                    {" "}
-                    <button onClick={()=> navigate(`/details/${type}/${movie.id}`)} className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform">
-                      {" "}
-                      View Details{" "}
-                    </button>{" "}
-                    <button onClick={()=> console.log("add to fav")} className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform">
-                      {" "}
-                      Add to Favourites{" "}
-                    </button>{" "}
-                  </div>{" "}
-                </div>{" "}
+                    <button
+                      onClick={() => navigate(`/details/${type}/${movie.id}`)}
+                      className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
+                    >
+                      View Details
+                    </button>
+                    {userData &&
+                      (favoured ? (
+                        <button
+                          onClick={() =>
+                            deleteUserFavourite({ type: type, id: movie.id })
+                          }
+                          className="flex gap-1 bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
+                        >
+                          Remove from{" "}
+                          <Heart className="fill-rose-500 text-rose-500" />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            updateUserFavourites({ type: type, id: movie.id })
+                          }
+                          className="flex gap-1 bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
+                        >
+                          Add to <Heart />
+                        </button>
+                      ))}
+                  </div>
+                </div>
                 <div className="p-3">
-                  {" "}
                   <h3 className="font-semibold text-gray-800">
-                  {movie.title ? movie.title : movie.name}
-                  </h3>{" "}
-                  <p className="text-sm text-gray-400">{genre}</p>{" "}
-                </div>{" "}
+                    {movie.title || movie.name}
+                  </h3>
+                  <p className="text-sm text-gray-400">{genre}</p>
+                </div>
               </div>
             );
           })}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

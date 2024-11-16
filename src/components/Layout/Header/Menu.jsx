@@ -55,7 +55,7 @@ const Sidebar = () => {
             <NavItem
               icon={<Heart size={20} />}
               text="Favorites"
-              link="/favourties"
+              link="/favourites"
             />
             <NavItem icon={<User size={20} />} text="For You" link="#" />
           </div>

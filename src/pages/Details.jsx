@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/DetailsPage/Sidebar";
 import DetailsInfo from "../components/DetailsPage/DetailsInfo";
 import Similiar from "../components/DetailsPage/Similiar";
@@ -16,7 +16,7 @@ const Details = () => {
   const [trailer, setTrailer] = useState([]);
   const [similiar, setSimiliar] = useState([]);
 
-  useState(() => {
+  useEffect(() => {
     const getData = async () => {
       let data = await fetchData(
         `https://api.themoviedb.org/3/${type}/${id}?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
