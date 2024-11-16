@@ -1,88 +1,49 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Favourited from "../components/FavouritesPage/Favourited";
 import Sidebar from "../components/FavouritesPage/Sidebar";
+import { UserData } from "../providers/UserDataProvider";
+import { fetchData } from "../_utils/utils";
 
 const Favourites = () => {
-  const [favorites, setFavorites] = useState([
-    {
-      id: 1,
-      title: "The Shawshank Redemption",
-      year: 1994,
-      rating: 4.8,
-      genre: "Drama",
-      imageUrl: "/api/placeholder/300/450",
-    },
-    {
-      id: 2,
-      title: "The Godfather",
-      year: 1972,
-      rating: 4.7,
-      genre: "Crime, Drama",
-      imageUrl: "/api/placeholder/300/450",
-    },
-    {
-      id: 3,
-      title: "Pulp Fiction",
-      year: 1994,
-      rating: 4.6,
-      genre: "Crime, Drama",
-      imageUrl: "/api/placeholder/300/450",
-    },
-    {
-      id: 4,
-      title: "The Green Mile",
-      year: 1999,
-      rating: 4.5,
-      genre: "Drama",
-      imageUrl: "/api/placeholder/300/450",
-    },
-    {
-      id: 5,
-      title: "Goodfellas",
-      year: 1990,
-      rating: 4.6,
-      genre: "Crime, Drama",
-      imageUrl: "/api/placeholder/300/450",
-    },
-  ]);
+  const { userData } = useContext(UserData);
+
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
+  const [favoriteShows, setFavoriteShows] = useState([]);
 
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [showSimilarPanel, setShowSimilarPanel] = useState(false);
+  const [similarMovies, setSimilarMovies] = useState([]);
 
-  const removeFromFavorites = (id) => {
-    setFavorites(favorites.filter((movie) => movie.id !== id));
-    if (selectedMovie?.id === id) {
-      setSelectedMovie(null);
-      setShowSimilarPanel(false);
-    }
-  };
-
-  const getSimilarMovies = (selectedMovie) => {
-    return favorites.filter(
-      (movie) =>
-        movie.id !== selectedMovie.id &&
-        movie.genre
-          .split(", ")
-          .some((genre) => selectedMovie.genre.includes(genre))
+  const handleShowSimilar = async ({ title, type, id }) => {
+    const data = await fetchData(
+      `https://api.themoviedb.org/3/${type}/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
     );
-  };
-
-  const handleShowSimilar = (movie) => {
-    setSelectedMovie(movie);
+    setSimilarMovies(data.results);
+    setSelectedMovie(title);
     setShowSimilarPanel(true);
   };
 
+  useEffect(() => {
+    if (userData) {
+      const shows = userData.favourites.filter((fav) => fav.type === "tv");
+      const movies = userData.favourites.filter((fav) => fav.type === "movie");
+      setFavoriteMovies(movies);
+      setFavoriteShows(shows);
+    }
+  }, [userData]);
+
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-start items-center">
         <Favourited
           title={"Movies"}
-          favorites={favorites}
+          favorites={favoriteMovies}
           handleShowSimilar={handleShowSimilar}
         />
+
         <Favourited
           title={"Shows"}
-          favorites={favorites}
+          favorites={favoriteShows}
           handleShowSimilar={handleShowSimilar}
         />
       </div>
@@ -91,7 +52,7 @@ const Favourites = () => {
         <Sidebar
           selectedMovie={selectedMovie}
           setShowSimilarPanel={setShowSimilarPanel}
-          getSimilarMovies={getSimilarMovies}
+          similarMovies={similarMovies}
         />
       )}
     </div>

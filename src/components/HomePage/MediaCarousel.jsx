@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { ChevronLeft, ChevronRight, User } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { deleteUserFavourite, updateUserFavourites } from "../../_utils/firestore";
+import {
+  deleteUserFavourite,
+  updateUserFavourites,
+} from "../../_utils/firestore";
 
 const GENRES = {
   28: "Action",
@@ -34,6 +37,7 @@ const GENRES = {
 };
 
 const MediaCarousel = ({ movies, text, type, userData }) => {
+  movies = movies.slice(0, 18);
   const navigate = useNavigate();
   const moviesPerPage = 6;
 
@@ -123,19 +127,22 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
                     {userData &&
                       (favoured ? (
                         <button
-                          onClick={() => deleteUserFavourite({ type: type, id: movie.id })}
-                          className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
+                          onClick={() =>
+                            deleteUserFavourite({ type: type, id: movie.id })
+                          }
+                          className="flex gap-1 bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
                         >
-                          Remove from Favourites
+                          Remove from{" "}
+                          <Heart className="fill-rose-500 text-rose-500" />
                         </button>
                       ) : (
                         <button
                           onClick={() =>
                             updateUserFavourites({ type: type, id: movie.id })
                           }
-                          className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
+                          className="flex gap-1 bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
                         >
-                          Add to Favourites
+                          Add to <Heart />
                         </button>
                       ))}
                   </div>
