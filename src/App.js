@@ -26,6 +26,7 @@ import Details from "./pages/Details";
 import Test from "./pages/Test";
 import Favourites from "./pages/Favourites";
 import { UserDataProvider } from "./providers/UserDataProvider";
+import UsersPage from "./pages/UsersPage";
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
                     <Route path="/contact-us" element={<ContactUs />} />
                     <Route path="/free-movies" element={<FreeMovies />} />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/users" element={<UsersPage />} />
                     <Route path="/Kids" element={<Kids />} />
                     <Route path="/test" element={<Test />} />
                   </Routes>
