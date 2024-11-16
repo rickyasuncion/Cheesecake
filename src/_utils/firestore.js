@@ -7,6 +7,7 @@ import {
   collection,
   arrayUnion,
   serverTimestamp,
+  onSnapshot,
 } from "firebase/firestore";
 
 import { db } from "./firebase";
@@ -40,26 +41,25 @@ async function createUser() {
   }
 }
 
-async function getUserData() {
-  const user = auth.currentUser;
-  if (!user) return;
-  try {
-    const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
+function getUserData(user, callback) {
+  if (!user) return null;
 
-    if (userDoc.exists()) {
-      const userData = userDoc.data();
-      console.log("User data:", userData);
-      return userData;
+  const userDocRef = doc(db, "users", user.uid);
+
+  const unsubscribe = onSnapshot(userDocRef, (snapshot) => {
+    if (snapshot.exists()) {
+      callback(snapshot.data());
     } else {
       console.log("No user found!");
-      return null;
+      callback(null);
     }
-  } catch (error) {
-    console.error("Error getting user data:", error);
-    return null;
-  }
-}
+  }, (error) => {
+    console.error("Error listening to user data:", error);
+    callback(null);
+  });
+
+  return unsubscribe;
+};
 
 async function getUserFavourites() {
   const user = auth.currentUser;
@@ -90,7 +90,6 @@ async function getUserReviews() {
 
     if (userDoc.exists()) {
       const reviews = userDoc.data().reviews;
-      console.log("Reviews:", reviews);
       return reviews;
     } else {
       console.log("No user found!");
@@ -285,3 +284,5 @@ export {
   addUserNotification,
   getUserNotifications,
 };
+
+export const userData = getUserData();
