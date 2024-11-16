@@ -4,13 +4,11 @@ import { Sheet, SheetContent, SheetTrigger } from "../../ui/sheet";
 import { useUserAuth } from "../../../_utils/auth-context";
 // import { useTranslation } from "react-i18next";
 import {
-  Bookmark,
   LogOut,
   LogIn,
   Home,
   Film,
   Tv,
-  Star,
   Grid,
   List,
   Heart,
