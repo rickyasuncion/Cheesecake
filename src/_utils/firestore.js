@@ -135,6 +135,26 @@ async function updateUserFavourites(favouriteObject) {
   }
 }
 
+async function deleteUserFavourite({type, id}) {
+  try {
+    const favourites = await getUserFavourites();
+    if (favourites) {
+      const updatedFavourites = favourites.filter(
+        (favourite) => !(favourite.type === type && favourite.id === id)
+      );
+
+      const data = { favourites: updatedFavourites };
+      await updateUser(data);
+    } else {
+      console.log("No favourites found!");
+    }
+  } catch (error) {
+    console.error("Error deleting favourite:", error);
+  }
+}
+
+
+
 async function updateUserReviews(reviewId) {
   try {
     const reviews = await getUserReviews();
@@ -276,9 +296,13 @@ export {
   getUserFavourites,
   getUserReviews,
   getUserRecentlyViewed,
+
   updateUserFavourites,
   updateUserReviews,
   updateUserRecentlyViewed,
+
+  deleteUserFavourite,
+
   isUserSubscribedToMovie,
   subscribeUserToMovieNotifications,
   addUserNotification,

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { updateUserFavourites } from "../../_utils/firestore";
+import { deleteUserFavourite, updateUserFavourites } from "../../_utils/firestore";
 
 const GENRES = {
   28: "Action",
@@ -97,11 +97,9 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
 
             let favoured = false;
             if (userData) {
-             favoured = userData.favourites.some(fav => fav.type === type && fav.id === movie.id);
-            }
-
-            if (!userData) {
-              return <div>Loading...</div>;
+              favoured = userData.favourites.some(
+                (fav) => fav.type === type && fav.id === movie.id
+              );
             }
 
             return (
@@ -122,23 +120,24 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
                     >
                       View Details
                     </button>
-                    {favoured ? (
-                      <button
-                        onClick={() => console.log("delete fav")}
-                        className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
-                      >
-                        Remove from Favourites
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() =>
-                          updateUserFavourites({ type: type, id: movie.id })
-                        }
-                        className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
-                      >
-                        Add to Favourites
-                      </button>
-                    )}
+                    {userData &&
+                      (favoured ? (
+                        <button
+                          onClick={() => deleteUserFavourite({ type: type, id: movie.id })}
+                          className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
+                        >
+                          Remove from Favourites
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            updateUserFavourites({ type: type, id: movie.id })
+                          }
+                          className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
+                        >
+                          Add to Favourites
+                        </button>
+                      ))}
                   </div>
                 </div>
                 <div className="p-3">
