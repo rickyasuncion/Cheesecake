@@ -26,7 +26,7 @@ import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
 import UsersPage from "./pages/users";
 import Kids from "./pages/Kids";
 import Details from "./pages/Details";
-// import SearchPage from "./pages/Test";
+import Test from "./pages/Test";
 
 function App() {
   return (
@@ -69,7 +69,7 @@ function App() {
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/users" element={<UsersPage />} />
                   <Route path="/Kids" element={<Kids />} />
-                  {/* <Route path="/test" element={<SearchPage />} /> */}
+                  <Route path="/test" element={<Test/>} />
                 </Routes>
               </main>
 
