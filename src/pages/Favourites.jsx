@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Heart, Trash2, Star, X, ListFilter } from "lucide-react";
 import Favourited from "../components/FavouritesPage/Favourited";
 import Sidebar from "../components/FavouritesPage/Sidebar";
 
-const Test = () => {
+const Favourites = () => {
   const [favorites, setFavorites] = useState([
     {
       id: 1,
@@ -99,4 +98,4 @@ const Test = () => {
   );
 };
 
-export default Test;
+export default Favourites;

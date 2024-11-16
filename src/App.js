@@ -8,7 +8,6 @@ import NotFound from "./pages/NotFound";
 import { AuthContextProvider } from "./_utils/auth-context";
 import { LanguageProvider } from "./_utils/LanguageContext";
 import Search from "./pages/Search";
-import Favourties from "./pages/Favourties";
 import Header from "./components/Layout/Header/Header";
 import Movies from "./pages/Movies";
 import FilteredContent from "./pages/FilteredContent";
@@ -18,7 +17,6 @@ import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
 import FreeMovies from "./pages/FreeMovies";
-import SimilarLiked from "./pages/SimilarLiked";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Settings from "./pages/Settings";
@@ -27,6 +25,7 @@ import UsersPage from "./pages/users";
 import Kids from "./pages/Kids";
 import Details from "./pages/Details";
 import Test from "./pages/Test";
+import Favourites from "./pages/Favourites";
 
 function App() {
   return (
@@ -51,16 +50,12 @@ function App() {
                   />
                   <Route path="/tvShows" element={<TvShows />} />
                   <Route path="/details/:type/:id" element={<Details />} />
-                  <Route path="/favourties" element={<Favourties />} />
-                  <Route
-                    path="/favourites/similar"
-                    element={<SimilarLiked />}
-                  />
                   <Route
                     path="/filtered-content"
                     element={<FilteredContent />}
                   />
                   <Route path="*" element={<NotFound />} />
+                  <Route path="/favourites" element={<Favourites />} />
                   <Route path="/contact-us" element={<ContactUs />} />
                   <Route path="/terms-of-use" element={<TermsOfUse />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
