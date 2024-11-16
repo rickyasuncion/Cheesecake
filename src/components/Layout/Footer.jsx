@@ -9,11 +9,11 @@ const Footer = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [messageColor, setMessageColor] = useState('');
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
-    setLoading(true); 
+    setLoading(true);
 
     try {
       const response = await axios.post('http://127.0.0.1:3001/subscribe', { email });
@@ -76,33 +76,51 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-        
+
+        {/* Divider */}
         <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
 
-        <div className="flex flex-col items-center space-y-4">
-          <h3 className="text-lg font-semibold">{t('Subscribe to our Newsletter')}</h3>
-          <form className="flex space-x-2 w-full max-w-md" onSubmit={handleSubscribe}>
-            <input
-              type="email"
-              placeholder={t('Enter your email')}
-              className="w-full px-4 py-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition duration-300 ease-in-out">
-              {t('Subscribe')}
-            </Button>
-          </form>
-          {loading ? (
-            <div className="mt-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div> {/* Loading spinner */}
-            </div>
-          ) : (
-            message && <p className={`mt-4 text-sm ${messageColor}`}>{message}</p> 
-          )}
+        {/* Subscription & Links Section */}
+        <div className="flex flex-col sm:flex-row sm:justify-between items-center space-y-4 sm:space-y-0">
+          {/* Newsletter Subscription */}
+          <div className="w-full sm:w-1/2 flex flex-col items-center sm:items-start">
+            <h3 className="text-lg font-semibold">{t('Subscribe to our Newsletter')}</h3>
+            <form className="flex space-x-2 w-full max-w-md" onSubmit={handleSubscribe}>
+              <input
+                type="email"
+                placeholder={t('Enter your email')}
+                className="w-full px-4 py-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <Button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition duration-300 ease-in-out">
+                {t('Subscribe')}
+              </Button>
+            </form>
+            {loading ? (
+              <div className="mt-4">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div> {/* Loading spinner */}
+              </div>
+            ) : (
+              message && <p className={`mt-4 text-sm ${messageColor}`}>{message}</p>
+            )}
+          </div>
+
+          {/* Footer Links */}
+          <div className="w-full sm:w-1/2 flex justify-center sm:justify-end space-x-6">
+            <Link to="/privacy-policy" className="hover:underline">{t('Privacy Policy')}</Link>
+            <Link to="/contact-us" className="hover:underline">{t('Contact Us')}</Link>
+          </div>
         </div>
 
+        {/* Footer Links for About, Terms of Use, etc. */}
+        <div className="w-full flex justify-center sm:justify-end mt-6 space-x-6">
+          <Link to="/about" className="hover:underline">{t('About')}</Link>
+          <Link to="/terms-of-use" className="hover:underline">{t('Terms of Use')}</Link>
+        </div>
+
+        {/* Copyright Section */}
         <span className="block text-sm text-gray-300 sm:text-center mt-6">
           © 2024 <Link to={'/'} className="hover:underline">Cheesecake</Link>. {t('All Rights Reserved')}
         </span>
