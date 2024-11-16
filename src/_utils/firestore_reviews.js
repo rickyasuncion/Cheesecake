@@ -12,7 +12,6 @@ import { updateUserReviews } from "./firestore";
 async function createReview({
   media_type,
   media_id,
-  displayName,
   content,
   rating,
 }) {
@@ -25,7 +24,7 @@ async function createReview({
       media_type: media_type,
       media_id: media_id,
       uid: user.uid,
-      displayName: displayName,
+      displayName: user.displayName,
       content: content,
       rating: rating,
       date: serverTimestamp(),
