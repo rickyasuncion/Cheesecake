@@ -5,14 +5,14 @@ import {
   getDoc,
   getDocs,
   collection,
-  addDoc,
   arrayUnion,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import { db } from "./firebase";
 import { auth } from "./firebase";
 
-async function createUser(username) {
+async function createUser() {
   const user = auth.currentUser;
   if (user) {
     try {
@@ -24,14 +24,13 @@ async function createUser(username) {
       }
 
       await setDoc(userDocRef, {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName || username,
+        createdAt: serverTimestamp(),
         favourites: [],
+        lists: [],
         reviews: [],
-        recentlyViewedMovie: [],
-        recentlyViewedShow: [],
+        recentlyViewed: [],
         friends: [],
+        chats: [],
       });
 
       console.log("User created successfully!");
@@ -71,7 +70,6 @@ async function getUserFavourites() {
 
     if (userDoc.exists()) {
       const favourites = userDoc.data().favourites;
-      console.log("Favourites:", favourites);
       return favourites;
     } else {
       console.log("No user found!");
@@ -104,7 +102,7 @@ async function getUserReviews() {
   }
 }
 
-async function getUserRecentlyViewedMovies() {
+async function getUserRecentlyViewed() {
   const user = auth.currentUser;
   if (!user) return;
   try {
@@ -112,36 +110,14 @@ async function getUserRecentlyViewedMovies() {
     const userDoc = await getDoc(userDocRef);
 
     if (userDoc.exists()) {
-      const recentlyViewedMovies = userDoc.data().recentlyViewedMovie || [];
-      console.log("Recently Viewed Movies:", recentlyViewedMovies);
-      return recentlyViewedMovies;
+      const recentlyViewed = userDoc.data().recentlyViewed || [];
+      return recentlyViewed;
     } else {
       console.log("No user found!");
       return null;
     }
   } catch (error) {
-    console.error("Error getting recently viewed movies:", error);
-    return null;
-  }
-}
-
-async function getUserRecentlyViewedShows() {
-  const user = auth.currentUser;
-  if (!user) return;
-  try {
-    const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (userDoc.exists()) {
-      const recentlyViewedShows = userDoc.data().recentlyViewedShow || [];
-      console.log("Recently Viewed Shows:", recentlyViewedShows);
-      return recentlyViewedShows;
-    } else {
-      console.log("No user found!");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error getting recently viewed shows:", error);
+    console.error("Error getting recently viewed:", error);
     return null;
   }
 }
@@ -150,9 +126,7 @@ async function updateUserFavourites(favouriteObject) {
   try {
     const favourites = await getUserFavourites();
     if (favourites) {
-      console.log(favourites);
       const data = { favourites: [...favourites, favouriteObject] };
-
       await updateUser(data);
     } else {
       console.log("No favourites found!");
@@ -179,57 +153,29 @@ async function updateUserReviews(reviewId) {
   }
 }
 
-async function updateUserRecentlyViewedMovies(viewedObject) {
+async function updateUserRecentlyViewed(viewedObject) {
   try {
-    const recentlyViewedMovies = await getUserRecentlyViewedMovies();
-    let updatedRecentlyViewedMovies;
+    const recentlyViewed = await getUserRecentlyViewed();
+    let updatedRecentlyViewed;
 
-    if (recentlyViewedMovies) {
-      console.log(recentlyViewedMovies);
-      updatedRecentlyViewedMovies = new Set([
+    if (recentlyViewed) {
+      updatedRecentlyViewed = new Set([
         viewedObject,
-        ...recentlyViewedMovies,
+        ...recentlyViewed,
       ]);
-      updatedRecentlyViewedMovies = [...updatedRecentlyViewedMovies];
+      updatedRecentlyViewed = [...updatedRecentlyViewed];
 
-      if (updatedRecentlyViewedMovies.length > 5) {
-        updatedRecentlyViewedMovies = updatedRecentlyViewedMovies.slice(0, 5);
+      if (updatedRecentlyViewed.length > 5) {
+        updatedRecentlyViewed = updatedRecentlyViewed.slice(0, 5);
       }
     } else {
-      updatedRecentlyViewedMovies = [viewedObject];
+      updatedRecentlyViewed = [viewedObject];
     }
 
-    const data = { recentlyViewedMovie: updatedRecentlyViewedMovies };
+    const data = { recentlyViewed: updatedRecentlyViewed };
     await updateUser(data);
   } catch (error) {
-    console.error("Error updating recently viewed movies:", error);
-  }
-}
-
-async function updateUserRecentlyViewedShows(viewedObject) {
-  try {
-    const recentlyViewedShows = await getUserRecentlyViewedShows();
-    let updatedRecentlyViewedShows;
-
-    if (recentlyViewedShows) {
-      console.log(recentlyViewedShows);
-      updatedRecentlyViewedShows = new Set([
-        viewedObject,
-        ...recentlyViewedShows,
-      ]);
-      updatedRecentlyViewedShows = [...updateUserRecentlyViewedShows];
-
-      if (updatedRecentlyViewedShows.length > 5) {
-        updatedRecentlyViewedShows = updatedRecentlyViewedShows.slice(0, 5);
-      }
-    } else {
-      updatedRecentlyViewedShows = [viewedObject];
-    }
-
-    const data = { recentlyViewedShow: updatedRecentlyViewedShows };
-    await updateUser(data);
-  } catch (error) {
-    console.error("Error updating recently viewed shows:", error);
+    console.error("Error updating recently viewed:", error);
   }
 }
 
@@ -241,7 +187,6 @@ async function updateUser(updatedData) {
 
     await updateDoc(userDocRef, updatedData);
 
-    console.log("User updated successfully!");
   } catch (error) {
     console.error("Error updating user:", error);
   }
@@ -331,12 +276,10 @@ export {
   getUserData,
   getUserFavourites,
   getUserReviews,
-  getUserRecentlyViewedMovies,
-  getUserRecentlyViewedShows,
+  getUserRecentlyViewed,
   updateUserFavourites,
   updateUserReviews,
-  updateUserRecentlyViewedMovies,
-  updateUserRecentlyViewedShows,
+  updateUserRecentlyViewed,
   isUserSubscribedToMovie,
   subscribeUserToMovieNotifications,
   addUserNotification,
