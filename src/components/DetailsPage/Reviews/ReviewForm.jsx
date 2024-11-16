@@ -1,18 +1,15 @@
 import { Star, X } from "lucide-react";
 import { useState } from "react";
 import { createReview } from "../../../_utils/firestore_reviews";
-import { getUserData } from "../../../_utils/firestore";
 
 const ReviewForm = ({setIsWritingReview, type, id}) => {
     const [rating, setRating] = useState(0);
     const [content, setContent] = useState("");
     
     const btnHandler = async () => {
-        const user = await getUserData()
         const revObj = {
           media_type: type,
           media_id: id,
-          displayName: user.displayName,
           content: content,
           rating: rating,
         };
