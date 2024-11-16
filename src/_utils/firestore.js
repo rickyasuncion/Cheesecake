@@ -7,6 +7,7 @@ import {
   collection,
   addDoc,
   arrayUnion,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import { db } from "./firebase";
@@ -24,11 +25,13 @@ async function createUser() {
       }
 
       await setDoc(userDocRef, {
+        createdAt: serverTimestamp(),
         favourites: [],
+        lists: [],
         reviews: [],
-        recentlyViewedMovie: [],
-        recentlyViewedShow: [],
+        recentlyViewed: [],
         friends: [],
+        chats: [],
       });
 
       console.log("User created successfully!");
