@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import { ArrowRight } from "lucide-react";
+import {
+  subscribeUserToMovieNotifications,
+  isUserSubscribedToMovie,
+} from "../../_utils/firestore";
 
 const GENRES = {
   28: "Action",
@@ -35,6 +41,8 @@ const Sidebar = ({ movie, cast, crews, type }) => {
     .filter((actor) => actor.known_for_department === "Acting")
     .slice(0, 5);
   const [directors, setDirectors] = useState([]);
+  const [isFree, setIsFree] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
     if (crews) {
@@ -42,6 +50,34 @@ const Sidebar = ({ movie, cast, crews, type }) => {
       setDirectors(filteredData);
     }
   }, [crews]);
+
+  useEffect(() => {
+    const fetchProviderData = async () => {
+      try {
+        const providerResponse = await fetch(
+          `https://api.themoviedb.org/3/movie/${movie.id}/watch/providers?api_key=bbd89781c7835917a2decb4989b56470`
+        );
+        const providerData = await providerResponse.json();
+
+        setIsFree(providerData.results?.CA?.free || false);
+      } catch (error) {
+        console.error("Error fetching providers data:", error);
+      }
+    };
+
+    const checkIfSubscribed = async () => {
+      const subscribed = await isUserSubscribedToMovie(movie.id);
+      setIsSubscribed(subscribed);
+    };
+
+    fetchProviderData();
+    checkIfSubscribed();
+  }, [movie.id]);
+
+  const handleSubscribe = async () => {
+    await subscribeUserToMovieNotifications(movie.id);
+    setIsSubscribed(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -110,6 +146,34 @@ const Sidebar = ({ movie, cast, crews, type }) => {
               </span>
             ))}
         </div>
+      </div>
+
+      {/* Free Movie Notification Button */}
+      <div className="mt-4">
+        {isFree ? (
+          <Button
+            onClick={() =>
+              window.open(
+                `https://www.themoviedb.org/movie/${movie.id}/watch`,
+                "_blank"
+              )
+            }
+            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base bg-yellow-500 text-black"
+          >
+            Find Free Viewing Options on TMDb <ArrowRight />
+          </Button>
+        ) : (
+          <Button
+            onClick={handleSubscribe}
+            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base bg-yellow-500 text-black"
+            disabled={isSubscribed}
+          >
+            {isSubscribed
+              ? "Subscribed for free notifications"
+              : "Notify me when it’s free"}{" "}
+            <ArrowRight />
+          </Button>
+        )}
       </div>
     </div>
   );
