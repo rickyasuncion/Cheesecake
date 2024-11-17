@@ -29,27 +29,27 @@ const UsersPage = () => {
 
   return (
     <div className="w-3/4 mx-auto p-4 space-y-4">
-      <Tabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={["stats", "friends", "chat", "profile"]} />
-      {activeTab === "stats" && (
-        <StatsTab
-          friendsCount={friends.length}
-          moviesWatched={24}
-          avgRating={4.5}
-          watchlistCount={15}
-        />
-      )}
+      <Tabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={["friends", "chat", "stats", "profile"]} />
       {activeTab === "friends" && (
         <FriendsTab
-          friends={friends}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          onAddFriend={() => alert("Add Friend clicked!")}
+        friends={friends}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        onAddFriend={() => alert("Add Friend clicked!")}
         />
       )}
       {activeTab === "chat" && (
         <ChatTab
         />
       )}
+        {activeTab === "stats" && (
+          <StatsTab
+            friendsCount={friends.length}
+            moviesWatched={24}
+            avgRating={4.5}
+            watchlistCount={15}
+          />
+        )}
       {activeTab === "profile" && (
         <ProfileTab
         />
