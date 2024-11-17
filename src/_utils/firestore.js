@@ -46,20 +46,24 @@ function getUserData(user, callback) {
 
   const userDocRef = doc(db, "users", user.uid);
 
-  const unsubscribe = onSnapshot(userDocRef, (snapshot) => {
-    if (snapshot.exists()) {
-      callback(snapshot.data());
-    } else {
-      console.log("No user found!");
+  const unsubscribe = onSnapshot(
+    userDocRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.data());
+      } else {
+        console.log("No user found!");
+        callback(null);
+      }
+    },
+    (error) => {
+      console.error("Error listening to user data:", error);
       callback(null);
     }
-  }, (error) => {
-    console.error("Error listening to user data:", error);
-    callback(null);
-  });
+  );
 
   return unsubscribe;
-};
+}
 
 async function getUserFavourites() {
   const user = auth.currentUser;
@@ -135,7 +139,7 @@ async function updateUserFavourites(favouriteObject) {
   }
 }
 
-async function deleteUserFavourite({type, id}) {
+async function deleteUserFavourite({ type, id }) {
   try {
     const favourites = await getUserFavourites();
     if (favourites) {
@@ -153,8 +157,6 @@ async function deleteUserFavourite({type, id}) {
   }
 }
 
-
-
 async function updateUserReviews(reviewId) {
   try {
     const reviews = await getUserReviews();
@@ -162,7 +164,6 @@ async function updateUserReviews(reviewId) {
     if (reviews.length > 0) {
       console.log(reviews);
       data = { reviews: [...reviews, reviewId] };
-
     } else {
       data = { reviews: [...reviews, reviewId] };
     }
@@ -178,10 +179,7 @@ async function updateUserRecentlyViewed(viewedObject) {
     let updatedRecentlyViewed;
 
     if (recentlyViewed) {
-      updatedRecentlyViewed = new Set([
-        viewedObject,
-        ...recentlyViewed,
-      ]);
+      updatedRecentlyViewed = new Set([viewedObject, ...recentlyViewed]);
       updatedRecentlyViewed = [...updatedRecentlyViewed];
 
       if (updatedRecentlyViewed.length > 5) {
@@ -205,15 +203,19 @@ async function updateUser(updatedData) {
     const userDocRef = doc(db, "users", user.uid);
 
     await updateDoc(userDocRef, updatedData);
-
   } catch (error) {
     console.error("Error updating user:", error);
   }
 }
 
+//01
 async function subscribeUserToMovieNotifications(movieId) {
   const user = auth.currentUser;
-  if (!user) return;
+  if (!user) {
+    // Redirect to login if not logged in
+    window.open("/login", "_blank");
+    return;
+  }
 
   try {
     const userDocRef = doc(db, "users", user.uid);
@@ -296,13 +298,10 @@ export {
   getUserFavourites,
   getUserReviews,
   getUserRecentlyViewed,
-
   updateUserFavourites,
   updateUserReviews,
   updateUserRecentlyViewed,
-
   deleteUserFavourite,
-
   isUserSubscribedToMovie,
   subscribeUserToMovieNotifications,
   addUserNotification,
