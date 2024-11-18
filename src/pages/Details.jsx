@@ -5,7 +5,7 @@ import Similiar from "../components/DetailsPage/Similiar";
 import DetailsHero from "../components/DetailsPage/DetailsHero";
 import { useParams } from "react-router-dom";
 import { fetchData } from "../_utils/utils";
-import { updateUserRecentlyViewedMovies } from "../_utils/firestore";
+// import { updateUserRecentlyViewedMovies } from "../_utils/firestore";
 
 const Details = () => {
   const { type, id } = useParams();
@@ -46,7 +46,7 @@ const Details = () => {
     };
 
     getData();
-  }, [id]);
+  }, [id, type]);
   
   return (
     <div className="min-h-screen bg-gray-900 text-white">

@@ -36,10 +36,7 @@ const GENRES = {
   10768: "War & Politics",
 };
 
-const Sidebar = ({ movie, cast, crews, type }) => {
-  const filteredCast = cast
-    .filter((actor) => actor.known_for_department === "Acting")
-    .slice(0, 5);
+const Sidebar = ({ movie, crews, type }) => {
   const [directors, setDirectors] = useState([]);
   const [isFree, setIsFree] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
