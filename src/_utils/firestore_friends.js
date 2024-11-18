@@ -37,4 +37,22 @@ async function sendUserNotifications(notif, id) {
   }
 }
 
-export { sendUserNotifications };
+async function getUsersByIds(friends) {
+  const users = [];
+  try {
+    for (const userId of friends) {
+      const userDocRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        users.push(userDoc.data());
+      } else {
+        console.log(`No user document found for ID: ${userId}`);
+      }
+    }
+    return users;
+  } catch (error) {
+    console.error("Error getting user documents:", error);
+  }
+}
+
+export { sendUserNotifications, getUsersByIds };

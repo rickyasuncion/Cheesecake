@@ -26,6 +26,7 @@ async function createUser() {
       }
 
       await setDoc(userDocRef, {
+        displayName: user.displayName,
         createdAt: serverTimestamp(),
         favourites: [],
         lists: [],

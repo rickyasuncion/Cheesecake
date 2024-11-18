@@ -32,9 +32,13 @@ const FriendsTab = ({
   };
 
   useEffect(() => {
-    setFriendRequests(
-      userData.notifications.filter((notif) => notif.type === "friend-request")
-    );
+    if (userData.notifications) {
+      setFriendRequests(
+        userData.notifications.filter(
+          (notif) => notif.type === "friend-request"
+        )
+      );
+    }
   }, [userData]);
 
   const acceptRequestHandler = (from, to) => {
@@ -111,19 +115,19 @@ const FriendsTab = ({
         </div>
       </div>
       <div className="space-y-4">
-        {friends.map((friend) => (
+        {friends && friends.map((friend,index) => (
           <div
-            key={friend.id}
+            key={index}
             className="border rounded-lg p-4 hover:bg-gray-50"
           >
             <div className="flex justify-between items-start mb-2">
-              <h3 className="font-medium text-lg">{friend.name}</h3>
+              <h3 className="font-medium text-lg">{friend.displayName}</h3>
               <button className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2">
                 <MessageSquare className="h-4 w-4" />
                 Message
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="text-sm font-medium mb-1">Recently Watched</div>
                 <div className="text-sm text-gray-500">
@@ -136,7 +140,7 @@ const FriendsTab = ({
                   {friend.watchlist.join(", ")}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         ))}
       </div>
