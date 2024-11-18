@@ -4,10 +4,10 @@ import FriendsTab from '../components/UsersPage/FriendsTab';
 import Tabs from '../components/UsersPage/Tabs';
 import ChatTab from '../components/UsersPage/ChatTab';
 import ProfileTab from '../components/UsersPage/ProfileTab';
+import { auth } from '../_utils/firebase';
 
 const UsersPage = () => {
   const [activeTab, setActiveTab] = useState("stats");
-  const [searchTerm, setSearchTerm] = useState("");
   const [friends, setFriends] = useState([
     {
       id: 1,
@@ -33,9 +33,7 @@ const UsersPage = () => {
       {activeTab === "friends" && (
         <FriendsTab
         friends={friends}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        onAddFriend={() => alert("Add Friend clicked!")}
+        auth={auth}
         />
       )}
       {activeTab === "chat" && (

@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UserPlus, MessageSquare, Check, X, Bell } from 'lucide-react';
+import { sendUserNotifications } from '../../_utils/firestore_friends';
 
 const FriendsTab = ({ 
   friends, 
   friendRequests = [], 
-  searchTerm, 
-  setSearchTerm, 
-  onAddFriend,
+  onAddFriend,  
   onAcceptRequest,
-  onRejectRequest 
+  onRejectRequest,
+  auth 
 }) => {
-  const [showRequests, setShowRequests] = React.useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showRequests, setShowRequests] = useState(false);
+
+  const addFriendHandler = () => {
+    const notif = {
+      type: "friend-request",
+      from: auth.currentUser.uid,
+      to: searchTerm
+    }
+    sendUserNotifications(notif, searchTerm)
+    setSearchTerm("")
+  }
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
@@ -60,14 +71,14 @@ const FriendsTab = ({
           </div>
           <input
             type="text"
-            placeholder="Search friends..."
+            placeholder="Search friends by id..."
             className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded-lg flex items-center gap-2"
-            onClick={onAddFriend}
+            onClick={addFriendHandler}
           >
             <UserPlus className="h-4 w-4" />
             Add Friend

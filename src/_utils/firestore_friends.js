@@ -15,9 +15,18 @@ async function sendUserNotifications(notif, id) {
         return;
       }
       const existingNotifications = userDoc.data().notifications || [];
-      const newNotifications = [...existingNotifications, notif];
-      await updateDoc(userDocRef, { notifications: newNotifications });
-      console.log("Notification sent successfully!");
+      const isDuplicate = existingNotifications.some(
+        (existingNotif) =>
+          existingNotif.message === notif.message &&
+          existingNotif.timestamp === notif.timestamp
+      );
+      if (!isDuplicate) {
+        const newNotifications = [...existingNotifications, notif];
+        await updateDoc(userDocRef, { notifications: newNotifications });
+        console.log("Notification sent successfully!");
+      } else {
+        console.log("Duplicate notification found, not adding.");
+      }
     } catch (error) {
       console.error("Error sending notifications:", error);
     }

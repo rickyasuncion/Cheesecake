@@ -101,7 +101,7 @@ async function deleteUserFavourite({ type, id }) {
       console.error("Error deleting favourite:", error);
     }
   }
-}
+} 
 
 async function updateUserReviews(reviewId) {
   const user = auth.currentUser;
