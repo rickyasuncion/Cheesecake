@@ -1,328 +1,417 @@
 import {
-  doc,
-  setDoc,
-  updateDoc,
-  getDoc,
-  getDocs,
-  collection,
-  arrayUnion,
-  serverTimestamp,
-  onSnapshot,
+    doc,
+    setDoc,
+    updateDoc,
+    getDoc,
+    getDocs,
+    collection,
+    addDoc,
+    arrayUnion,
+    Timestamp,
 } from "firebase/firestore";
 
-import { db } from "./firebase";
-import { auth } from "./firebase";
-import { v4 as uuidv4 } from 'uuid'
+import { db } from "./firebase.js";
+import { auth } from "./firebase.js";
 
-async function createUser() {
-  const user = auth.currentUser;
-  if (user) {
+async function createUser(username) {
+    const user = auth.currentUser;
+    if (user) {
+        try {
+            const userDocRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userDocRef);
+
+            if (userDoc.exists()) {
+                return;
+            }
+
+            await setDoc(userDocRef, {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName || username,
+                favourites: [],
+                reviews: [],
+                recentlyViewedMovie: [],
+                recentlyViewedShow: [],
+                friends: [],
+            });
+
+            console.log("User created successfully!");
+        } catch (error) {
+            console.error("Error creating user:", error);
+        }
+    }
+}
+
+async function createReview({
+    title,
+    content,
+    media_type,
+    media_id,
+    rating,
+    containsSpoilers,
+}) {
+    const user = auth.currentUser;
+    if (!user) return;
     try {
-      const userDocRef = doc(db, "users", user.uid);
+        const userDocRef = collection(db, "reviews", media_type, media_id);
 
-      const userDoc = await getDoc(userDocRef);
-      if (userDoc.exists()) {
-        return;
-      }
+        await addDoc(userDocRef, {
+            media_type: media_type,
+            media_id: media_id,
+            uid: user.uid,
+            displayName: user.displayName,
+            title: title,
+            content: content,
+            rating: rating,
+            containsSpoilers: containsSpoilers,
+            date: Date.now(),
+        });
 
-      await setDoc(userDocRef, {
-        displayName: user.displayName,
-        createdAt: serverTimestamp(),
-        favourites: [],
-        lists: [],
-        reviews: [],
-        recentlyViewed: [],
-        friends: [],
-        chats: [],
-      });
-
-      console.log("User created successfully!");
+        console.log("Review created successfully!");
     } catch (error) {
-      console.error("Error creating user:", error);
+        console.error("Error creating review:", error);
     }
-  }
 }
 
-function getUserData(user, callback) {
-  if (!user) return null;
+async function getUserData() {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
 
-  const userDocRef = doc(db, "users", user.uid);
-
-  const unsubscribe = onSnapshot(
-    userDocRef,
-    (snapshot) => {
-      if (snapshot.exists()) {
-        callback(snapshot.data());
-      } else {
-        console.log("No user found!");
-        callback(null);
-      }
-    },
-    (error) => {
-      console.error("Error listening to user data:", error);
-      callback(null);
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            console.log("User data:", userData);
+            return userData;
+        } else {
+            console.log("No user found!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error getting user data:", error);
+        return null;
     }
-  );
-
-  return unsubscribe;
 }
+
+async function getUserFavourites() {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+            const favourites = userDoc.data().favourites;
+            console.log("Favourites:", favourites);
+            return favourites;
+        } else {
+            console.log("No user found!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error getting favourites:", error);
+        return null;
+    }
+}
+
+async function getUserReviews() {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+            const reviews = userDoc.data().reviews;
+            console.log("Reviews:", reviews);
+            return reviews;
+        } else {
+            console.log("No user found!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error getting favourites:", error);
+        return null;
+    }
+}
+
+async function getUserRecentlyViewedMovies() {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+            const recentlyViewedMovies =
+                userDoc.data().recentlyViewedMovie || [];
+            console.log("Recently Viewed Movies:", recentlyViewedMovies);
+            return recentlyViewedMovies;
+        } else {
+            console.log("No user found!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error getting recently viewed movies:", error);
+        return null;
+    }
+}
+
+async function getUserRecentlyViewedShows() {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+            const recentlyViewedShows = userDoc.data().recentlyViewedShow || [];
+            console.log("Recently Viewed Shows:", recentlyViewedShows);
+            return recentlyViewedShows;
+        } else {
+            console.log("No user found!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error getting recently viewed shows:", error);
+        return null;
+    }
+}
+
+async function getReviews(media_type, media_id) {
+    try {
+        const reviewsRef = collection(db, "reviews", media_type, media_id);
+        const querySnapshot = await getDocs(reviewsRef);
+        const reviews = querySnapshot.docs.map((doc) => doc.data());
+
+        console.log(reviews);
+        return reviews;
+    } catch (error) {
+        console.error("Error retrieving reviews:", error);
+        return [];
+    }
+}
+
+// async function getReviewsMedia(media_type) {
+//   try {
+//     const reviewsRef = doc(db, "reviews", media_type);
+//     const querySnapshot = await getDocs(reviewsRef);
+//     const reviews = querySnapshot.docs.map((doc) => doc.data());
+
+//     console.log(reviews);
+//     return reviews;
+//   } catch (error) {
+//     console.error("Error retrieving reviews:", error);
+//     return [];
+//   }
+// }
 
 async function updateUserFavourites(favouriteObject) {
-  const user = auth.currentUser;
-  if (user) {
     try {
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-      if (!userDoc.exists()) {
-        console.log("User document does not exist!");
-        return;
-      }
-      const existingFavorites = userDoc.data().favourites || [];
-      const newFavorites = [...existingFavorites, favouriteObject];
-      await updateUser({ favourites: newFavorites });
-      console.log("Notification added successfully!");
+        const favourites = await getUserFavourites();
+        if (favourites) {
+            console.log(favourites);
+            const data = { favourites: [...favourites, favouriteObject] };
+
+            await updateUser(data);
+        } else {
+            console.log("No favourites found!");
+        }
     } catch (error) {
-      console.error("Error adding favorites:", error);
+        console.error("Error updating favourites:", error);
     }
-  }
 }
 
-async function deleteUserFavourite({ type, id }) {
-  const user = auth.currentUser;
-  if (user) {
+async function updateUserReviews(reviewObject) {
     try {
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-      if (!userDoc.exists()) {
-        console.log("User document does not exist!");
-        return;
-      }
-      const existingFavorites = userDoc.data().favourites || [];
-      const updatedFavourites = existingFavorites.filter(
-        (favourite) => !(favourite.type === type && favourite.id === id)
-      );
-      await updateDoc(userDocRef, { favourites: updatedFavourites });
-      console.log("Favourite deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting favourite:", error);
-    }
-  }
-} 
+        const reviews = await getUserReviews();
+        if (reviews) {
+            console.log(reviews);
+            const data = { reviews: [...reviews, reviewObject] };
 
-async function updateUserReviews(reviewId) {
-  const user = auth.currentUser;
-  if (user) {
-    try {
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-      if (!userDoc.exists()) {
-        console.log("User document does not exist!");
-        return;
-      }
-      const existingreviews = userDoc.data().reviews || [];
-      const newReviews = [...existingreviews, reviewId];
-      await updateUser({ reviews: newReviews });
-      console.log("Reviews added successfully!");
+            await updateUser(data);
+        } else {
+            console.log("No reviews found!");
+        }
     } catch (error) {
-      console.error("Error adding reviews:", error);
+        console.error("Error updating reviews:", error);
     }
-  }
 }
 
-async function updateUserFriends(userId, friend) {
-  const user = auth.currentUser;
-  if (user) {
+async function updateUserRecentlyViewedMovies(viewedObject) {
     try {
-      const userDocRef = doc(db, "users", userId);
-      const userDoc = await getDoc(userDocRef);
-      if (!userDoc.exists()) {
-        console.log("User document does not exist!");
-        return;
-      }
-      const existingFriends = userDoc.data().friends || [];
-      const newFriends = [...existingFriends, friend];
-      await updateDoc(userDocRef, { friends: newFriends });
+        const recentlyViewedMovies = await getUserRecentlyViewedMovies();
+        let updatedRecentlyViewedMovies;
+
+        if (recentlyViewedMovies) {
+            console.log(recentlyViewedMovies);
+            updatedRecentlyViewedMovies = new Set([
+                viewedObject,
+                ...recentlyViewedMovies,
+            ]);
+            updatedRecentlyViewedMovies = [...updatedRecentlyViewedMovies];
+
+            if (updatedRecentlyViewedMovies.length > 5) {
+                updatedRecentlyViewedMovies = updatedRecentlyViewedMovies.slice(
+                    0,
+                    5
+                );
+            }
+        } else {
+            updatedRecentlyViewedMovies = [viewedObject];
+        }
+
+        const data = { recentlyViewedMovie: updatedRecentlyViewedMovies };
+        await updateUser(data);
     } catch (error) {
-      console.error("Error adding friends:", error);
+        console.error("Error updating recently viewed movies:", error);
     }
-  }
 }
 
-
-async function updateUserNotifications(notif) {
-  const user = auth.currentUser;
-  notif = { id: uuidv4(), ...notif };
-  if (user) {
+async function updateUserRecentlyViewedShows(viewedObject) {
     try {
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-      if (!userDoc.exists()) {
-        console.log("User document does not exist!");
-        return;
-      }
-      const existingNotifications = userDoc.data().notifications || [];
-      const newNotifications = [...existingNotifications, notif];
-      await updateDoc(userDocRef, { notifications: newNotifications });
-      console.log("Notification added successfully!");
-    } catch (error) {
-      console.error("Error adding notifications:", error);
-    }
-  }
-}
+        const recentlyViewedShows = await getUserRecentlyViewedShows();
+        let updatedRecentlyViewedShows;
 
+        if (recentlyViewedShows) {
+            console.log(recentlyViewedShows);
+            updatedRecentlyViewedShows = new Set([
+                viewedObject,
+                ...recentlyViewedShows,
+            ]);
+            updatedRecentlyViewedShows = [...updateUserRecentlyViewedShows];
 
-async function deleteUserNotification(notificationId) {
-  const user = auth.currentUser;
-  if (user) {
-    try {
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-      if (!userDoc.exists()) {
-        console.log("User document does not exist!");
-        return;
-      }
-      const existingNotifications = userDoc.data().notifications || [];
-      const updatedNotifications = existingNotifications.filter(
-        (notif) => notif.id !== notificationId
-      );
-      await updateDoc(userDocRef, { notifications: updatedNotifications });
-      console.log("Notification deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting notification:", error);
-    }
-  }
-}
+            if (updatedRecentlyViewedShows.length > 5) {
+                updatedRecentlyViewedShows = updatedRecentlyViewedShows.slice(
+                    0,
+                    5
+                );
+            }
+        } else {
+            updatedRecentlyViewedShows = [viewedObject];
+        }
 
-async function updateUserRecentlyViewed(viewedObject) {
-  const user = auth.currentUser;
-  if (user) {
-    try {
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-      if (!userDoc.exists()) {
-        console.log("User document does not exist!");
-        return;
-      }
-      const existingRecentlyViewed = userDoc.data().recentlyViewed || [];
-      const newNotifications = [...existingRecentlyViewed, viewedObject];
-      await updateUser({ recentlyViewed: newNotifications });
-      console.log("RecentlyViewed added successfully!");
+        const data = { recentlyViewedShow: updatedRecentlyViewedShows };
+        await updateUser(data);
     } catch (error) {
-      console.error("Error adding recentlyViewed:", error);
+        console.error("Error updating recently viewed shows:", error);
     }
-  }
 }
 
 async function updateUser(updatedData) {
-  const user = auth.currentUser;
-  if (!user) return;
-  try {
-    const userDocRef = doc(db, "users", user.uid);
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+        const userDocRef = doc(db, "users", user.uid);
 
-    await updateDoc(userDocRef, updatedData);
-  } catch (error) {
-    console.error("Error updating user:", error);
-  }
+        await updateDoc(userDocRef, updatedData);
+
+        console.log("User updated successfully!");
+    } catch (error) {
+        console.error("Error updating user:", error);
+    }
 }
 
-//01
 async function subscribeUserToMovieNotifications(movieId) {
-  const user = auth.currentUser;
-  if (!user) {
-    // Redirect to login if not logged in
-    window.open("/login", "_blank");
-    return;
-  }
+    const user = auth.currentUser;
+    if (!user) return;
 
-  try {
-    const userDocRef = doc(db, "users", user.uid);
+    try {
+        const userDocRef = doc(db, "users", user.uid);
 
-    await updateDoc(userDocRef, {
-      subscriptions: arrayUnion(movieId),
-    });
+        await updateDoc(userDocRef, {
+            subscriptions: arrayUnion(movieId),
+        });
 
-    console.log("User subscribed to movie notifications successfully!");
-  } catch (error) {
-    console.error("Error subscribing user to movie notifications:", error);
-  }
+        console.log("User subscribed to movie notifications successfully!");
+    } catch (error) {
+        console.error("Error subscribing user to movie notifications:", error);
+    }
 }
 
 async function isUserSubscribedToMovie(movieId) {
-  const user = auth.currentUser;
-  if (!user) return false;
+    const user = auth.currentUser;
+    if (!user) return false;
 
-  try {
-    const userDocRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userDocRef);
+    try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
 
-    if (userDoc.exists()) {
-      const subscriptions = userDoc.data().subscriptions || [];
-      return subscriptions.includes(movieId);
-    } else {
-      return false;
+        if (userDoc.exists()) {
+            const subscriptions = userDoc.data().subscriptions || [];
+            return subscriptions.includes(movieId);
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error("Error checking if user is subscribed to movie:", error);
+        return false;
     }
-  } catch (error) {
-    console.error("Error checking if user is subscribed to movie:", error);
-    return false;
-  }
 }
 
 async function addUserNotification(movieId, message) {
-  const user = auth.currentUser;
-  if (!user) return;
+    const user = auth.currentUser;
+    if (!user) return;
 
-  try {
-    const userNotificationRef = doc(
-      db,
-      "users",
-      user.uid,
-      "notifications",
-      movieId
-    );
-    await setDoc(userNotificationRef, {
-      movieId,
-      message,
-      isRead: false,
-      timestamp: Date.now(),
-    });
-    console.log("Notification added successfully!");
-  } catch (error) {
-    console.error("Error adding notification:", error);
-  }
+    try {
+        const userNotificationRef = doc(
+            db,
+            "users",
+            user.uid,
+            "notifications",
+            movieId
+        );
+        await setDoc(userNotificationRef, {
+            movieId,
+            message,
+            isRead: false,
+            timestamp: Date.now(),
+        });
+        console.log("Notification added successfully!");
+    } catch (error) {
+        console.error("Error adding notification:", error);
+    }
 }
 
 async function getUserNotifications() {
-  const user = auth.currentUser;
-  if (!user) return [];
+    const user = auth.currentUser;
+    if (!user) return [];
 
-  try {
-    const notificationsRef = collection(db, "users", user.uid, "notifications");
-    const notificationsSnapshot = await getDocs(notificationsRef);
-    const notifications = notificationsSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    return notifications;
-  } catch (error) {
-    console.error("Error getting notifications:", error);
-    return [];
-  }
+    try {
+        const notificationsRef = collection(
+            db,
+            "users",
+            user.uid,
+            "notifications"
+        );
+        const notificationsSnapshot = await getDocs(notificationsRef);
+        const notifications = notificationsSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        return notifications;
+    } catch (error) {
+        console.error("Error getting notifications:", error);
+        return [];
+    }
 }
 
 export {
-  createUser,
-  getUserData,
-  updateUserFavourites,
-  updateUserReviews,
-  updateUserFriends,
-  updateUserNotifications,
-  updateUserRecentlyViewed,
-  deleteUserFavourite,
-  deleteUserNotification,
-  isUserSubscribedToMovie,
-  subscribeUserToMovieNotifications,
-  addUserNotification,
-  getUserNotifications,
+    createUser,
+    createReview,
+    getUserData,
+    getUserFavourites,
+    getUserReviews,
+    getReviews,
+    getUserRecentlyViewedMovies,
+    getUserRecentlyViewedShows,
+    updateUserFavourites,
+    updateUserReviews,
+    updateUserRecentlyViewedMovies,
+    updateUserRecentlyViewedShows,
+    isUserSubscribedToMovie,
+    subscribeUserToMovieNotifications,
+    addUserNotification,
+    getUserNotifications,
 };
-
-export const userData = getUserData();

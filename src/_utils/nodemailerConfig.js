@@ -5,8 +5,8 @@ var transporter = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-      user: process.env.REACT_APP_NODEMAILER_EMAIL_ID,
-      pass: process.env.REACT_APP_NODEMAILER_PASSWORD
+      user: "Cheesecakemovies309@gmail.com",
+      pass: "zfir vfxm aqlh cqcv"
   }
 });
 
