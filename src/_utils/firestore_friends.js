@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { v4 as uuidv4 } from 'uuid'
 
@@ -54,5 +54,33 @@ async function getUsersByIds(friends) {
     console.error("Error getting user documents:", error);
   }
 }
+
+async function createChat(chatData) {
+  try {
+    const chatRef = await addDoc(collection(db, "chats"), chatData);
+    console.log("Chat created with ID: ", chatRef.id);
+    return chatRef.id;
+  } catch (error) {
+    console.error("Error creating chat: ", error);
+  }
+}
+
+async function addMessage(chatId, messageData) {
+  try {
+    const messageRef = await addDoc(collection(db, "chats", chatId, "messages"), messageData);
+    console.log("Message added with ID: ", messageRef.id);
+    return messageRef.id;
+  } catch (error) {
+    console.error("Error adding message: ", error);
+  }
+}
+
+// Example usage
+// addMessage("chatId1", { text: "Hello, World!", createdAt: new Date(), sender: "userId1" });
+
+
+// Example usage
+// createChat({ name: "General", createdAt: new Date() });
+
 
 export { sendUserNotifications, getUsersByIds };
