@@ -47,20 +47,24 @@ function getUserData(user, callback) {
 
   const userDocRef = doc(db, "users", user.uid);
 
-  const unsubscribe = onSnapshot(userDocRef, (snapshot) => {
-    if (snapshot.exists()) {
-      callback(snapshot.data());
-    } else {
-      console.log("No user found!");
+  const unsubscribe = onSnapshot(
+    userDocRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.data());
+      } else {
+        console.log("No user found!");
+        callback(null);
+      }
+    },
+    (error) => {
+      console.error("Error listening to user data:", error);
       callback(null);
     }
-  }, (error) => {
-    console.error("Error listening to user data:", error);
-    callback(null);
-  });
+  );
 
   return unsubscribe;
-};
+}
 
 async function updateUserFavourites(favouriteObject) {
   const user = auth.currentUser;
@@ -143,6 +147,7 @@ async function updateUserFriends(userId, friend) {
   }
 }
 
+
 async function updateUserNotifications(notif) {
   const user = auth.currentUser;
   notif = { id: uuidv4(), ...notif };
@@ -163,6 +168,7 @@ async function updateUserNotifications(notif) {
     }
   }
 }
+
 
 async function deleteUserNotification(notificationId) {
   const user = auth.currentUser;
@@ -213,15 +219,19 @@ async function updateUser(updatedData) {
     const userDocRef = doc(db, "users", user.uid);
 
     await updateDoc(userDocRef, updatedData);
-
   } catch (error) {
     console.error("Error updating user:", error);
   }
 }
 
+//01
 async function subscribeUserToMovieNotifications(movieId) {
   const user = auth.currentUser;
-  if (!user) return;
+  if (!user) {
+    // Redirect to login if not logged in
+    window.open("/login", "_blank");
+    return;
+  }
 
   try {
     const userDocRef = doc(db, "users", user.uid);
@@ -301,16 +311,13 @@ async function getUserNotifications() {
 export {
   createUser,
   getUserData,
-
   updateUserFavourites,
   updateUserReviews,
   updateUserFriends,
   updateUserNotifications,
   updateUserRecentlyViewed,
-
   deleteUserFavourite,
   deleteUserNotification,
-
   isUserSubscribedToMovie,
   subscribeUserToMovieNotifications,
   addUserNotification,
