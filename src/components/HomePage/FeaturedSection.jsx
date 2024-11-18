@@ -40,7 +40,7 @@ const FeaturedSection = ({ featuredContent }) => {
             <img
               src={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
               alt={item.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-center"
             />
             <div className="absolute bottom-0 left-0 p-8 bg-gradient-to-t from-black/80 to-transparent w-full">
               <h2 className="text-5xl text-white font-bold mb-2">

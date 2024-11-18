@@ -21,12 +21,12 @@ import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Settings from "./pages/Settings";
 import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
-import UsersPage from "./pages/users";
 import Kids from "./pages/Kids";
 import Details from "./pages/Details";
 import Test from "./pages/Test";
 import Favourites from "./pages/Favourites";
 import { UserDataProvider } from "./providers/UserDataProvider";
+import UsersPage from "./pages/UsersPage";
 
 function App() {
   return (
