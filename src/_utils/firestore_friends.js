@@ -1,6 +1,8 @@
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
+import { v4 as uuidv4 } from 'uuid'
+
 const auth = getAuth();
 
 
@@ -15,6 +17,9 @@ async function sendUserNotifications(notif, id) {
         return;
       }
       const existingNotifications = userDoc.data().notifications || [];
+
+      notif = { id: uuidv4(), ...notif };
+
       const isDuplicate = existingNotifications.some(
         (existingNotif) =>
           existingNotif.message === notif.message &&
@@ -23,7 +28,6 @@ async function sendUserNotifications(notif, id) {
       if (!isDuplicate) {
         const newNotifications = [...existingNotifications, notif];
         await updateDoc(userDocRef, { notifications: newNotifications });
-        console.log("Notification sent successfully!");
       } else {
         console.log("Duplicate notification found, not adding.");
       }

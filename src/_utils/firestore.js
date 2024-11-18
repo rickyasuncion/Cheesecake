@@ -12,6 +12,7 @@ import {
 
 import { db } from "./firebase";
 import { auth } from "./firebase";
+import { v4 as uuidv4 } from 'uuid'
 
 async function createUser() {
   const user = auth.currentUser;
@@ -123,8 +124,28 @@ async function updateUserReviews(reviewId) {
   }
 }
 
+async function updateUserFriends(userId, friend) {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        console.log("User document does not exist!");
+        return;
+      }
+      const existingFriends = userDoc.data().friends || [];
+      const newFriends = [...existingFriends, friend];
+      await updateDoc(userDocRef, { friends: newFriends });
+    } catch (error) {
+      console.error("Error adding friends:", error);
+    }
+  }
+}
+
 async function updateUserNotifications(notif) {
   const user = auth.currentUser;
+  notif = { id: uuidv4(), ...notif };
   if (user) {
     try {
       const userDocRef = doc(db, "users", user.uid);
@@ -135,10 +156,32 @@ async function updateUserNotifications(notif) {
       }
       const existingNotifications = userDoc.data().notifications || [];
       const newNotifications = [...existingNotifications, notif];
-      await updateUser({ notifications: newNotifications });
+      await updateDoc(userDocRef, { notifications: newNotifications });
       console.log("Notification added successfully!");
     } catch (error) {
       console.error("Error adding notifications:", error);
+    }
+  }
+}
+
+async function deleteUserNotification(notificationId) {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        console.log("User document does not exist!");
+        return;
+      }
+      const existingNotifications = userDoc.data().notifications || [];
+      const updatedNotifications = existingNotifications.filter(
+        (notif) => notif.id !== notificationId
+      );
+      await updateDoc(userDocRef, { notifications: updatedNotifications });
+      console.log("Notification deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting notification:", error);
     }
   }
 }
@@ -261,10 +304,12 @@ export {
 
   updateUserFavourites,
   updateUserReviews,
+  updateUserFriends,
   updateUserNotifications,
   updateUserRecentlyViewed,
 
   deleteUserFavourite,
+  deleteUserNotification,
 
   isUserSubscribedToMovie,
   subscribeUserToMovieNotifications,

@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import StatsTab from '../components/UsersPage/StatsTab';
 import FriendsTab from '../components/UsersPage/FriendsTab';
 import Tabs from '../components/UsersPage/Tabs';
 import ChatTab from '../components/UsersPage/ChatTab';
 import ProfileTab from '../components/UsersPage/ProfileTab';
 import { auth } from '../_utils/firebase';
+import { UserData } from '../providers/UserDataProvider';
 
 const UsersPage = () => {
+  const { userData } = useContext(UserData);
+
   const [activeTab, setActiveTab] = useState("stats");
   const [friends, setFriends] = useState([
     {
@@ -34,6 +37,7 @@ const UsersPage = () => {
         <FriendsTab
         friends={friends}
         auth={auth}
+        userData={userData}
         />
       )}
       {activeTab === "chat" && (
