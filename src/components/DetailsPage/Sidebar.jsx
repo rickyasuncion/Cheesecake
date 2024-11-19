@@ -76,6 +76,39 @@ const Sidebar = ({ movie, crews, type }) => {
     setIsSubscribed(true);
   };
 
+  // Testing function to toggle "isFree" status
+  const toggleFreeStatus = async () => {
+    setIsFree((prevStatus) => !prevStatus);
+
+    if (!isFree) {
+      // send notification email when status changes from "not free" to "free"
+      try {
+        const response = await fetch(
+          "http://localhost:3003/send-free-notification",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              movieId: movie.id,
+              movieTitle: movie.title,
+            }),
+          }
+        );
+
+        const result = await response.json();
+        if (result.success) {
+          console.log("Notification emails sent successfully!");
+        } else {
+          console.error("Failed to send notification emails:", result.message);
+        }
+      } catch (error) {
+        console.error("Error sending notification emails:", error);
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -171,6 +204,16 @@ const Sidebar = ({ movie, crews, type }) => {
             <ArrowRight />
           </Button>
         )}
+      </div>
+
+      {/* Test Button to Toggle Free Status */}
+      <div className="mt-4">
+        <Button
+          onClick={toggleFreeStatus}
+          className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base bg-blue-500 text-white"
+        >
+          Toggle Free Status (Testing)
+        </Button>
       </div>
     </div>
   );

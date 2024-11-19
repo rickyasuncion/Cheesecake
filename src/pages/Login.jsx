@@ -12,7 +12,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-
   const handleLogin = async (provider) => {
     try {
       if (provider === "GitHub") {
@@ -22,17 +21,20 @@ const Login = () => {
       } else if (provider === "EmailPassword") {
         await emailSignIn(email, password);
       }
-      createUser()
+      console.log("Calling createUser after login");
+      await createUser();
     } catch (error) {
       console.error(`Error during ${provider} login:`, error.message);
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (user) {
+      console.log("User logged in:", user.email);
+      createUser();
       navigate("/");
     }
-  },[user, navigate])
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
