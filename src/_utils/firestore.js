@@ -12,7 +12,7 @@ import {
 
 import { db } from "./firebase";
 import { auth } from "./firebase";
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from "uuid";
 
 async function createUser() {
   const user = auth.currentUser;
@@ -20,14 +20,25 @@ async function createUser() {
     try {
       const userDocRef = doc(db, "users", user.uid);
 
+      // Log the current user for debugging
+      console.log("createUser called for user:", user.email);
+
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
+        console.log("User document already exists:", userDoc.data());
+
+        if (!userDoc.data().email) {
+          console.log("Email missing in Firestore, updating document...");
+          await updateDoc(userDocRef, { email: user.email });
+          console.log("Email updated successfully!");
+        }
         return;
       }
 
       await setDoc(userDocRef, {
         displayName: user.displayName,
         createdAt: serverTimestamp(),
+        email: user.email,
         favourites: [],
         lists: [],
         reviews: [],
@@ -35,11 +46,16 @@ async function createUser() {
         friends: [],
         chats: [],
       });
-
+      console.log(
+        "Firestore document successfully written for user:",
+        user.email
+      );
       console.log("User created successfully!");
     } catch (error) {
       console.error("Error creating user:", error);
     }
+  } else {
+    console.warn("No current user found during createUser");
   }
 }
 
@@ -107,7 +123,7 @@ async function deleteUserFavourite({ type, id }) {
       console.error("Error deleting favourite:", error);
     }
   }
-} 
+}
 
 async function updateUserReviews(reviewId) {
   const user = auth.currentUser;
@@ -148,7 +164,6 @@ async function updateUserFriends(userId, friend) {
   }
 }
 
-
 async function updateUserNotifications(notif) {
   const user = auth.currentUser;
   notif = { id: uuidv4(), ...notif };
@@ -169,7 +184,6 @@ async function updateUserNotifications(notif) {
     }
   }
 }
-
 
 async function deleteUserNotification(notificationId) {
   const user = auth.currentUser;
