@@ -26,6 +26,7 @@ async function createUser() {
       }
 
       await setDoc(userDocRef, {
+        id: user.uid,
         displayName: user.displayName,
         createdAt: serverTimestamp(),
         favourites: [],

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { UserPlus, MessageSquare, Check, X, Bell } from "lucide-react";
-import { sendUserNotifications } from "../../_utils/firestore_friends";
+import { createChat, sendUserChat, sendUserNotifications } from "../../_utils/firestore_friends";
 import {
   deleteUserNotification,
   updateUserFriends,
@@ -29,6 +29,17 @@ const FriendsTab = ({
     };
     sendUserNotifications(notif, searchTerm);
     setSearchTerm("");
+  };
+
+  const messageHandler = async (from, to, name) => {
+    const chat = { name: name, createdAt: new Date() };
+    try {
+      const chatId = await createChat(chat);
+      await sendUserChat(chatId, from);
+      await sendUserChat(chatId, to);
+    } catch (error) {
+      console.error("Error in messageHandler:", error);
+    }
   };
 
   useEffect(() => {
@@ -122,7 +133,7 @@ const FriendsTab = ({
           >
             <div className="flex justify-between items-start mb-2">
               <h3 className="font-medium text-lg">{friend.displayName}</h3>
-              <button className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2">
+              <button onClick={() => messageHandler(auth.currentUser.uid, friend.id, friend.displayName)} className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2">
                 <MessageSquare className="h-4 w-4" />
                 Message
               </button>

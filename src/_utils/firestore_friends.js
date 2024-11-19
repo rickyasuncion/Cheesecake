@@ -58,10 +58,35 @@ async function getUsersByIds(friends) {
 async function createChat(chatData) {
   try {
     const chatRef = await addDoc(collection(db, "chats"), chatData);
-    console.log("Chat created with ID: ", chatRef.id);
     return chatRef.id;
   } catch (error) {
     console.error("Error creating chat: ", error);
+  }
+}
+
+async function sendUserChat(chatId, userId) {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        console.log("User document does not exist!");
+        return;
+      }
+      const existingChats = userDoc.data().chats || [];
+      const isDuplicate = existingChats.includes(chatId);
+      if (!isDuplicate) {
+        const newChats = [...existingChats, chatId];
+        await updateDoc(userDocRef, { chats: newChats });
+      } else {
+        console.log("Duplicate chat ID found, not adding.");
+      }
+    } catch (error) {
+      console.error("Error adding chat ID:", error);
+    }
+  } else {
+    console.log("No user is currently authenticated.");
   }
 }
 
@@ -83,4 +108,4 @@ async function addMessage(chatId, messageData) {
 // createChat({ name: "General", createdAt: new Date() });
 
 
-export { sendUserNotifications, getUsersByIds };
+export { sendUserNotifications, getUsersByIds, createChat, sendUserChat };

@@ -11,7 +11,7 @@ import { getUsersByIds } from '../_utils/firestore_friends';
 const UsersPage = () => {
   const { userData } = useContext(UserData);
 
-  const [activeTab, setActiveTab] = useState("stats");
+  const [activeTab, setActiveTab] = useState("friends");
   const [friends, setFriends] = useState([]);
 
   useEffect(() => {
