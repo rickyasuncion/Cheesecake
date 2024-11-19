@@ -1,29 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Send, Smile, Paperclip, Search, MoreVertical, Phone, Video, User, Message, Check } from 'lucide-react';
+import { getChatsByIds } from '../../_utils/firestore_friends';
 
-const ChatTab = () => {
+const ChatTab = ({userData}) => {
   const [message, setMessage] = useState('');
+  const [chats, setChats] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
 
+  useEffect(() => {
+    const getData = async () => {
+      let data = await getChatsByIds(userData.chats);
+      setChats(data);
+      console.log(data);
+    };
+
+    getData();
+  }, []);
+
+  const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+
   // Sample chat data
-  const chats = [
-    {
-      id: 1,
-      name: "Support Team",
-      lastMessage: "We'll help you with your streaming issues",
-      time: "12:30 PM",
-      unread: 2,
-      isOnline: true,
-    },
-    {
-      id: 2,
-      name: "Movie Club",
-      lastMessage: "What did everyone think of the ending?",
-      time: "10:45 AM",
-      unread: 0,
-      isOnline: false,
-    }
-  ];
+  // const chats = [
+  //   {
+  //     id: 1,
+  //     name: "Support Team",
+  //     lastMessage: "We'll help you with your streaming issues",
+  //     time: "12:30 PM",
+  //     unread: 2,
+  //     isOnline: true,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Movie Club",
+  //     lastMessage: "What did everyone think of the ending?",
+  //     time: "10:45 AM",
+  //     unread: 0,
+  //     isOnline: false,
+  //   }
+  // ];
 
   const messages = [
     {
@@ -49,7 +63,7 @@ const ChatTab = () => {
     }
   ];
 
-  const ChatListItem = ({ name, lastMessage, time, unread, isOnline, isSelected, onClick }) => (
+  const ChatListItem = ({ name, lastMessage, createdAt, unread, isSelected, onClick }) => (
     <button
       onClick={onClick}
       className={`w-full p-4 flex items-center space-x-4 ${
@@ -60,14 +74,11 @@ const ChatTab = () => {
         <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
           <User className="w-6 h-6 text-gray-500" />
         </div>
-        {isOnline && (
-          <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
-        )}
       </div>
       <div className="flex-1 text-left">
         <div className="flex justify-between items-center mb-1">
           <h3 className="font-medium text-gray-900">{name}</h3>
-          <span className="text-xs text-gray-500">{time}</span>
+          <span className="text-xs text-gray-500">{createdAt.toDate().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span>
         </div>
         <p className="text-sm text-gray-500 truncate">{lastMessage}</p>
       </div>
@@ -114,10 +125,11 @@ const ChatTab = () => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          {chats.map(chat => (
+          {chats?.map(chat => (
             <ChatListItem
               key={chat.id}
-              {...chat}
+              name={chat.name}
+              createdAt={chat.createdAt}
               isSelected={selectedChat?.id === chat.id}
               onClick={() => setSelectedChat(chat)}
             />
@@ -136,14 +148,8 @@ const ChatTab = () => {
                   <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
                     <User className="w-5 h-5 text-gray-500" />
                   </div>
-                  {selectedChat.isOnline && (
-                    <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
-                  )}
                 </div>
-                <div>
                   <h2 className="font-medium text-gray-900">{selectedChat.name}</h2>
-                  <p className="text-sm text-green-500">{selectedChat.isOnline ? 'Online' : 'Offline'}</p>
-                </div>
               </div>
               <div className="flex items-center space-x-4">
                 <button className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100">

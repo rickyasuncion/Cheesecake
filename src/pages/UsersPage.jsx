@@ -37,6 +37,7 @@ const UsersPage = () => {
       )}
       {activeTab === "chat" && (
         <ChatTab
+        userData={userData}
         />
       )}
         {activeTab === "stats" && (
