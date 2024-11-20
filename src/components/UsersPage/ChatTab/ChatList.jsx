@@ -1,15 +1,16 @@
 import React from "react";
 import ChatListItem from "./ChatListItem";
 
-const ChatList = ({ chats, selectedChat, setSelectedChat }) => {
+const ChatList = ({ chats, selectedChat, setSelectedChat, setSelectedChatName }) => {
   return (
     <div className="flex-1 overflow-y-auto">
-      {chats?.map((chat) => (
+      {chats?.map((chat, index) => (
         <ChatListItem
-          key={chat.id}
+          key={index}
           {...chat}
           isSelected={selectedChat === chat.id}
           setSelectedChat={setSelectedChat}
+          setSelectedChatName={setSelectedChatName}
         />
       ))}
     </div>
