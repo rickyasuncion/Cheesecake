@@ -1,23 +1,64 @@
-import React, { useEffect, useState } from 'react';
-import { Send, Smile, Paperclip, Search, MoreVertical, Phone, Video, User, Message, Check } from 'lucide-react';
-import { getChatsByIds } from '../../_utils/firestore_friends';
+import React, { useEffect, useState } from "react";
+import {
+  Send,
+  Smile,
+  Paperclip,
+  Search,
+  MoreVertical,
+  Phone,
+  Video,
+  User,
+  Check,
+  MessageSquare,
+} from "lucide-react";
+import {
+  getChatsByIds,
+  updateChatMessage,
+} from "../../_utils/firestore_friends";
+import { db } from "../../_utils/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 
-const ChatTab = ({userData}) => {
-  const [message, setMessage] = useState('');
-  const [chats, setChats] = useState(null);
-  const [selectedChat, setSelectedChat] = useState(null);
+const ChatTab = ({ userData }) => {
+  const [message, setMessage] = useState("");
+  const [selectedChat, setSelectedChat] = useState("");
+  const [messages, setMessages] = useState("");
 
   useEffect(() => {
-    const getData = async () => {
-      let data = await getChatsByIds(userData.chats);
-      setChats(data);
-      console.log(data);
+    let unsubscribe;
+
+    if (selectedChat) {
+      const chatDocRef = doc(db, "chats", selectedChat);
+
+      unsubscribe = onSnapshot(chatDocRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const chatData = docSnapshot.data();
+          setMessages(chatData.messages || []); 
+        } else {
+          console.error(`Chat document with ID ${selectedChat} does not exist.`);
+        }
+      });
+    }
+
+    return () => {
+      if (unsubscribe) unsubscribe();
     };
+  }, [selectedChat]);
 
-    getData();
-  }, []);
-
-  const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     if (userData) {
+  //       const chatIds = userData.chats.map((chat) => chat.id);
+  //       try {
+  //         const data = await getChatsByIds(chatIds);
+  //         setChats(data);
+  //         console.log(data);
+  //       } catch (error) {
+  //         console.error("Error fetching chat data:", error);
+  //       }
+  //     }
+  //   };
+  //   getData();
+  // }, [userData]);
 
   // Sample chat data
   // const chats = [
@@ -39,76 +80,119 @@ const ChatTab = ({userData}) => {
   //   }
   // ];
 
-  const messages = [
-    {
-      id: 1,
-      sender: "Support Team",
-      content: "Hello! How can we help you today?",
-      time: "12:25 PM",
-      isUser: false
-    },
-    {
-      id: 2,
-      sender: "You",
-      content: "Hi, I'm having trouble with video playback on my device",
-      time: "12:27 PM",
-      isUser: true
-    },
-    {
-      id: 3,
-      sender: "Support Team",
-      content: "I understand. Could you tell me what device you're using and what happens when you try to play a video?",
-      time: "12:30 PM",
-      isUser: false
-    }
-  ];
+  // const messages = [
+  //   {
+  //     id: 1,
+  //     sender: "Support Team",
+  //     content: "Hello! How can we help you today?",
+  //     time: "12:25 PM",
+  //     isUser: false,
+  //   },
+  //   {
+  //     id: 2,
+  //     sender: "You",
+  //     content: "Hi, I'm having trouble with video playback on my device",
+  //     time: "12:27 PM",
+  //     isUser: true,
+  //   },
+  //   {
+  //     id: 3,
+  //     sender: "Support Team",
+  //     content:
+  //       "I understand. Could you tell me what device you're using and what happens when you try to play a video?",
+  //     time: "12:30 PM",
+  //     isUser: false,
+  //   },
+  // ];
 
-  const ChatListItem = ({ name, lastMessage, createdAt, unread, isSelected, onClick }) => (
-    <button
-      onClick={onClick}
-      className={`w-full p-4 flex items-center space-x-4 ${
-        isSelected ? 'bg-red-50' : 'hover:bg-gray-50'
-      }`}
-    >
-      <div className="relative">
-        <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-          <User className="w-6 h-6 text-gray-500" />
+  const ChatListItem = ({
+    name,
+    id,
+    lastMessage,
+    unread,
+    isSelected,
+    setSelectedChat,
+    onClick,
+  }) => {
+    const [chat, setChat] = useState(null);
+    const chatDocRef = doc(db, "chats", id);
+
+    useEffect(() => {
+      if (id) {
+        const unsubscribe = onSnapshot(chatDocRef, (docSnapshot) => {
+          if (docSnapshot.exists()) {
+            setChat({ id: docSnapshot.id, ...docSnapshot.data() });
+          } else {
+            console.log(`No chat document found for ID: ${id}`);
+          }
+        });
+        return () => unsubscribe();
+      }
+    }, []);
+
+    return (
+      <button
+      onClick={() => {
+        setSelectedChat(chat.id);
+        }}
+        className={`w-full p-4 flex items-center space-x-4 ${
+          isSelected ? "bg-red-50" : "hover:bg-gray-50"
+        }`}
+      >
+        <div className="relative">
+          <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+            <User className="w-6 h-6 text-gray-500" />
+          </div>
         </div>
-      </div>
-      <div className="flex-1 text-left">
-        <div className="flex justify-between items-center mb-1">
-          <h3 className="font-medium text-gray-900">{name}</h3>
-          <span className="text-xs text-gray-500">{createdAt.toDate().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span>
+        <div className="flex-1 text-left">
+          <div className="flex justify-between items-center mb-1">
+            <h3 className="font-medium text-gray-900">{name}</h3>
+            <span className="text-xs text-gray-500">
+              {chat &&
+                chat.time?.toDate().toLocaleTimeString("en-US", {
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                })}
+            </span>
+          </div>
+          {lastMessage && (
+            <p className="text-sm text-gray-500 truncate">{lastMessage}</p>
+          )}
         </div>
-        <p className="text-sm text-gray-500 truncate">{lastMessage}</p>
-      </div>
-      {unread > 0 && (
+        {/* {unread > 0 && (
         <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
           <span className="text-xs text-white">{unread}</span>
         </div>
-      )}
-    </button>
-  );
+      )} */}
+      </button>
+    );
+  };
 
-  const Message = ({ content, time, isUser }) => (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
-      <div className={`max-w-[70%] ${isUser ? 'order-2' : 'order-1'}`}>
+  const Message = ({ content, time, isUser }) => {
+    return (
+    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4`}>
+      <div className={`max-w-[70%] ${isUser ? "order-2" : "order-1"}`}>
         <div
           className={`p-3 rounded-lg ${
-            isUser ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-900'
+            isUser ? "bg-red-500 text-white" : "bg-gray-100 text-gray-900"
           }`}
         >
           {content}
         </div>
         <div className="flex items-center mt-1">
-          <span className="text-xs text-gray-500">{time}</span>
-          {isUser && (
-            <Check className="w-4 h-4 text-gray-500 ml-1" />
-          )}
+          <span className="text-xs text-gray-500">
+            {time?.toDate().toLocaleTimeString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            })}
+          </span>
+          {isUser && <Check className="w-4 h-4 text-gray-500 ml-1" />}
         </div>
       </div>
     </div>
-  );
+  )};
 
   return (
     <div className="h-screen bg-white flex">
@@ -125,13 +209,12 @@ const ChatTab = ({userData}) => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          {chats?.map(chat => (
+          {userData.chats?.map((chat) => (
             <ChatListItem
-              key={chat.id}
-              name={chat.name}
-              createdAt={chat.createdAt}
-              isSelected={selectedChat?.id === chat.id}
-              onClick={() => setSelectedChat(chat)}
+              {...chat}
+              isSelected={selectedChat === chat.id}
+              setMessages={setMessages}
+              setSelectedChat={setSelectedChat}
             />
           ))}
         </div>
@@ -149,7 +232,9 @@ const ChatTab = ({userData}) => {
                     <User className="w-5 h-5 text-gray-500" />
                   </div>
                 </div>
-                  <h2 className="font-medium text-gray-900">{selectedChat.name}</h2>
+                <h2 className="font-medium text-gray-900">
+                  {selectedChat.name}
+                </h2>
               </div>
               <div className="flex items-center space-x-4">
                 <button className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100">
@@ -166,9 +251,17 @@ const ChatTab = ({userData}) => {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {messages.map(msg => (
-                <Message key={msg.id} {...msg} />
-              ))}
+              {messages ? (
+                messages.map((msg) => <Message key={msg.id} {...msg} />)
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                  <MessageSquare className="w-12 h-12 mb-4" />
+                  <p className="text-lg font-medium">No messages yet</p>
+                  <p className="text-sm">
+                    Start a conversation to see messages appear here
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Input Area */}
@@ -187,7 +280,15 @@ const ChatTab = ({userData}) => {
                 <button className="text-gray-400 hover:text-gray-600">
                   <Smile className="w-5 h-5" />
                 </button>
-                <button className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600">
+                <button
+                  onClick={() =>
+                    updateChatMessage(selectedChat, {
+                      content: "Hello, World!",
+                      sender: userData.id,
+                    })
+                  }
+                  className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
+                >
                   <Send className="w-5 h-5" />
                 </button>
               </div>
@@ -199,8 +300,12 @@ const ChatTab = ({userData}) => {
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Message className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Select a chat to start messaging</h3>
-              <p className="text-sm text-gray-500">Choose from your existing conversations or start a new one</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Select a chat to start messaging
+              </h3>
+              <p className="text-sm text-gray-500">
+                Choose from your existing conversations or start a new one
+              </p>
             </div>
           </div>
         )}

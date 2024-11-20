@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { UserPlus, MessageSquare, Check, X, Bell } from "lucide-react";
-import { createChat, getChatsByIds, sendUserChat, sendUserNotifications } from "../../_utils/firestore_friends";
+import { createChat, sendUserChat, sendUserNotifications } from "../../_utils/firestore_friends";
 import {
   deleteUserNotification,
   updateUserFriends,
@@ -43,21 +43,26 @@ const FriendsTab = ({
 
   const messageHandler = async (from, to) => {
     try {
-      const existingChat = userData.chats.some((c) => to.chats.includes(c));
+      const existingChat = from.chats.some((c) => 
+        to.chats.some((chat) => chat.id === c.id)
+      );
   
       if (existingChat) {
         console.log("Chat already exists!");
         return;
       }
   
-      const chatId = await createChat(to.displayName);
-      await sendUserChat(chatId, from);
-      await sendUserChat(chatId, to.id);
+      const chatId = await createChat();
+  
+      await sendUserChat({ id: chatId, name: to.displayName }, from.id);
+      await sendUserChat({ id: chatId, name: from.displayName }, to.id);
+  
       alert("Chat created successfully!");
     } catch (error) {
       console.error("Error creating chat:", error);
     }
   };
+  
   
   
 
@@ -152,7 +157,7 @@ const FriendsTab = ({
           >
             <div className="flex justify-between items-start mb-2">
               <h3 className="font-medium text-lg">{friend.displayName}</h3>
-              <button onClick={() => messageHandler(auth.currentUser.uid, friend )} className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2">
+              <button onClick={() => messageHandler(userData, friend )} className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2">
                 <MessageSquare className="h-4 w-4" />
                 Message
               </button>
