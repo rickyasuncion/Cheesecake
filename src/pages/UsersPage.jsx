@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import StatsTab from '../components/UsersPage/StatsTab';
 import FriendsTab from '../components/UsersPage/FriendsTab';
 import Tabs from '../components/UsersPage/Tabs';
-import ChatTab from '../components/UsersPage/ChatTab';
 import ProfileTab from '../components/UsersPage/ProfileTab';
 import { auth } from '../_utils/firebase';
 import { UserData } from '../providers/UserDataProvider';
 import { getUsersByIds } from '../_utils/firestore_friends';
+import ChatTab from '../components/UsersPage/ChatTab/ChatTab';
 
 const UsersPage = () => {
   const { userData } = useContext(UserData);

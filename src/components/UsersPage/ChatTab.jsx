@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Send,
   Smile,
@@ -11,17 +11,24 @@ import {
   Check,
   MessageSquare,
 } from "lucide-react";
-import {
-  getChatsByIds,
-  updateChatMessage,
-} from "../../_utils/firestore_friends";
-import { db } from "../../_utils/firebase";
+import { updateChatMessage } from "../../_utils/firestore_friends";
+import { auth, db } from "../../_utils/firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 
 const ChatTab = ({ userData }) => {
   const [message, setMessage] = useState("");
   const [selectedChat, setSelectedChat] = useState("");
   const [messages, setMessages] = useState("");
+  
+  const messagesEndRef = useRef(null);
+
+  const messageHandler = () => {
+    updateChatMessage(selectedChat, {
+      content: message,
+      sender: userData.id,
+    });
+    setMessage("");
+  };
 
   useEffect(() => {
     let unsubscribe;
@@ -32,9 +39,11 @@ const ChatTab = ({ userData }) => {
       unsubscribe = onSnapshot(chatDocRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
           const chatData = docSnapshot.data();
-          setMessages(chatData.messages || []); 
+          setMessages(chatData.messages || []);
         } else {
-          console.error(`Chat document with ID ${selectedChat} does not exist.`);
+          console.error(
+            `Chat document with ID ${selectedChat} does not exist.`
+          );
         }
       });
     }
@@ -132,8 +141,8 @@ const ChatTab = ({ userData }) => {
 
     return (
       <button
-      onClick={() => {
-        setSelectedChat(chat.id);
+        onClick={() => {
+          setSelectedChat(chat.id);
         }}
         className={`w-full p-4 flex items-center space-x-4 ${
           isSelected ? "bg-red-50" : "hover:bg-gray-50"
@@ -169,30 +178,32 @@ const ChatTab = ({ userData }) => {
     );
   };
 
-  const Message = ({ content, time, isUser }) => {
+  const Message = ({ content, time, sender }) => {
+    const isUser = sender === userData.id;
     return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4`}>
-      <div className={`max-w-[70%] ${isUser ? "order-2" : "order-1"}`}>
-        <div
-          className={`p-3 rounded-lg ${
-            isUser ? "bg-red-500 text-white" : "bg-gray-100 text-gray-900"
-          }`}
-        >
-          {content}
-        </div>
-        <div className="flex items-center mt-1">
-          <span className="text-xs text-gray-500">
-            {time?.toDate().toLocaleTimeString("en-US", {
-              hour: "numeric",
-              minute: "numeric",
-              hour12: true,
-            })}
-          </span>
-          {isUser && <Check className="w-4 h-4 text-gray-500 ml-1" />}
+      <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4`}>
+        <div className={`max-w-[70%] ${isUser ? "order-2" : "order-1"}`}>
+          <div
+            className={`p-3 rounded-lg ${
+              isUser ? "bg-red-500 text-white" : "bg-gray-100 text-gray-900"
+            }`}
+          >
+            {content}
+          </div>
+          <div className="flex items-center mt-1">
+            <span className="text-xs text-gray-500">
+              {time?.toDate().toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              })}
+            </span>
+            {isUser && <Check className="w-4 h-4 text-gray-500 ml-1" />}
+          </div>
         </div>
       </div>
-    </div>
-  )};
+    );
+  };
 
   return (
     <div className="h-screen bg-white flex">
@@ -281,12 +292,7 @@ const ChatTab = ({ userData }) => {
                   <Smile className="w-5 h-5" />
                 </button>
                 <button
-                  onClick={() =>
-                    updateChatMessage(selectedChat, {
-                      content: "Hello, World!",
-                      sender: userData.id,
-                    })
-                  }
+                  onClick={messageHandler}
                   className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
                 >
                   <Send className="w-5 h-5" />
