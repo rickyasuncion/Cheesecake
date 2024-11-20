@@ -16,17 +16,18 @@ const SignUp = () => {
   });
   const navigate = useNavigate();
 
-
-  const handleLogin = async ({name, email, password}) => {
+  const handleLogin = async ({ name, email, password }) => {
     try {
       await emailSignUp(name, email, password);
-      createUser()
-      navigate("/")
+  
+      await createUser();
+      navigate("/");
       console.log("Successfully signed up!");
     } catch (error) {
       console.log("Error during sign up:", error.message);
     }
   };
+  
 
   const handleChange = (e) => {
     setFormData({
