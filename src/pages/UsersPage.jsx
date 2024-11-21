@@ -7,6 +7,7 @@ import { auth } from "../_utils/firebase";
 import { UserData } from "../providers/UserDataProvider";
 import { getUsersByIds } from "../_utils/firestore_friends";
 import { useTranslation } from "react-i18next";
+import ChatTab from "../components/UsersPage/ChatTab/ChatTab";
 
 const UsersPage = () => {
   const { t } = useTranslation();

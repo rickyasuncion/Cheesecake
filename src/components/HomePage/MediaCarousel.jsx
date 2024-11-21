@@ -67,7 +67,7 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
   return (
     <div>
       <div className="flex justify-between items-center my-4">
-        <h2 className="text-2xl text-gray-400">{text}</h2>
+        <h2 className="text-2xl text-neutral-900">{text}</h2>
         <div className="flex space-x-2">
           <button
             onClick={prevMovies}
