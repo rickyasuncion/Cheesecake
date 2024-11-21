@@ -1,10 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import FeaturedSection from "../components/HomePage/FeaturedSection";
 import MediaCarousel from "../components/HomePage/MediaCarousel";
 import { fetchData } from "../_utils/utils";
 import { UserData } from "../providers/UserDataProvider";
 import { useTranslation } from "react-i18next";
 import FreeMoviesPane from "../components/HomePage/FreeMoviesPane";
+import LatestMoviesWithCount from "../components/HomePage/LatestMoviesWithCount";
 
 const Home = () => {
   const [featured, setFeatured] = useState([]);
@@ -64,8 +65,9 @@ const Home = () => {
           userData={userData}
         />
         {/* <MediaCarousel movies={movies} text="Top 10 in Canada" /> */}
-        <FreeMoviesPane />
       </main>
+      <FreeMoviesPane />
+      <LatestMoviesWithCount />
     </div>
   );
 };
