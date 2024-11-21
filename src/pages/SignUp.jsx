@@ -20,7 +20,8 @@ const SignUp = () => {
   const handleLogin = async ({ name, email, password }) => {
     try {
       await emailSignUp(name, email, password);
-      createUser();
+
+      await createUser();
       navigate("/");
       console.log("Successfully signed up!");
     } catch (error) {

@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import StatsTab from "../components/UsersPage/StatsTab";
 import FriendsTab from "../components/UsersPage/FriendsTab";
 import Tabs from "../components/UsersPage/Tabs";
-import ChatTab from "../components/UsersPage/ChatTab";
 import ProfileTab from "../components/UsersPage/ProfileTab";
 import { auth } from "../_utils/firebase";
 import { UserData } from "../providers/UserDataProvider";
@@ -13,7 +12,7 @@ const UsersPage = () => {
   const { t } = useTranslation();
   const { userData } = useContext(UserData);
 
-  const [activeTab, setActiveTab] = useState("stats");
+  const [activeTab, setActiveTab] = useState("friends");
   const [friends, setFriends] = useState([]);
 
   useEffect(() => {
@@ -37,8 +36,8 @@ const UsersPage = () => {
       {activeTab === t("friends") && (
         <FriendsTab friends={friends} auth={auth} userData={userData} />
       )}
-      {activeTab === t("chat") && <ChatTab />}
-      {activeTab === t("stats") && (
+      {activeTab === "chat" && <ChatTab userData={userData} />}
+      {activeTab === "stats" && (
         <StatsTab
           friendsCount={friends.length}
           moviesWatched={24}
@@ -46,7 +45,7 @@ const UsersPage = () => {
           watchlistCount={15}
         />
       )}
-      {activeTab === t("profile") && <ProfileTab />}
+      {activeTab === "profile" && <ProfileTab />}
     </div>
   );
 };

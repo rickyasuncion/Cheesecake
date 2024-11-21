@@ -34,16 +34,18 @@ export const AuthContextProvider = ({ children }) => {
   //   return signInWithPopup(auth, provider);
   // };
 
-  const emailSignUp = (name, email, password) => {
+  const emailSignUp = async (name, email, password) => {
     try {
-      createUserWithEmailAndPassword(auth, email, password).catch((err) =>
-        console.log(err)
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
       );
-      updateProfile(auth.currentUser, { displayName: name }).catch(
-        (err) => console.log(err)
-      );
+      const user = userCredential.user;
+      await updateProfile(user, { displayName: name });
+      console.log("User signed up and profile updated successfully!");
     } catch (err) {
-      console.log(err);
+      console.log("Error during sign-up:", err);
     }
   };
 

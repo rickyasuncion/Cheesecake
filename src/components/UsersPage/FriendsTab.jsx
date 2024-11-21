@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { UserPlus, MessageSquare, Check, X, Bell } from "lucide-react";
-import { sendUserNotifications } from "../../_utils/firestore_friends";
+import {
+  createChat,
+  sendUserChat,
+  sendUserNotifications,
+} from "../../_utils/firestore_friends";
 import {
   deleteUserNotification,
   updateUserFriends,
@@ -15,25 +19,56 @@ const FriendsTab = ({ friends, userData, auth }) => {
 
   const addFriendHandler = () => {
     if (auth.currentUser.uid === searchTerm) {
+      alert("You cannot add yourself as a friend.");
       setSearchTerm("");
-
       return;
     }
+
     const notif = {
       type: "friend-request",
       title: auth.currentUser.displayName,
       from: auth.currentUser.uid,
       to: searchTerm,
     };
-    sendUserNotifications(notif, searchTerm);
-    setSearchTerm("");
+
+    try {
+      sendUserNotifications(notif, searchTerm);
+      alert("Friend request sent successfully!");
+    } catch (error) {
+      console.error("Failed to send friend request:", error);
+      alert("Could not send friend request. Please try again.");
+    } finally {
+      setSearchTerm("");
+    }
+  };
+
+  const messageHandler = async (from, to) => {
+    try {
+      const existingChat = from.chats.some((c) =>
+        to.chats.some((chat) => chat.id === c.id)
+      );
+
+      if (existingChat) {
+        console.log("Chat already exists!");
+        return;
+      }
+
+      const chatId = await createChat();
+
+      await sendUserChat({ id: chatId, name: to.displayName }, from.id);
+      await sendUserChat({ id: chatId, name: from.displayName }, to.id);
+
+      alert("Chat created successfully!");
+    } catch (error) {
+      console.error("Error creating chat:", error);
+    }
   };
 
   useEffect(() => {
-    if (userData.notifications) {
+    if (userData) {
       setFriendRequests(
         userData.notifications.filter(
-          (notif) => notif.type === "friend-request"
+          (notif) => notif.type === "friend-request" || []
         )
       );
     }
@@ -120,9 +155,12 @@ const FriendsTab = ({ friends, userData, auth }) => {
             <div key={index} className="border rounded-lg p-4 hover:bg-gray-50">
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-medium text-lg">{friend.displayName}</h3>
-                <button className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2">
+                <button
+                  onClick={() => messageHandler(userData, friend)}
+                  className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2"
+                >
                   <MessageSquare className="h-4 w-4" />
-                  {t("Message")}
+                  Message
                 </button>
               </div>
               {/* <div className="grid grid-cols-2 gap-4">

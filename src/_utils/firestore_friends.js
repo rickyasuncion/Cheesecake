@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { v4 as uuidv4 } from 'uuid'
 
@@ -55,23 +55,75 @@ async function getUsersByIds(friends) {
   }
 }
 
-async function createChat(chatData) {
+async function createChat() {
+  let chatData = { time: serverTimestamp() };
   try {
     const chatRef = await addDoc(collection(db, "chats"), chatData);
-    console.log("Chat created with ID: ", chatRef.id);
-    return chatRef.id;
+    return chatRef.id; 
   } catch (error) {
-    console.error("Error creating chat: ", error);
+    console.error("Error creating chat:", error);
+    return null; 
   }
 }
 
-async function addMessage(chatId, messageData) {
+
+async function sendUserChat(chat, userId) {
+  if (!auth.currentUser) {
+    console.error("No authenticated user found.");
+    return;
+  }
   try {
-    const messageRef = await addDoc(collection(db, "chats", chatId, "messages"), messageData);
-    console.log("Message added with ID: ", messageRef.id);
-    return messageRef.id;
+    const userDocRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userDocRef);
+    if (!userDoc.exists()) {
+      console.error(`User document does not exist for userId: ${userId}`);
+      return;
+    }
+    const userChats = userDoc.data().chats || [];
+    await updateDoc(userDocRef, { chats: [...userChats, chat] });
+    console.log(
+      `Chat ID ${chat.id} successfully added to user ${userId}`
+    );
   } catch (error) {
-    console.error("Error adding message: ", error);
+    console.error(`Error adding chat ${chat.id} to user ${userId}:`, error);
+  }
+}
+
+
+async function getChatById(chatId) {
+  try {
+    const chatDocRef = doc(db, "chats", chatId);
+    const chatDoc = await getDoc(chatDocRef);
+    if (chatDoc.exists()) {
+      return { id: chatDocRef.id, ...chatDoc.data() };
+    } else {
+      console.log(`No chat document found for ID: ${chatId}`);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting chat document:", error);
+    return null;
+  }
+}
+
+async function updateChatMessage(chatId, messageData) {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const chatDocRef = doc(db, "chats", chatId);
+      const chatDoc = await getDoc(chatDocRef);
+      if (!chatDoc.exists()) {
+        console.log("Chat document does not exist!");
+        return;
+      }
+      const existingMessages = chatDoc.data().messages || [];
+      messageData = {time: new Date(), ...messageData}
+      const newMessages = [...existingMessages, messageData];
+      await updateDoc(chatDocRef, { time: serverTimestamp(), messages: newMessages });
+      console.log("Messages added successfully!");
+    } catch (error) {
+      console.error("Error adding messages:", error);
+    }
   }
 }
 
@@ -83,4 +135,4 @@ async function addMessage(chatId, messageData) {
 // createChat({ name: "General", createdAt: new Date() });
 
 
-export { sendUserNotifications, getUsersByIds };
+export { sendUserNotifications, getUsersByIds, createChat, sendUserChat, updateChatMessage };
