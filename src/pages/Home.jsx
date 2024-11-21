@@ -4,6 +4,7 @@ import MediaCarousel from "../components/HomePage/MediaCarousel";
 import { fetchData } from "../_utils/utils";
 import { UserData } from "../providers/UserDataProvider";
 import { useTranslation } from "react-i18next";
+import FreeMoviesPane from "../components/HomePage/FreeMoviesPane";
 
 const Home = () => {
   const [featured, setFeatured] = useState([]);
@@ -63,6 +64,7 @@ const Home = () => {
           userData={userData}
         />
         {/* <MediaCarousel movies={movies} text="Top 10 in Canada" /> */}
+        <FreeMoviesPane />
       </main>
     </div>
   );
