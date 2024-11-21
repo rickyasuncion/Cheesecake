@@ -175,7 +175,40 @@
     "Cast": "演员",
     "Episodes": "集数",
     "Details": "详情",
-    "Subscribed for free notifications": "订阅免费通知"
+    "Subscribed for free notifications": "订阅免费通知",
+    "Watch Trailer": "观看预告片",
+    "Reviews": "评论",
+    "reviews": "评论",
+    "Season": "季度",
+    "First Aired": "首播日期",
+    "Status": "状态",
+    "Network": "网络",
+    "Creator": "创作者",
+    "Seasons": "季度",
+    "Write a Review": "写评论",
+    "No reviews yet. Be the first to review!" : "还没有评论。成为第一个评论者！",
+    "Subscribe to our Newsletter": "订阅我们的通讯",
+    "Enter your email": "输入您的电子邮件地址",
+    "Subscribe": "订阅",
+    "All Rights Reserved": "保留所有权利",
+    "mins": "分钟",
+    "Favourites": "收藏夹",
+    "My Favorites": "我的收藏夹",
+    "No favorite": "没有收藏",
+    "Shows": "电视剧",
+    "yet": " ",
+    "My Favorite": "我的收藏",
+    "Hi, User": "您好，用户",
+    "Welcome": "欢迎",
+    "Watchlist": "观看列表",
+    "Favorites": "收藏夹",
+    "For You": "个人",
+    "Users": "用户",
+    "Settings": "设置",
+    "Sign Out": "退出"
+
+
+
 
 
   }

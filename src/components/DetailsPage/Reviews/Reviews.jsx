@@ -3,8 +3,10 @@ import { Star } from "lucide-react";
 import ReviewForm from "./ReviewForm";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../_utils/firebase";
+import { useTranslation } from "react-i18next";
 
 const Reviews = ({ title, type, id }) => {
+  const { t } = useTranslation();
   const options = { year: "numeric", month: "long", day: "numeric" };
   const [isWritingReview, setIsWritingReview] = useState(false);
   const [reviews, setReviews] = useState([]);
@@ -33,7 +35,7 @@ const Reviews = ({ title, type, id }) => {
             <span>4.8</span>
           </div>
           <span>•</span>
-          <span>42 reviews</span>
+          <span>42 {t("reviews")}</span>
         </div>
       </div>
 
@@ -45,7 +47,7 @@ const Reviews = ({ title, type, id }) => {
             onClick={() => setIsWritingReview(true)}
             className="w-full py-3 bg-yellow-600 hover:bg-yellow-700 rounded-lg mb-8 transition-colors"
           >
-            Write a Review
+            {t("Write a Review")}
           </button>
         )}
 
@@ -98,7 +100,7 @@ const Reviews = ({ title, type, id }) => {
             ))}
           {reviews.length === 0 && (
             <div className="p-6 bg-gray-800 rounded-lg text-gray-400 text-center">
-              No reviews yet. Be the first to review!
+              {t("No reviews yet. Be the first to review!")}
             </div>
           )}
         </div>

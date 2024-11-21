@@ -128,7 +128,7 @@ const Sidebar = ({ movie, crews, type }) => {
             </div>
             <div>
               <span className="text-gray-500">{t("Runtime")}:</span>{" "}
-              {movie.runtime} mins
+              {movie.runtime} {t("mins")}
             </div>
             <div>
               <span className="text-gray-500">{t("Director")}:</span>{" "}
@@ -140,26 +140,27 @@ const Sidebar = ({ movie, crews, type }) => {
         ) : (
           <div className="space-y-3 text-gray-300">
             <div>
-              <span className="text-gray-500">First Aired:</span>{" "}
+              <span className="text-gray-500">{t("First Aired")}:</span>{" "}
               {movie.first_air_date}
             </div>
             <div>
-              <span className="text-gray-500">Status:</span> {movie.status}
+              <span className="text-gray-500">{t("Status")}:</span>{" "}
+              {movie.status}
             </div>
             <div>
-              <span className="text-gray-500">Network:</span>{" "}
+              <span className="text-gray-500">{t("Network")}:</span>{" "}
               {movie.networks?.map((network) => network.name).join(", ")}
             </div>
             <div>
-              <span className="text-gray-500">Creator:</span>{" "}
+              <span className="text-gray-500">{t("Creator")}:</span>{" "}
               {movie.created_by?.map((creator) => creator.name).join(", ")}
             </div>
             <div>
-              <span className="text-gray-500">Episodes:</span>{" "}
+              <span className="text-gray-500">{t("Episodes")}:</span>{" "}
               {movie.number_of_episodes}
             </div>
             <div>
-              <span className="text-gray-500">Seasons:</span>{" "}
+              <span className="text-gray-500">{t("Seasons")}:</span>{" "}
               {movie.number_of_seasons}
             </div>
           </div>

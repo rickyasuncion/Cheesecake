@@ -1,7 +1,9 @@
 import { Heart, Play, Star } from "lucide-react";
 import React, { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 const DetailsHero = ({ movie, trailerVideo }) => {
+  const { t } = useTranslation();
   const videoRef = useRef(null);
   const [showTrailer, setShowTrailer] = React.useState(false);
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -72,7 +74,7 @@ const DetailsHero = ({ movie, trailerVideo }) => {
                 className="flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 px-8 py-3 rounded-full font-semibold transition-colors"
               >
                 <Play size={20} />
-                {isPlaying ? "Pause" : "Watch Trailer"}
+                {isPlaying ? "Pause" : t("Watch Trailer")}
               </button>
               <div className="flex items-center gap-2">
                 <Star className="text-yellow-400" fill="currentColor" />

@@ -3,8 +3,10 @@ import Favourited from "../components/FavouritesPage/Favourited";
 import Sidebar from "../components/FavouritesPage/Sidebar";
 import { UserData } from "../providers/UserDataProvider";
 import { fetchData } from "../_utils/utils";
+import { useTranslation } from "react-i18next";
 
 const Favourites = () => {
+  const { t, i18n } = useTranslation();
   const { userData } = useContext(UserData);
 
   const [favoriteMovies, setFavoriteMovies] = useState([]);
@@ -16,7 +18,7 @@ const Favourites = () => {
 
   const handleShowSimilar = async ({ title, type, id }) => {
     const data = await fetchData(
-      `https://api.themoviedb.org/3/${type}/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
+      `https://api.themoviedb.org/3/${type}/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
     );
     setSimilarMovies(data.results);
     setSelectedMovie(title);
@@ -36,13 +38,13 @@ const Favourites = () => {
     <div className="flex justify-center">
       <div className="flex flex-col justify-start items-center">
         <Favourited
-          title={"Movies"}
+          title={t("Movies")}
           favorites={favoriteMovies}
           handleShowSimilar={handleShowSimilar}
         />
 
         <Favourited
-          title={"Shows"}
+          title={t("Shows")}
           favorites={favoriteShows}
           handleShowSimilar={handleShowSimilar}
         />

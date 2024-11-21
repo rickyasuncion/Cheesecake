@@ -62,7 +62,7 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
             {movie.seasons &&
               movie.seasons.map((season) => (
                 <option key={season.season_number} value={season.season_number}>
-                  Season {season.season_number}
+                  {t("Season")} {season.season_number}
                 </option>
               ))}
           </select>
@@ -148,13 +148,13 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
               active={selectedTab === "Overview"}
               onClick={() => setSelectedTab("Overview")}
             >
-              Overview
+              {t("Overview")}
             </TabButton>
             <TabButton
               active={selectedTab === "reviews"}
               onClick={() => setSelectedTab("reviews")}
             >
-              Reviews
+              {t("Reviews")}
             </TabButton>
           </div>
         </div>
@@ -175,19 +175,19 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
               active={selectedTab === "Overview"}
               onClick={() => setSelectedTab("Overview")}
             >
-              Overview
+              {t("Overview")}
             </TabButton>
             <TabButton
               active={selectedTab === "episodes"}
               onClick={() => setSelectedTab("episodes")}
             >
-              Episodes
+              {t("Episodes")}
             </TabButton>
             <TabButton
               active={selectedTab === "reviews"}
               onClick={() => setSelectedTab("reviews")}
             >
-              Reviews
+              {t("Reviews")}
             </TabButton>
           </div>
         </div>
