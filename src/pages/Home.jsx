@@ -6,6 +6,7 @@ import { UserData } from "../providers/UserDataProvider";
 import { useTranslation } from "react-i18next";
 import FreeMoviesPane from "../components/HomePage/FreeMoviesPane";
 import LatestMoviesWithCount from "../components/HomePage/LatestMoviesWithCount";
+import MovieTrailer from "../components/HomePage/MovieTrailer";
 
 const Home = () => {
   const [featured, setFeatured] = useState([]);
@@ -43,9 +44,10 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <FeaturedSection featuredContent={featured} />
+    <div className="min-h-screen bg-gray-100 isolate">
+      <MovieTrailer></MovieTrailer>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 -mt-32 z-10">
+        {/* <FeaturedSection featuredContent={featured} /> */}
         <MediaCarousel
           movies={movies1}
           text={t("Now In Theaters")}
