@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const FeaturedSection = ({ featuredContent }) => {
-  featuredContent = featuredContent.slice(0,10);
+  featuredContent = featuredContent.slice(0, 10);
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const nextFeatured = () => {
     setCurrentFeaturedIndex((prev) =>
-      prev === (featuredContent.length - 1) ? 0 : prev + 1
+      prev === featuredContent.length - 1 ? 0 : prev + 1
     );
   };
 
@@ -47,8 +49,11 @@ const FeaturedSection = ({ featuredContent }) => {
                 {item.title}
               </h2>
               <p className="text-white mb-4">{item.subtitle}</p>
-              <button onClick={()=> navigate(`/details/movie/${item.id}`)} className="bg-white text-black px-6 py-2 rounded-full hover:bg-gray-100 transition">
-                View More
+              <button
+                onClick={() => navigate(`/details/movie/${item.id}`)}
+                className="bg-white text-black px-6 py-2 rounded-full hover:bg-gray-100 transition"
+              >
+                {t("View More")}
               </button>
             </div>
           </div>

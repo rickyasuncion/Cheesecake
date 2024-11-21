@@ -5,38 +5,41 @@ import {
   deleteUserFavourite,
   updateUserFavourites,
 } from "../../_utils/firestore";
-
-const GENRES = {
-  28: "Action",
-  12: "Adventure",
-  16: "Animation",
-  35: "Comedy",
-  80: "Crime",
-  99: "Documentary",
-  18: "Drama",
-  10751: "Family",
-  14: "Fantasy",
-  36: "History",
-  27: "Horror",
-  10402: "Music",
-  9648: "Mystery",
-  10749: "Romance",
-  878: "Science Fiction",
-  10770: "TV Movie",
-  53: "Thriller",
-  10752: "War",
-  37: "Western",
-  10759: "Action & Adventure",
-  10762: "Kids",
-  10763: "News",
-  10764: "Reality",
-  10765: "Sci-Fi & Fantasy",
-  10766: "Soap",
-  10767: "Talk",
-  10768: "War & Politics",
-};
+import { useTranslation } from "react-i18next";
 
 const MediaCarousel = ({ movies, text, type, userData }) => {
+  const { t, i18n } = useTranslation();
+
+  const GENRES = {
+    28: t("Action"),
+    12: t("Adventure"),
+    16: t("Animation"),
+    35: t("Comedy"),
+    80: t("Crime"),
+    99: t("Documentary"),
+    18: t("Drama"),
+    10751: t("Family"),
+    14: t("Fantasy"),
+    36: t("History"),
+    27: t("Horror"),
+    10402: t("Music"),
+    9648: t("Mystery"),
+    10749: t("Romance"),
+    878: t("Science Fiction"),
+    10770: t("TV Movie"),
+    53: t("Thriller"),
+    10752: t("War"),
+    37: t("Western"),
+    10759: t("Action & Adventure"),
+    10762: t("Kids"),
+    10763: t("News"),
+    10764: t("Reality"),
+    10765: t("Sci-Fi & Fantasy"),
+    10766: t("Soap"),
+    10767: t("Talk"),
+    10768: t("War & Politics"),
+  };
+
   movies = movies.slice(0, 18);
   const navigate = useNavigate();
   const moviesPerPage = 6;
@@ -122,7 +125,7 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
                       onClick={() => navigate(`/details/${type}/${movie.id}`)}
                       className="bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
                     >
-                      View Details
+                      {t("View Details")}
                     </button>
                     {userData &&
                       (favoured ? (
@@ -132,7 +135,7 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
                           }
                           className="flex gap-1 bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
                         >
-                          Remove from{" "}
+                          {t("Remove from")}{" "}
                           <Heart className="fill-rose-500 text-rose-500" />
                         </button>
                       ) : (
@@ -142,7 +145,7 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
                           }
                           className="flex gap-1 bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
                         >
-                          Add to <Heart />
+                          {t("Add to")} <Heart />
                         </button>
                       ))}
                   </div>

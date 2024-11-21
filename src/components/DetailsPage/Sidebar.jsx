@@ -5,38 +5,41 @@ import {
   subscribeUserToMovieNotifications,
   isUserSubscribedToMovie,
 } from "../../_utils/firestore";
-
-const GENRES = {
-  28: "Action",
-  12: "Adventure",
-  16: "Animation",
-  35: "Comedy",
-  80: "Crime",
-  99: "Documentary",
-  18: "Drama",
-  10751: "Family",
-  14: "Fantasy",
-  36: "History",
-  27: "Horror",
-  10402: "Music",
-  9648: "Mystery",
-  10749: "Romance",
-  878: "Science Fiction",
-  10770: "TV Movie",
-  53: "Thriller",
-  10752: "War",
-  37: "Western",
-  10759: "Action & Adventure",
-  10762: "Kids",
-  10763: "News",
-  10764: "Reality",
-  10765: "Sci-Fi & Fantasy",
-  10766: "Soap",
-  10767: "Talk",
-  10768: "War & Politics",
-};
+import { useTranslation } from "react-i18next";
 
 const Sidebar = ({ movie, crews, type }) => {
+  const { t, i18n } = useTranslation();
+
+  const GENRES = {
+    28: t("Action"),
+    12: t("Adventure"),
+    16: t("Animation"),
+    35: t("Comedy"),
+    80: t("Crime"),
+    99: t("Documentary"),
+    18: t("Drama"),
+    10751: t("Family"),
+    14: t("Fantasy"),
+    36: t("History"),
+    27: t("Horror"),
+    10402: t("Music"),
+    9648: t("Mystery"),
+    10749: t("Romance"),
+    878: t("Science Fiction"),
+    10770: t("TV Movie"),
+    53: t("Thriller"),
+    10752: t("War"),
+    37: t("Western"),
+    10759: t("Action & Adventure"),
+    10762: t("Kids"),
+    10763: t("News"),
+    10764: t("Reality"),
+    10765: t("Sci-Fi & Fantasy"),
+    10766: t("Soap"),
+    10767: t("Talk"),
+    10768: t("War & Politics"),
+  };
+
   const [directors, setDirectors] = useState([]);
   const [isFree, setIsFree] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -112,23 +115,23 @@ const Sidebar = ({ movie, crews, type }) => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold mb-2">Details</h3>
+        <h3 className="text-lg font-semibold mb-2">{t("Details")}</h3>
         {type === "movie" ? (
           <div className="space-y-3 text-gray-300">
             <div>
-              <span className="text-gray-500">Release Date:</span>{" "}
+              <span className="text-gray-500">{t("Release Date")}:</span>{" "}
               {movie.release_date}
             </div>
             <div>
-              <span className="text-gray-500">Revenue:</span> $
+              <span className="text-gray-500">{t("Revenue")}:</span> $
               {movie.revenue && movie.revenue.toLocaleString()}
             </div>
             <div>
-              <span className="text-gray-500">Runtime:</span> {movie.runtime}{" "}
-              mins
+              <span className="text-gray-500">{t("Runtime")}:</span>{" "}
+              {movie.runtime} mins
             </div>
             <div>
-              <span className="text-gray-500">Director:</span>{" "}
+              <span className="text-gray-500">{t("Director")}:</span>{" "}
               {directors.length > 0
                 ? directors.map((director) => director.name).join(", ")
                 : "No Director"}
@@ -164,7 +167,7 @@ const Sidebar = ({ movie, crews, type }) => {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-2">Genres</h3>
+        <h3 className="text-lg font-semibold mb-2">{t("Genres")}</h3>
         <div className="flex flex-wrap gap-2">
           {movie.genres &&
             movie.genres.map((genre, index) => (
@@ -190,7 +193,7 @@ const Sidebar = ({ movie, crews, type }) => {
             }
             className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base bg-yellow-500 text-black"
           >
-            Find Free Viewing Options on TMDb <ArrowRight />
+            {t("Find Free Viewing Options on TMDb")} <ArrowRight />
           </Button>
         ) : (
           <Button
@@ -199,8 +202,8 @@ const Sidebar = ({ movie, crews, type }) => {
             disabled={isSubscribed}
           >
             {isSubscribed
-              ? "Subscribed for free notifications"
-              : "Notify me when it’s free"}{" "}
+              ? t("Subscribed for free notifications")
+              : t("Notify me when it’s free")}{" "}
             <ArrowRight />
           </Button>
         )}
