@@ -95,7 +95,7 @@ const Sidebar = () => {
             ) : (
               <NavItem
                 icon={<LogIn size={20} />}
-                text="Sign In"
+                text={t("Sign In")}
                 link="/login"
               />
             )}

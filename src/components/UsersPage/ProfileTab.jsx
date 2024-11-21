@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const ProfileTab = () => {
+  const { t } = useTranslation();
   const [profileSettings, setProfileSettings] = useState({
     username: "MovieBuff123",
     email: "user@example.com",
@@ -11,9 +13,9 @@ const ProfileTab = () => {
   return (
     <div className="p-6 space-y-6">
       <div className="space-y-2">
-        <h2 className="text-xl font-semibold">Profile Settings</h2>
+        <h2 className="text-xl font-semibold">{t("Profile Settings")}</h2>
         <p className="text-gray-500">
-          Manage your account details and preferences
+          {t("Manage your account details and preferences")}
         </p>
       </div>
 
@@ -26,13 +28,15 @@ const ProfileTab = () => {
           />
         </div>
         <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-          Change Avatar
+          {t("Change Avatar")}
         </button>
       </div>
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Username</label>
+          <label className="block text-sm font-medium mb-1">
+            {t("Username")}
+          </label>
           <input
             type="text"
             value={profileSettings.username}
@@ -47,7 +51,7 @@ const ProfileTab = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Email</label>
+          <label className="block text-sm font-medium mb-1">{t("Email")}</label>
           <input
             type="email"
             value={profileSettings.email}
@@ -59,7 +63,9 @@ const ProfileTab = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Language</label>
+          <label className="block text-sm font-medium mb-1">
+            {t("Language")}
+          </label>
           <select
             value={profileSettings.language}
             onChange={(e) =>
@@ -77,7 +83,7 @@ const ProfileTab = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Theme</label>
+          <label className="block text-sm font-medium mb-1">{t("Theme")}</label>
           <select
             value={profileSettings.theme}
             onChange={(e) =>

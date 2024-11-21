@@ -5,12 +5,10 @@ import {
   deleteUserNotification,
   updateUserFriends,
 } from "../../_utils/firestore";
+import { useTranslation } from "react-i18next";
 
-const FriendsTab = ({
-  friends,
-  userData,
-  auth,
-}) => {
+const FriendsTab = ({ friends, userData, auth }) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [friendRequests, setFriendRequests] = useState([]);
   const [showRequests, setShowRequests] = useState(false);
@@ -49,7 +47,7 @@ const FriendsTab = ({
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Friends</h2>
+        <h2 className="text-xl font-bold">{t("Friends")}</h2>
         <div className="flex gap-2">
           <div className="relative">
             <button
@@ -66,7 +64,9 @@ const FriendsTab = ({
             {showRequests && friendRequests.length > 0 && (
               <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg border border-gray-200 shadow-lg z-10">
                 <div className="p-2">
-                  <h3 className="text-sm font-medium mb-2">Friend Requests</h3>
+                  <h3 className="text-sm font-medium mb-2">
+                    {t("Friend Requests")}
+                  </h3>
                   <div className="space-y-2">
                     {friendRequests.map((request, index) => (
                       <div
@@ -100,7 +100,7 @@ const FriendsTab = ({
           </div>
           <input
             type="text"
-            placeholder="Search friends by id..."
+            placeholder={t("Search friends by id...")}
             className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -110,24 +110,22 @@ const FriendsTab = ({
             onClick={addFriendHandler}
           >
             <UserPlus className="h-4 w-4" />
-            Add Friend
+            {t("Add Friend")}
           </button>
         </div>
       </div>
       <div className="space-y-4">
-        {friends && friends.map((friend,index) => (
-          <div
-            key={index}
-            className="border rounded-lg p-4 hover:bg-gray-50"
-          >
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="font-medium text-lg">{friend.displayName}</h3>
-              <button className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2">
-                <MessageSquare className="h-4 w-4" />
-                Message
-              </button>
-            </div>
-            {/* <div className="grid grid-cols-2 gap-4">
+        {friends &&
+          friends.map((friend, index) => (
+            <div key={index} className="border rounded-lg p-4 hover:bg-gray-50">
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="font-medium text-lg">{friend.displayName}</h3>
+                <button className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4" />
+                  {t("Message")}
+                </button>
+              </div>
+              {/* <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="text-sm font-medium mb-1">Recently Watched</div>
                 <div className="text-sm text-gray-500">
@@ -141,8 +139,8 @@ const FriendsTab = ({
                 </div>
               </div>
             </div> */}
-          </div>
-        ))}
+            </div>
+          ))}
       </div>
     </div>
   );

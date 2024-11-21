@@ -110,7 +110,7 @@ const Card = ({ type, id, handleShowSimilar }) => {
           className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded flex items-center justify-center gap-2 transition-colors"
         >
           <ListFilter className="w-4 h-4" />
-          View Similar
+          {t("View Similar")}
         </button>
       </div>
     </div>

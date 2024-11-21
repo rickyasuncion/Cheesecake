@@ -205,11 +205,52 @@
     "For You": "个人",
     "Users": "用户",
     "Settings": "设置",
-    "Sign Out": "退出"
+    "Sign Out": "退出",
+    "Friends": "好友",
+    "Friend Requests": "好友请求",
+    "Add Friend": "添加好友",
+    "Search friends by id..." : "按ID搜索好友...",
+    "Message": "信息",
+    "Movies Watched": "观看的电影",
+    "Avg Rating": "平均评分",
+    "In Watchlist": "在观看列表中",
+    "Profile Settings": "个人资料设置",
+    "Manage your account details and preferences": "管理您的帐户详细信息和首选项",
+    "Change Avatar": "更改头像",
+    "Username": "用户名称",
+    "Theme": "主题",
+    "Light": "明亮",
+    "Dark": "黑暗",
+    "System": "系统",
+    "friends": "好友",
+    "chat": "聊天",
+    "stats": "统计",
+    "profile": "个人资料",
+    "Search chats...": "搜索聊天...",
+    "Select a chat to start messaging": "选择一个聊天开始发送消息",
+    "Choose from your existing conversations or start a new one": "从您现有的对话中选择或开始新的对话",
+    "Sign In": "登录",
+    "Welcome back": "欢迎回来",
+    "Please enter your details to sign in": "请输入您的详细信息登录",
+    "Enter your password": "输入您的密码",
+    "Sign in": "登录",
+    "Or continue with": "或继续使用",
+    "Sign up for free": "免费注册",
+    "Create account": "创建帐户",
+    "Join us to start streaming your favorite shows": "加入我们开始观看您喜欢的节目",
+    "Create a password": "创建密码",
+    "Password must be at least 8 characters long and include one uppercase letter, number, and special character": "密码长度至少为8个字符，包括一个大写字母，数字和特殊字符",
+    "I agree to the": "我同意",
+    "Terms of Service": "服务条款",
+    "and": "和",
+    "Create Account": "创建帐户",
+    "Already have an account?" : "已经有账号了？",
+    "View Similar": "查看相似"
 
 
 
 
+    
 
   }
   

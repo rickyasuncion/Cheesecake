@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
-import { Eye, EyeOff, User, Info } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Eye, EyeOff, User, Info } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useUserAuth } from "../_utils/auth-context";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../_utils/firestore";
-
+import { useTranslation } from "react-i18next";
 
 const SignUp = () => {
+  const { t } = useTranslation();
   const { emailSignUp } = useUserAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
   const navigate = useNavigate();
 
-
-  const handleLogin = async ({name, email, password}) => {
+  const handleLogin = async ({ name, email, password }) => {
     try {
       await emailSignUp(name, email, password);
-      createUser()
-      navigate("/")
+      createUser();
+      navigate("/");
       console.log("Successfully signed up!");
     } catch (error) {
       console.log("Error during sign up:", error.message);
@@ -31,7 +31,7 @@ const SignUp = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -42,10 +42,10 @@ const SignUp = () => {
           <div className="bg-white rounded-2xl p-8 shadow-lg">
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold text-yellow-500 mb-2">
-                Create account
+                {t("Create account")}
               </h1>
               <p className="text-gray-500">
-                Join us to start streaming your favorite shows
+                {t("Join us to start streaming your favorite shows")}
               </p>
             </div>
 
@@ -58,7 +58,7 @@ const SignUp = () => {
             >
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Username
+                  {t("Username")}
                 </label>
                 <input
                   type="text"
@@ -72,7 +72,7 @@ const SignUp = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
+                  {t("Email")}
                 </label>
                 <input
                   type="email"
@@ -87,7 +87,7 @@ const SignUp = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
+                  {t("Password")}
                 </label>
                 <div className="relative">
                   <input
@@ -96,7 +96,7 @@ const SignUp = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
-                    placeholder="Create a password"
+                    placeholder={t("Create a password")}
                     required
                   />
                   <button
@@ -110,8 +110,9 @@ const SignUp = () => {
                 <div className="mt-2 flex items-start space-x-2 text-sm text-gray-500">
                   <Info size={16} className="mt-0.5 flex-shrink-0" />
                   <p>
-                    Password must be at least 8 characters long and include one
-                    uppercase letter, number, and special character
+                    {t(
+                      "Password must be at least 8 characters long and include one uppercase letter, number, and special character"
+                    )}
                   </p>
                 </div>
               </div>
@@ -123,19 +124,19 @@ const SignUp = () => {
                   className="mt-1 h-4 w-4 text-yellow-500 focus:ring-yellow-500 border-gray-300 rounded"
                 />
                 <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
-                  I agree to the{" "}
+                  {t("I agree to the")}{" "}
                   <button
                     type="button"
                     className="text-yellow-500 hover:text-yellow-600 transition"
                   >
-                    Terms of Service
+                    {t("Terms of Service")}
                   </button>{" "}
-                  and{" "}
+                  {t("and")}{" "}
                   <button
                     type="button"
                     className="text-yellow-500 hover:text-yellow-600 transition"
                   >
-                    Privacy Policy
+                    {t("Privacy Policy")}
                   </button>
                 </label>
               </div>
@@ -145,7 +146,7 @@ const SignUp = () => {
                 className="w-full bg-yellow-500 text-white py-3 rounded-lg hover:bg-yellow-600 transition flex items-center justify-center space-x-2"
               >
                 <User size={20} />
-                <span>Create Account</span>
+                <span>{t("Create Account")}</span>
               </button>
 
               <div className="relative my-8">
@@ -156,12 +157,12 @@ const SignUp = () => {
             </form>
 
             <p className="text-center mt-8 text-sm text-gray-600">
-              Already have an account?{" "}
+              {t("Already have an account?")}{" "}
               <Link
                 to="/login"
                 className="text-yellow-500 hover:text-yellow-600 transition font-medium"
               >
-                Sign in
+                {t("Sign in")}
               </Link>
             </p>
           </div>

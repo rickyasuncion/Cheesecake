@@ -4,8 +4,10 @@ import { createUser } from "../_utils/firestore";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+  const { t } = useTranslation();
   const { user, gitHubSignIn, googleSignIn, emailSignIn } = useUserAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -43,10 +45,10 @@ const Login = () => {
           <div className="bg-white rounded-2xl p-8 shadow-lg">
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold text-yellow-500 mb-2">
-                Welcome back
+                {t("Welcome back")}
               </h1>
               <p className="text-gray-500">
-                Please enter your details to sign in
+                {t("Please enter your details to sign in")}
               </p>
             </div>
 
@@ -59,21 +61,21 @@ const Login = () => {
             >
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
+                  {t("Email")}
                 </label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
-                  placeholder="Enter your email"
+                  placeholder={t("Enter your email")}
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
+                  {t("Password")}
                 </label>
                 <div className="relative">
                   <input
@@ -81,7 +83,7 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
-                    placeholder="Enter your password"
+                    placeholder={t("Enter your password")}
                     required
                   />
                   <button
@@ -99,7 +101,7 @@ const Login = () => {
                 className="w-full bg-yellow-500 text-white py-3 rounded-lg hover:bg-yellow-600 transition flex items-center justify-center space-x-2"
               >
                 <LogIn size={20} />
-                <span>Sign in</span>
+                <span>{t("Sign in")}</span>
               </button>
 
               <div className="relative my-8">
@@ -108,7 +110,7 @@ const Login = () => {
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-white text-gray-500">
-                    Or continue with
+                    {t("Or continue with")}
                   </span>
                 </div>
               </div>
@@ -134,12 +136,12 @@ const Login = () => {
             </form>
 
             <p className="text-center mt-8 text-sm text-gray-600">
-              Don't have an account?{" "}
+              {t("Don't have an account?")}{" "}
               <Link
                 to={"/signup"}
                 className="text-yellow-500 hover:text-yellow-600 transition font-medium"
               >
-                Sign up for free
+                {t("Sign up for free")}
               </Link>
             </p>
           </div>
