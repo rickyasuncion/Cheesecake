@@ -2,9 +2,13 @@ import { ChevronDown, Star } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../_utils/utils";
 import Reviews from "./Reviews/Reviews";
+import { useTranslation } from "react-i18next";
 
 const DetailsInfo = ({ movie, cast, type, id }) => {
-  const filteredCast = cast.filter((actor) => actor.known_for_department === "Acting").slice(0, 5);
+  const { t, i18n } = useTranslation();
+  const filteredCast = cast
+    .filter((actor) => actor.known_for_department === "Acting")
+    .slice(0, 5);
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [selectedTab, setSelectedTab] = useState("Overview");
   const [seasonData, setSeasonData] = useState(null);
@@ -13,22 +17,22 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
     if (type === "tv") {
       const getData = async () => {
         let data = await fetchData(
-          `https://api.themoviedb.org/3/tv/${id}/season/${selectedSeason}?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
+          `https://api.themoviedb.org/3/tv/${id}/season/${selectedSeason}?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
         );
         setSeasonData(data);
       };
       getData();
     }
-  }, [selectedSeason, id, type]);
+  }, [selectedSeason, id, type, i18n.language]);
 
   const OverviewTab = () => (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-semibold mb-4">Overview</h2>
+        <h2 className="text-2xl font-semibold mb-4">{t("Overview")}</h2>
         <p className="text-gray-300 leading-relaxed">{movie.overview}</p>
       </div>
       <div>
-        <h2 className="text-2xl font-semibold mb-4">Cast</h2>
+        <h2 className="text-2xl font-semibold mb-4">{t("Cast")}</h2>
         <div className="grid grid-cols-2 gap-4">
           {filteredCast.map((cast, index) => (
             <div key={index} className="flex items-center gap-4">
@@ -50,21 +54,26 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
       {/* Season Selector */}
       <div className="flex items-center gap-4 mb-8">
         <div className="relative">
-          <select 
+          <select
             value={selectedSeason}
             onChange={(e) => setSelectedSeason(Number(e.target.value))}
             className="appearance-none bg-gray-800 text-white px-6 py-3 pr-12 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500"
           >
-            {movie.seasons && movie.seasons.map(season => (
-              <option key={season.season_number} value={season.season_number}>
-                Season {season.season_number}
-              </option>
-            ))}
+            {movie.seasons &&
+              movie.seasons.map((season) => (
+                <option key={season.season_number} value={season.season_number}>
+                  {t("Season")} {season.season_number}
+                </option>
+              ))}
           </select>
-          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+          <ChevronDown
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+            size={16}
+          />
         </div>
         <div className="text-gray-400">
-          {seasonData?.episodes?.length} Episodes • {seasonData?.air_date}
+          {seasonData?.episodes?.length} {t("Episodes")} •{" "}
+          {seasonData?.air_date}
         </div>
       </div>
 
@@ -74,11 +83,14 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
       {/* Episodes List */}
       <div className="space-y-4">
         {seasonData?.episodes?.map((episode) => (
-          <div key={episode.episode_number} className="bg-gray-800 rounded-lg overflow-hidden">
+          <div
+            key={episode.episode_number}
+            className="bg-gray-800 rounded-lg overflow-hidden"
+          >
             <div className="flex">
               <div className="w-64 h-40">
-                <img 
-                  src={`https://image.tmdb.org/t/p/w500${episode.still_path}`} 
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${episode.still_path}`}
                   alt={episode.name}
                   className="w-full h-full object-cover"
                 />
@@ -94,7 +106,11 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Star className="text-yellow-400" fill="currentColor" size={16} />
+                    <Star
+                      className="text-yellow-400"
+                      fill="currentColor"
+                      size={16}
+                    />
                     <span>{episode.vote_average.toFixed(2)}</span>
                   </div>
                 </div>
@@ -114,7 +130,9 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
       case "episodes":
         return <EpisodesTab />;
       case "reviews":
-        return <Reviews title={movie.title || movie.name} type={type} id={id}/>;
+        return (
+          <Reviews title={movie.title || movie.name} type={type} id={id} />
+        );
       default:
         return <OverviewTab />;
     }
@@ -126,17 +144,17 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
         {/* Tabs */}
         <div className="border-b border-gray-800 mb-8">
           <div className="flex gap-8">
-            <TabButton 
-              active={selectedTab === "Overview"} 
+            <TabButton
+              active={selectedTab === "Overview"}
               onClick={() => setSelectedTab("Overview")}
             >
-              Overview
+              {t("Overview")}
             </TabButton>
-            <TabButton 
-              active={selectedTab === "reviews"} 
+            <TabButton
+              active={selectedTab === "reviews"}
               onClick={() => setSelectedTab("reviews")}
             >
-              Reviews
+              {t("Reviews")}
             </TabButton>
           </div>
         </div>
@@ -153,23 +171,23 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
         {/* Tabs */}
         <div className="border-b border-gray-800 mb-8">
           <div className="flex gap-8">
-            <TabButton 
-              active={selectedTab === "Overview"} 
+            <TabButton
+              active={selectedTab === "Overview"}
               onClick={() => setSelectedTab("Overview")}
             >
-              Overview
+              {t("Overview")}
             </TabButton>
-            <TabButton 
-              active={selectedTab === "episodes"} 
+            <TabButton
+              active={selectedTab === "episodes"}
               onClick={() => setSelectedTab("episodes")}
             >
-              Episodes
+              {t("Episodes")}
             </TabButton>
-            <TabButton 
-              active={selectedTab === "reviews"} 
+            <TabButton
+              active={selectedTab === "reviews"}
               onClick={() => setSelectedTab("reviews")}
             >
-              Reviews
+              {t("Reviews")}
             </TabButton>
           </div>
         </div>
@@ -185,8 +203,8 @@ const TabButton = ({ children, active, onClick }) => (
   <button
     onClick={onClick}
     className={`px-4 py-4 text-lg font-medium border-b-2 transition-colors ${
-      active 
-        ? "text-white border-red-500" 
+      active
+        ? "text-white border-red-500"
         : "text-gray-400 border-transparent hover:text-white"
     }`}
   >

@@ -6,8 +6,10 @@ import DetailsHero from "../components/DetailsPage/DetailsHero";
 import { useParams } from "react-router-dom";
 import { fetchData } from "../_utils/utils";
 // import { updateUserRecentlyViewedMovies } from "../_utils/firestore";
+import { useTranslation } from "react-i18next";
 
 const Details = () => {
+  const { t, i18n } = useTranslation();
   const { type, id } = useParams();
 
   const [movie, setMovie] = useState([]);
@@ -19,26 +21,27 @@ const Details = () => {
   useEffect(() => {
     const getData = async () => {
       let data = await fetchData(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
       );
       setMovie(data);
       //////////////////////////////////////////////
       data = await fetchData(
-        `https://api.themoviedb.org/3/${type}/${id}/credits?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
+        `https://api.themoviedb.org/3/${type}/${id}/credits?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
       );
       setCast(data.cast);
       setCrew(data.crew);
       //////////////////////////////////////////////
       data = await fetchData(
-        `https://api.themoviedb.org/3/${type}/${id}/videos?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
+        `https://api.themoviedb.org/3/${type}/${id}/videos?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
       );
-      let video = data.results.find(
-        (video) => video.site === "YouTube" && video.type === "Trailer"
-      ) || data.results[0];
+      let video =
+        data.results.find(
+          (video) => video.site === "YouTube" && video.type === "Trailer"
+        ) || data.results[0];
       setTrailer(video);
       //////////////////////////////////////////////
       data = await fetchData(
-        `https://api.themoviedb.org/3/${type}/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
+        `https://api.themoviedb.org/3/${type}/${id}/recommendations?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
       );
       setSimiliar(data.results);
 
@@ -46,8 +49,8 @@ const Details = () => {
     };
 
     getData();
-  }, [id, type]);
-  
+  }, [id, type, i18n.language]);
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <DetailsHero movie={movie} trailerVideo={trailer} />
@@ -58,7 +61,7 @@ const Details = () => {
           </div>
           <Sidebar movie={movie} cast={cast} crews={crew} type={type} />
         </div>
-        <Similiar similarMovies={similiar} type={type}/>
+        <Similiar similarMovies={similiar} type={type} />
       </div>
     </div>
   );

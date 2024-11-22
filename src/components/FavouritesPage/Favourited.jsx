@@ -1,8 +1,10 @@
 import { Heart } from "lucide-react";
 import React from "react";
 import Card from "./Card";
+import { useTranslation } from "react-i18next";
 
 const Favourited = ({ title, favorites, handleShowSimilar }) => {
+  const { t, i18n } = useTranslation();
   if (!favorites) {
     <div>Loading...</div>;
   }
@@ -12,7 +14,9 @@ const Favourited = ({ title, favorites, handleShowSimilar }) => {
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2">
           <Heart className="w-6 h-6 text-red-500" />
-          <h1 className="text-3xl font-bold">My Favorite {title}</h1>
+          <h1 className="text-3xl font-bold">
+            {t("My Favorite")} {title}
+          </h1>
         </div>
         <span className="text-gray-500">
           {favorites.length} {title}
@@ -31,7 +35,9 @@ const Favourited = ({ title, favorites, handleShowSimilar }) => {
 
       {favorites.length === 0 && (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-500">No favorite {title} yet</p>
+          <p className="text-gray-500">
+            {t("No favorite")} {title} {t("yet")}
+          </p>
         </div>
       )}
     </div>

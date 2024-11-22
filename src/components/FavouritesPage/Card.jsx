@@ -2,44 +2,47 @@ import React, { useEffect, useState } from "react";
 import { fetchData } from "../../_utils/utils";
 import { ListFilter, Star, Trash2 } from "lucide-react";
 import { deleteUserFavourite } from "../../_utils/firestore";
-
-const GENRES = {
-  28: "Action",
-  12: "Adventure",
-  16: "Animation",
-  35: "Comedy",
-  80: "Crime",
-  99: "Documentary",
-  18: "Drama",
-  10751: "Family",
-  14: "Fantasy",
-  36: "History",
-  27: "Horror",
-  10402: "Music",
-  9648: "Mystery",
-  10749: "Romance",
-  878: "Science Fiction",
-  10770: "TV Movie",
-  53: "Thriller",
-  10752: "War",
-  37: "Western",
-  10759: "Action & Adventure",
-  10762: "Kids",
-  10763: "News",
-  10764: "Reality",
-  10765: "Sci-Fi & Fantasy",
-  10766: "Soap",
-  10767: "Talk",
-  10768: "War & Politics",
-};
+import { useTranslation } from "react-i18next";
 
 const Card = ({ type, id, handleShowSimilar }) => {
+  const { t, i18n } = useTranslation();
+
+  const GENRES = {
+    28: t("Action"),
+    12: t("Adventure"),
+    16: t("Animation"),
+    35: t("Comedy"),
+    80: t("Crime"),
+    99: t("Documentary"),
+    18: t("Drama"),
+    10751: t("Family"),
+    14: t("Fantasy"),
+    36: t("History"),
+    27: t("Horror"),
+    10402: t("Music"),
+    9648: t("Mystery"),
+    10749: t("Romance"),
+    878: t("Science Fiction"),
+    10770: t("TV Movie"),
+    53: t("Thriller"),
+    10752: t("War"),
+    37: t("Western"),
+    10759: t("Action & Adventure"),
+    10762: t("Kids"),
+    10763: t("News"),
+    10764: t("Reality"),
+    10765: t("Sci-Fi & Fantasy"),
+    10766: t("Soap"),
+    10767: t("Talk"),
+    10768: t("War & Politics"),
+  };
+
   const [movie, setMovie] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
       let data = await fetchData(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=bbd89781c7835917a2decb4989b56470&language=${i18n.language}`
       );
       setMovie(data);
     };
@@ -107,7 +110,7 @@ const Card = ({ type, id, handleShowSimilar }) => {
           className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded flex items-center justify-center gap-2 transition-colors"
         >
           <ListFilter className="w-4 h-4" />
-          View Similar
+          {t("View Similar")}
         </button>
       </div>
     </div>
