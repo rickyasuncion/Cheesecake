@@ -20,7 +20,6 @@ async function createUser() {
     try {
       const userDocRef = doc(db, "users", user.uid);
 
-      // Log the current user for debugging
       console.log("createUser called for user:", user.email);
 
       const userDoc = await getDoc(userDocRef);
@@ -96,7 +95,7 @@ async function updateUserFavourites(favouriteObject) {
       }
       const existingFavorites = userDoc.data().favourites || [];
       const newFavorites = [...existingFavorites, favouriteObject];
-      await updateUser({ favourites: newFavorites });
+      await updateDoc(userDocRef, { favourites: newFavorites });
       console.log("Notification added successfully!");
     } catch (error) {
       console.error("Error adding favorites:", error);
@@ -138,7 +137,7 @@ async function updateUserReviews(reviewId) {
       }
       const existingreviews = userDoc.data().reviews || [];
       const newReviews = [...existingreviews, reviewId];
-      await updateUser({ reviews: newReviews });
+      await updateDoc(userDocRef, { reviews: newReviews });
       console.log("Reviews added successfully!");
     } catch (error) {
       console.error("Error adding reviews:", error);
@@ -162,6 +161,116 @@ async function updateUserFriends(userId, friend) {
     } catch (error) {
       console.error("Error adding friends:", error);
     }
+  }
+}
+
+async function updateUserLists(userId, listName, newItem) {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        console.log("User document does not exist!");
+        return;
+      }
+      const existingList = userDoc.data()[listName] || [];
+      const newList = [...existingList, newItem];
+      await updateDoc(userDocRef, { [listName]: newList });
+      console.log(`Successfully added to ${listName} for user ${userId}`);
+    } catch (error) {
+      console.error(`Error updating ${listName}:`, error);
+    }
+  } else {
+    console.error("No authenticated user found.");
+  }
+}
+
+async function deleteUserList(userId, listName) {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        console.log("User document does not exist!");
+        return;
+      }
+
+      const existingLists = userDoc.data().lists || {};
+
+      if (existingLists[listName]) {
+        delete existingLists[listName];
+
+        await updateDoc(userDocRef, { lists: existingLists });
+        console.log(`Successfully deleted ${listName} from user ${userId}`);
+      } else {
+        console.log(`List ${listName} does not exist in user's lists.`);
+      }
+    } catch (error) {
+      console.error(`Error deleting ${listName}:`, error);
+    }
+  } else {
+    console.error("No authenticated user found.");
+  }
+}
+
+async function updateUserListItem(userId, listName, newItem) {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        console.log("User document does not exist!");
+        return;
+      }
+      
+      const existingLists = userDoc.data()[listName] || {};
+      
+      if (!existingLists[newItem.name]) {
+        existingLists[newItem.name] = [];
+      }
+      existingLists[newItem.name] = [...existingLists[newItem.name], { type: newItem.type, id: newItem.id }];
+      
+      await updateDoc(userDocRef, { [listName]: existingLists });
+      console.log(`Successfully added to ${listName} for user ${userId}`);
+    } catch (error) {
+      console.error(`Error updating ${listName}:`, error);
+    }
+  } else {
+    console.error("No authenticated user found.");
+  }
+}
+
+async function removeUserListItem(userId, listName, itemToRemove) {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        console.log("User document does not exist!");
+        return;
+      }
+
+      const existingLists = userDoc.data()[listName] || {};
+
+      if (existingLists[itemToRemove.name]) {
+        existingLists[itemToRemove.name] = existingLists[itemToRemove.name].filter(
+          (item) => item.id !== itemToRemove.id
+        );
+
+        await updateDoc(userDocRef, { [listName]: existingLists });
+        console.log(`Successfully removed from ${listName} for user ${userId}`);
+      } else {
+        console.log(`List ${itemToRemove.name} does not exist in ${listName}`);
+      }
+    } catch (error) {
+      console.error(`Error removing item from ${listName}:`, error);
+    }
+  } else {
+    console.error("No authenticated user found.");
   }
 }
 
@@ -220,23 +329,11 @@ async function updateUserRecentlyViewed(viewedObject) {
       }
       const existingRecentlyViewed = userDoc.data().recentlyViewed || [];
       const newNotifications = [...existingRecentlyViewed, viewedObject];
-      await updateUser({ recentlyViewed: newNotifications });
+      await updateDoc(userDocRef, { recentlyViewed: newNotifications });
       console.log("RecentlyViewed added successfully!");
     } catch (error) {
       console.error("Error adding recentlyViewed:", error);
     }
-  }
-}
-
-async function updateUser(updatedData) {
-  const user = auth.currentUser;
-  if (!user) return;
-  try {
-    const userDocRef = doc(db, "users", user.uid);
-
-    await updateDoc(userDocRef, updatedData);
-  } catch (error) {
-    console.error("Error updating user:", error);
   }
 }
 
