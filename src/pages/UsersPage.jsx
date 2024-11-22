@@ -1,12 +1,3 @@
-import React, { useContext, useEffect, useState } from 'react';
-import StatsTab from '../components/UsersPage/StatsTab';
-import FriendsTab from '../components/UsersPage/FriendsTab';
-import Tabs from '../components/UsersPage/Tabs';
-import ProfileTab from '../components/UsersPage/ProfileTab';
-import { auth } from '../_utils/firebase';
-import { UserData } from '../providers/UserDataProvider';
-import { getUsersByIds } from '../_utils/firestore_friends';
-import ChatTab from '../components/UsersPage/ChatTab/ChatTab';
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StatsTab from "../components/UsersPage/StatsTab";
@@ -20,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import ChatTab from "../components/UsersPage/ChatTab/ChatTab";
 
 const UsersPage = () => {
+  const { t } = useTranslation();
   const { userData } = useContext(UserData);
   const navigate = useNavigate();
 
@@ -29,9 +21,6 @@ const UsersPage = () => {
 
   useEffect(() => {
     const getData = async () => {
-      let data = await getUsersByIds(userData.friends);
-      setFriends(data);
-    }
       try {
         if (userData?.friends) {
           let data = await getUsersByIds(userData.friends);
@@ -49,7 +38,6 @@ const UsersPage = () => {
     } else {
       setLoading(false);
     }
-  },[userData])
   }, [userData]);
 
   if (loading) {
@@ -65,10 +53,10 @@ const UsersPage = () => {
       <div className="w-3/4 mx-auto p-4">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
           <h3 className="text-lg font-semibold text-red-800 mb-2">
-            {t("Account Required")}
+            {t("Account required")}
           </h3>
           <p className="text-red-700">
-            {t("Please login/signUp")}
+            {t("Please login or signup")}
           </p>
         </div>
         <div className="flex gap-4">
@@ -91,31 +79,24 @@ const UsersPage = () => {
 
   return (
     <div className="w-3/4 mx-auto p-4 space-y-4">
-      <Tabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={["friends", "chat", "stats", "profile"]} />
-      {activeTab === "friends" && (
-        <FriendsTab
-        friends={friends}
-        auth={auth}
-        userData={userData}
+      <Tabs
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        tabs={[t("friends"), t("chat"), t("stats"), t("profile")]}
+      />
+      {activeTab === t("friends") && (
+        <FriendsTab friends={friends} auth={auth} userData={userData} />
+      )}
+      {activeTab === "chat" && <ChatTab userData={userData} />}
+      {activeTab === "stats" && (
+        <StatsTab
+          friendsCount={friends.length}
+          moviesWatched={24}
+          avgRating={4.5}
+          watchlistCount={15}
         />
       )}
-      {activeTab === "chat" && (
-        <ChatTab
-        userData={userData}
-        />
-      )}
-        {activeTab === "stats" && (
-          <StatsTab
-            friendsCount={friends.length}
-            moviesWatched={24}
-            avgRating={4.5}
-            watchlistCount={15}
-          />
-        )}
-      {activeTab === "profile" && (
-        <ProfileTab
-        />
-      )}
+      {activeTab === "profile" && <ProfileTab />}
     </div>
   );
 };
