@@ -164,7 +164,7 @@ async function updateUserFriends(userId, friend) {
   }
 }
 
-async function updateUserLists(userId, listName, newItem) {
+async function updateUserLists(userId, listName) {
   const user = auth.currentUser;
   if (user) {
     try {
@@ -174,9 +174,11 @@ async function updateUserLists(userId, listName, newItem) {
         console.log("User document does not exist!");
         return;
       }
-      const existingList = userDoc.data()[listName] || [];
-      const newList = [...existingList, newItem];
-      await updateDoc(userDocRef, { [listName]: newList });
+      const existingLists = userDoc.data().lists || [];
+      const list = { name: [listName], items: [] };
+
+      const newList = [...existingLists, list];
+      await updateDoc(userDocRef, { lists: newList });
       console.log(`Successfully added to ${listName} for user ${userId}`);
     } catch (error) {
       console.error(`Error updating ${listName}:`, error);
@@ -192,21 +194,19 @@ async function deleteUserList(userId, listName) {
     try {
       const userDocRef = doc(db, "users", userId);
       const userDoc = await getDoc(userDocRef);
+
       if (!userDoc.exists()) {
         console.log("User document does not exist!");
         return;
       }
 
-      const existingLists = userDoc.data().lists || {};
+      const existingLists = userDoc.data().lists || [];
+      const updatedLists = existingLists.filter(
+        (list) => list.name[0] !== listName
+      );
 
-      if (existingLists[listName]) {
-        delete existingLists[listName];
-
-        await updateDoc(userDocRef, { lists: existingLists });
-        console.log(`Successfully deleted ${listName} from user ${userId}`);
-      } else {
-        console.log(`List ${listName} does not exist in user's lists.`);
-      }
+      await updateDoc(userDocRef, { lists: updatedLists });
+      console.log(`Successfully deleted ${listName} for user ${userId}`);
     } catch (error) {
       console.error(`Error deleting ${listName}:`, error);
     }
@@ -221,20 +221,39 @@ async function updateUserListItem(userId, listName, newItem) {
     try {
       const userDocRef = doc(db, "users", userId);
       const userDoc = await getDoc(userDocRef);
+
       if (!userDoc.exists()) {
         console.log("User document does not exist!");
         return;
       }
-      
-      const existingLists = userDoc.data()[listName] || {};
-      
-      if (!existingLists[newItem.name]) {
-        existingLists[newItem.name] = [];
+
+      const existingLists = userDoc.data().lists || [];
+      const listIndex = existingLists.findIndex(
+        (list) => list.name[0] === listName
+      );
+
+      if (listIndex === -1) {
+        console.error(`List named "${listName}" does not exist.`);
+        return;
       }
-      existingLists[newItem.name] = [...existingLists[newItem.name], { type: newItem.type, id: newItem.id }];
-      
-      await updateDoc(userDocRef, { [listName]: existingLists });
-      console.log(`Successfully added to ${listName} for user ${userId}`);
+
+      const listItems = existingLists[listIndex].items;
+
+      const duplicateExists = listItems.some(
+        (item) => item.type === newItem.type && item.id === newItem.id
+      );
+
+      if (duplicateExists) {
+        console.error(
+          `Duplicate item with type "${newItem.type}" and id "${newItem.id}" already exists in "${listName}".`
+        );
+        return;
+      }
+
+      listItems.push({ type: newItem.type, id: newItem.id });
+
+      await updateDoc(userDocRef, { lists: existingLists });
+      console.log(`Successfully added item to ${listName} for user ${userId}`);
     } catch (error) {
       console.error(`Error updating ${listName}:`, error);
     }
@@ -249,23 +268,35 @@ async function removeUserListItem(userId, listName, itemToRemove) {
     try {
       const userDocRef = doc(db, "users", userId);
       const userDoc = await getDoc(userDocRef);
+
       if (!userDoc.exists()) {
         console.log("User document does not exist!");
         return;
       }
 
-      const existingLists = userDoc.data()[listName] || {};
+      const existingLists = userDoc.data().lists || [];
+      const listIndex = existingLists.findIndex(list => list.name[0] === listName);
 
-      if (existingLists[itemToRemove.name]) {
-        existingLists[itemToRemove.name] = existingLists[itemToRemove.name].filter(
-          (item) => item.id !== itemToRemove.id
-        );
-
-        await updateDoc(userDocRef, { [listName]: existingLists });
-        console.log(`Successfully removed from ${listName} for user ${userId}`);
-      } else {
-        console.log(`List ${itemToRemove.name} does not exist in ${listName}`);
+      if (listIndex === -1) {
+        console.error(`List named "${listName}" does not exist.`);
+        return;
       }
+
+      const listItems = existingLists[listIndex].items;
+
+      const itemIndex = listItems.findIndex(
+        item => item.type === itemToRemove.type && item.id === itemToRemove.id
+      );
+
+      if (itemIndex === -1) {
+        console.error(`Item with type "${itemToRemove.type}" and id "${itemToRemove.id}" does not exist in "${listName}".`);
+        return;
+      }
+
+      listItems.splice(itemIndex, 1);
+
+      await updateDoc(userDocRef, { lists: existingLists });
+      console.log(`Successfully removed item from ${listName} for user ${userId}`);
     } catch (error) {
       console.error(`Error removing item from ${listName}:`, error);
     }
@@ -273,6 +304,7 @@ async function removeUserListItem(userId, listName, itemToRemove) {
     console.error("No authenticated user found.");
   }
 }
+
 
 async function updateUserNotifications(notif) {
   const user = auth.currentUser;
@@ -429,6 +461,10 @@ export {
   updateUserFriends,
   updateUserNotifications,
   updateUserRecentlyViewed,
+  updateUserLists,
+  updateUserListItem,
+  removeUserListItem,
+  deleteUserList,
   deleteUserFavourite,
   deleteUserNotification,
   isUserSubscribedToMovie,
