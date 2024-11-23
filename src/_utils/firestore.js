@@ -175,7 +175,7 @@ async function updateUserLists(userId, listName) {
         return;
       }
       const existingLists = userDoc.data().lists || [];
-      const list = { name: [listName], items: [] };
+      const list = { name: listName, items: [] };
 
       const newList = [...existingLists, list];
       await updateDoc(userDocRef, { lists: newList });
@@ -202,7 +202,7 @@ async function deleteUserList(userId, listName) {
 
       const existingLists = userDoc.data().lists || [];
       const updatedLists = existingLists.filter(
-        (list) => list.name[0] !== listName
+        (list) => list.name !== listName
       );
 
       await updateDoc(userDocRef, { lists: updatedLists });
@@ -229,7 +229,7 @@ async function updateUserListItem(userId, listName, newItem) {
 
       const existingLists = userDoc.data().lists || [];
       const listIndex = existingLists.findIndex(
-        (list) => list.name[0] === listName
+        (list) => list.name === listName
       );
 
       if (listIndex === -1) {
@@ -275,7 +275,7 @@ async function removeUserListItem(userId, listName, itemToRemove) {
       }
 
       const existingLists = userDoc.data().lists || [];
-      const listIndex = existingLists.findIndex(list => list.name[0] === listName);
+      const listIndex = existingLists.findIndex(list => list.name === listName);
 
       if (listIndex === -1) {
         console.error(`List named "${listName}" does not exist.`);

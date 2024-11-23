@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Sidebar from "../components/DetailsPage/Sidebar";
 import DetailsInfo from "../components/DetailsPage/DetailsInfo";
 import Similiar from "../components/DetailsPage/Similiar";
@@ -53,7 +53,7 @@ const Details = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <DetailsHero movie={movie} trailerVideo={trailer} />
+      <DetailsHero type={type} id={id} movie={movie} trailerVideo={trailer} />
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-3 gap-12">
           <div className="col-span-2 space-y-8">

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { BookmarkPlus, ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   deleteUserFavourite,
   updateUserFavourites,
 } from "../../_utils/firestore";
 import { useTranslation } from "react-i18next";
+import ListModal from "../ListsPage/ListModal";
 
 const MediaCarousel = ({ movies, text, type, userData }) => {
   const { t, i18n } = useTranslation();
@@ -45,6 +46,8 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
   const moviesPerPage = 6;
 
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [id, setId] = useState(0);
 
   const nextMovies = () => {
     setCurrentMovieIndex((prev) =>
@@ -148,6 +151,17 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
                           {t("Add to")} <Heart />
                         </button>
                       ))}
+                    {userData && (
+                      <button
+                        onClick={() => {
+                          setId(movie.id)
+                          setIsOpen(true)}}
+                        className="flex bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
+                      >
+                        Save
+                        <BookmarkPlus size={20} />
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div className="p-3">
@@ -161,6 +175,7 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
           })}
         </div>
       </div>
+      <ListModal isOpen={isOpen} setIsOpen={setIsOpen} userData={userData} type={type} id={id} />
     </div>
   );
 };
