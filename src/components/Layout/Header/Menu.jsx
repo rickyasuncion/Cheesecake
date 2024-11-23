@@ -60,8 +60,7 @@ const Sidebar = () => {
               text={t("Shows")}
               link="/tvShows"
             />
-            <NavItem icon={<Grid size={20} />} text={t("Genres")} link="#" />
-            <NavItem icon={<List size={20} />} text={t("Watchlist")} link="#" />
+            <NavItem icon={<List size={20} />} text={t("List")} link="/lists" />
           </div>
 
           <div className="mt-8 space-y-1">
