@@ -4,6 +4,8 @@ import Sidebar from "../components/FavouritesPage/Sidebar";
 import { UserData } from "../providers/UserDataProvider";
 import { fetchData } from "../_utils/utils";
 import { useTranslation } from "react-i18next";
+import { auth } from "../_utils/firebase";
+import AccountNotice from "../components/AccountNotice";
 
 const Favourites = () => {
   const { t, i18n } = useTranslation();
@@ -33,6 +35,8 @@ const Favourites = () => {
       setFavoriteShows(shows);
     }
   }, [userData]);
+
+  if (!auth.currentUser) return <AccountNotice/>;
 
   return (
     <div className="flex justify-center">

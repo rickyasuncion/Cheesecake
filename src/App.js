@@ -27,6 +27,7 @@ import Test from "./pages/Test";
 import Favourites from "./pages/Favourites";
 import { UserDataProvider } from "./providers/UserDataProvider";
 import UsersPage from "./pages/UsersPage";
+import Lists from "./pages/Lists";
 
 function App() {
   return (
@@ -66,7 +67,8 @@ function App() {
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/users" element={<UsersPage />} />
                     <Route path="/Kids" element={<Kids />} />
-                    {/* <Route path="/test" element={<Test />} /> */}
+                    <Route path="/lists" element={<Lists />} />
+                    <Route path="/test" element={<Test />} />
                   </Routes>
                 </main>
 
