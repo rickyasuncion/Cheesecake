@@ -10,12 +10,10 @@ import {
 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { fetchData } from "../_utils/utils";
-import {
-  deleteUserFavourite,
-  updateUserFavourites,
-} from "../_utils/firestore";
+import { deleteUserFavourite, updateUserFavourites } from "../_utils/firestore";
 import ListModal from "../components/ListsPage/ListModal";
 import { UserData } from "../providers/UserDataProvider";
+import { auth } from "../_utils/firebase";
 
 const Search = () => {
   const { searched } = useParams();
@@ -147,31 +145,31 @@ const Search = () => {
             {release_date || first_air_date}
           </p>
         </div>
-        <div className="flex space-x-4">
-          <button
-            onClick={() =>
-              toggleFavorite({ id, media_type, title, name, poster_path })
-            }
-            disabled={isLoading}
-            className={`p-2 rounded-full hover:bg-gray-200 transition-colors ${
-              isFavorite ? "text-red-500" : "text-gray-500"
-            }`}
-          >
-            <Heart
-              size={24}
-              fill={isFavorite ? "currentColor" : "none"}
-              className="transition-colors"
-            />
-          </button>
-          <button
-            onClick={() =>
-              handleAddToList({id: id, type: media_type})
-            }
-            className="p-2 rounded-full hover:bg-gray-200 transition-colors text-gray-500"
-          >
-            <BookmarkPlus size={24} />
-          </button>
-        </div>
+        {auth.currentUser && (
+          <div className="flex space-x-4">
+            <button
+              onClick={() =>
+                toggleFavorite({ id, media_type, title, name, poster_path })
+              }
+              disabled={isLoading}
+              className={`p-2 rounded-full hover:bg-gray-200 transition-colors ${
+                isFavorite ? "text-red-500" : "text-gray-500"
+              }`}
+            >
+              <Heart
+                size={24}
+                fill={isFavorite ? "currentColor" : "none"}
+                className="transition-colors"
+              />
+            </button>
+            <button
+              onClick={() => handleAddToList({ id: id, type: media_type })}
+              className="p-2 rounded-full hover:bg-gray-200 transition-colors text-gray-500"
+            >
+              <BookmarkPlus size={24} />
+            </button>
+          </div>
+        )}
       </div>
     );
   };
