@@ -150,11 +150,6 @@ const shows = [
     backdrop_path: "path_to_mystery_backdrop.jpg",
   },
   {
-    id: 10763,
-    name: "News",
-    backdrop_path: "path_to_news_backdrop.jpg",
-  },
-  {
     id: 10764,
     name: "Reality",
     backdrop_path: "path_to_reality_backdrop.jpg",
@@ -190,9 +185,10 @@ const Movies = () => {
   const type = useParams().type;
 
   const [genres, setGenres] = useState([]);
-  const [upcomingMoviesGenres, setUpcomingMoviesGenres] = useState([]);
-  const [popularMovieGenres, setPopularMovieGenres] = useState([]);
-  const [topRatedMovieGenres, setTopRatedMovieGenres] = useState([]);
+  const [movies1, setMovies1] = useState([]);
+  const [movies2, setMovies2] = useState([]);
+  const [movies3, setMovies3] = useState([]);
+  const [movies4, setMovies4] = useState([]);
   const { t } = useTranslation();
 
   const updateBackdropPaths = (genres, movies) => {
@@ -218,42 +214,45 @@ const Movies = () => {
   useEffect(() => {
     const getData = async () => {
       let genresList;
-      let upcomingMovies;
-      let popularMovies;
-      let topRatedMovies;
+      let movie1;
+      let movie2;
+      let movie3;
+      let movie4;
       if (type === "movie") {
         genresList = movies;
-        upcomingMovies = await fetchData(
-          "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
-        );
-        popularMovies = await fetchData(
+        movie1 = await fetchData(
           "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
         );
-        topRatedMovies = await fetchData(
+        movie2 = await fetchData(
+          "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+        );
+        movie3 = await fetchData(
+          "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+        );
+        movie4 = await fetchData(
           "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
         );
-      } else if (type === "show") {
+      } else if (type === "tv") {
         genresList = shows;
-        upcomingMovies = await fetchData(
-          "https://api.themoviedb.org/3/tv/upcoming?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+        movie1 = await fetchData(
+          "https://api.themoviedb.org/3/trending/tv/day?language=en-US&api_key=bbd89781c7835917a2decb4989b56470"
         );
-        popularMovies = await fetchData(
-          "https://api.themoviedb.org/3/tv/popular?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+        movie2 = await fetchData(
+          "https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
         );
-        topRatedMovies = await fetchData(
+        movie3 = await fetchData(
+          "https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+        );
+        movie4 = await fetchData(
           "https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
         );
       }
-      setUpcomingMoviesGenres(
-        updateBackdropPaths(genresList, upcomingMovies.results)
-      );
-      setPopularMovieGenres(
-        updateBackdropPaths(genresList, popularMovies.results)
-      );
-      setTopRatedMovieGenres(
-        updateBackdropPaths(genresList, topRatedMovies.results)
-      );
+      setMovies1(updateBackdropPaths(genresList, movie1.results));
+      setMovies2(updateBackdropPaths(genresList, movie2.results));
+      setMovies3(updateBackdropPaths(genresList, movie3.results));
+      setMovies4(updateBackdropPaths(genresList, movie4.results));
     };
+
     getData();
   }, [type]);
 
@@ -271,25 +270,55 @@ const Movies = () => {
 
         {/* Custom Carousel Components */}
         <GenreCarousel
-          genres={upcomingMoviesGenres}
-          sectionTitle="New & Upcoming"
-          baseUrl="/movies/upcoming/genre"
-        />
-
-        <Separator className="h-0.5 bg-secondary/5 my-5" />
-
-        <GenreCarousel
-          genres={popularMovieGenres}
+          genres={movies1}
           sectionTitle="Popular"
-          baseUrl="/movies/popular/genre"
+          baseUrl={`/type/${type}/popular`}
         />
+
+        {type === "movie" && (
+          <>
+            <Separator className="h-0.5 bg-secondary/5 my-5" />
+            <GenreCarousel
+              genres={movies2}
+              sectionTitle="Now Playing"
+              baseUrl={`/type/${type}/now_playing`}
+            />
+            
+            <Separator className="h-0.5 bg-secondary/5 my-5" />
+
+            <GenreCarousel
+              genres={movies3}
+              sectionTitle="Upcoming"
+              baseUrl={`/type/${type}/upcoming`}
+            />
+          </>
+        )}
+
+        {type === "tv" && (
+          <>
+            <Separator className="h-0.5 bg-secondary/5 my-5" />
+            <GenreCarousel
+              genres={movies2}
+              sectionTitle="Airing Today"
+              baseUrl={`/type/${type}/airing_today`}
+            />
+
+            <Separator className="h-0.5 bg-secondary/5 my-5" />
+
+            <GenreCarousel
+              genres={movies3}
+              sectionTitle="On Tv"
+              baseUrl={`/type/${type}/on_tv`}
+            />
+          </>
+        )}
 
         <Separator className="h-0.5 bg-secondary/5 my-5" />
 
         <GenreCarousel
-          genres={topRatedMovieGenres}
+          genres={movies4}
           sectionTitle="Top Rated"
-          baseUrl="/movies/top_rated/genre"
+          baseUrl={`/type/${type}/top_rated`}
         />
       </div>
     </div>

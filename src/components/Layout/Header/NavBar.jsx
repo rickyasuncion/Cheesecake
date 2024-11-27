@@ -29,10 +29,10 @@ const NavBar = () => {
         <h1 className="text-xl font-bold">CheeseCake</h1>
       </Link>
       <nav className="hidden md:flex space-x-4 text-sm">
-        <Link to={"/movies"} className="hover:text-yellow-400">
+        <Link to={"type/movie"} className="hover:text-yellow-400">
           {t("Movies")}
         </Link>
-        <Link to="/tvShows" className="hover:text-yellow-400">
+        <Link to="type/tv" className="hover:text-yellow-400">
           {t("TV Shows")}
         </Link>
         <Link to="/free-movies" className="hover:text-yellow-400">

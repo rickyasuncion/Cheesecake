@@ -3,79 +3,78 @@ import { useParams } from "react-router-dom";
 import { MovieCard } from "../components/ui/MovieCard";
 import { useTranslation } from "react-i18next";
 import horrorHeader from "../media/horror-header.jpg";
-import sciFiHeader from "../media/sci-fiction-header.jpg"; // Sci-Fi header image
-import mysteryHeader from "../media/mystery-header.png"; // Mystery header image
-import warHeader from "../media/war-header.jpg"; // War header image
-import crimeHeader from "../media/crime-header.webp"; // Crime header image
-import adventureHeader from "../media/adventure-header.jpg"; // Adventure header image
-import historyHeader from "../media/history-header.webp"; // History header image
-import animationHeader from "../media/animation-header.webp"; // Animation header image
-import thrillerHeader from "../media/thriller-header.jpg"; // Thriller header image
-import dramaHeader from "../media/drama-header.jpg"; // Drama header image
-import actionHeader from "../media/action-header.webp"; // Action header image
+import sciFiHeader from "../media/sci-fiction-header.jpg";
+import mysteryHeader from "../media/mystery-header.png";
+import warHeader from "../media/war-header.jpg";
+import crimeHeader from "../media/crime-header.webp";
+import adventureHeader from "../media/adventure-header.jpg";
+import historyHeader from "../media/history-header.webp";
+import animationHeader from "../media/animation-header.webp";
+import thrillerHeader from "../media/thriller-header.jpg";
+import dramaHeader from "../media/drama-header.jpg";
+import actionHeader from "../media/action-header.webp";
+import { fetchData } from "../_utils/utils";
 
 const MoviesWithGenre = () => {
-  const { type, genreId } = useParams();
+  const { media, type, id } = useParams();
   const [movies, setMovies] = useState([]);
-  const [genreList, setGenreList] = useState([]);
   const [headerImage, setHeaderImage] = useState("");
-  const [yearFilter, setYearFilter] = useState("");
-  const [minRating, setMinRating] = useState("");
-  const [showFilter, setShowFilter] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1); // New state for pagination
+  const [totalPages, setTotalPages] = useState(1); // Total number of pages
   const { t, i18n } = useTranslation();
 
   const genreImages = {
     27: horrorHeader,
-    878: sciFiHeader,  // Sci-Fi
-    9648: mysteryHeader, // Mystery
-    10752: warHeader,  // War
-    80: crimeHeader,   // Crime
-    12: adventureHeader, // Adventure
-    36: historyHeader,  // History
-    16: animationHeader, // Animation
-    53: thrillerHeader,  // Thriller
-    18: dramaHeader,    // Drama
-    28: actionHeader,   // Action
-  };
-
-  // Function to fetch movies
-  const fetchMovies = (withFilters = false) => {
-    setMovies([]); // Clear previous movies
-
-    let url = `https://api.themoviedb.org/3/discover/movie?language=${i18n.language}&api_key=bbd89781c7835917a2decb4989b56470&with_genres=${genreId}`;
-
-    if (withFilters) {
-      if (yearFilter) url += `&year=${yearFilter}`;
-      if (minRating) url += `&vote_average.gte=${minRating}`;
-    }
-
-    // Fetch 5 pages of movies
-    for (let i = 1; i <= 5; i++) {
-      fetch(url + `&page=${i}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setMovies((prev) => [
-            ...prev,
-            ...data.results.filter(
-              (movie) => !prev.find((m) => m.id === movie.id)
-            ),
-          ]);
-        });
-    }
+    878: sciFiHeader,
+    9648: mysteryHeader,
+    10752: warHeader,
+    80: crimeHeader,
+    12: adventureHeader,
+    36: historyHeader,
+    16: animationHeader,
+    53: thrillerHeader,
+    18: dramaHeader,
+    28: actionHeader,
   };
 
   useEffect(() => {
-    setHeaderImage(genreImages[Number(genreId)] || "/default-header.jpg");
+    setHeaderImage(genreImages[Number(id)] || "/default-header.jpg");
 
-    fetch(
-      `https://api.themoviedb.org/3/genre/movie/list?language=${i18n.language}&api_key=bbd89781c7835917a2decb4989b56470`
-    )
-      .then((res) => res.json())
-      .then((data) => setGenreList(data.genres));
+    const getFormattedDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
 
-    // Initial fetch without filters
+    const today = new Date();
+    const firstDayOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+    const firstDayOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+    const lastDayOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 2, 0);
+
+    const fetchMovies = async () => {
+      const baseURL = `https://api.themoviedb.org/3/discover/${media}?include_adult=false&include_video=false&language=${i18n.language}&sort_by=popularity.desc&with_genres=${id}&api_key=bbd89781c7835917a2decb4989b56470&page=${currentPage}`;
+      let url = baseURL;
+
+      if (type === "popular") {
+        url = `${baseURL}`;
+      } else if (type === "top_rated") {
+        url = `${baseURL}&sort_by=vote_average.desc&vote_count.gte=300`;
+      } else if (type === "now_playing") {
+        url = `${baseURL}&with_release_type=3&primary_release_date.gte=${getFormattedDate(firstDayOfLastMonth)}&primary_release_date.lte=${getFormattedDate(lastDayOfNextMonth)}`;
+      } else if (type === "upcoming") {
+        url = `${baseURL}&with_release_type=3&primary_release_date.gte=${getFormattedDate(firstDayOfNextMonth)}&primary_release_date.lte=${getFormattedDate(lastDayOfNextMonth)}`;
+      } else if (type === "airing_today" || type === "on_tv") {
+        url = `${baseURL}&with_release_type=3&primary_release_date.gte=${getFormattedDate(today)}&primary_release_date.lte=${getFormattedDate(lastDayOfNextMonth)}`;
+      }
+
+      const data = await fetchData(url);
+      setMovies(data?.results || []);
+      setTotalPages(data?.total_pages || 1); // Set total pages
+    };
+
     fetchMovies();
-  }, [genreId, i18n.language]);
+  }, [id, type, i18n.language, currentPage]);
 
   return (
     <div className="bg-[#171c21] text-secondary pt-5 pb-16">
@@ -83,8 +82,7 @@ const MoviesWithGenre = () => {
         <div className="pt-48 pb-3 relative overflow-hidden rounded-md isolate">
           <div className="bg-neutral-900/60 absolute top-0 bottom-0 z-10 w-full">
             <h1 className="px-4 font-semibold text-3xl text-white absolute bottom-3 capitalize">
-              {t(type)} -{" "}
-              {genreList.find((genre) => genre.id.toString() === genreId)?.name}
+              {t(type)} - {media === "movie" ? "Movies" : "Tv Shows"}
             </h1>
           </div>
           <img
@@ -94,80 +92,40 @@ const MoviesWithGenre = () => {
           />
         </div>
 
-        {/* Filter Button */}
-        <div className="relative flex justify-end my-4">
-          <button
-            onClick={() => setShowFilter((prev) => !prev)}
-            className="bg-yellow-500 text-black font-semibold py-2 px-4 rounded hover:bg-yellow-600"
-          >
-            {t("Filter")}
-          </button>
-
-          {showFilter && (
-            <div className="absolute top-full right-0 mt-2 bg-white text-black shadow-lg rounded w-60 p-4 z-20">
-              <div className="mb-4">
-                <label className="block text-sm font-semibold mb-1">{t("Year")}</label>
-                <select
-                  value={yearFilter}
-                  onChange={(e) => setYearFilter(e.target.value)}
-                  className="w-full p-2 border rounded text-black"
-                >
-                  <option value="">{t("All Years")}</option>
-                  {[...Array(50)].map((_, i) => {
-                    const year = new Date().getFullYear() - i;
-                    return (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-semibold mb-1">
-                  {t("Minimum Rating")}
-                </label>
-                <input
-                  type="number"
-                  value={minRating}
-                  onChange={(e) => setMinRating(e.target.value)}
-                  className="w-full p-2 border rounded text-black"
-                  placeholder={t("Enter Rating (1-10)")}
-                  min="1"
-                  max="10"
-                />
-              </div>
-
-              <button
-                onClick={() => {
-                  setShowFilter(false);
-                  fetchMovies(true); // Fetch with filters
-                }}
-                className="bg-yellow-500 text-black font-semibold py-2 px-4 rounded w-full hover:bg-yellow-600"
-              >
-                {t("Show Results")}
-              </button>
-            </div>
-          )}
-        </div>
-
+        {/* Movies List */}
         <div className="flex gap-3 flex-wrap mt-10">
           {movies &&
-            movies.map((movie) => {
-              return (
-                <MovieCard
-                  key={movie.id}
-                  id={movie.id}
-                  media_type={"movie"}
-                  title={movie.title}
-                  name={movie.name}
-                  poster_path={movie.poster_path}
-                  href={`/details/movie/${movie.id}`}
-                  className="flex-1 min-w-44 max-w-60"
-                />
-              );
-            })}
+            movies.map((movie) => (
+              <MovieCard
+                key={movie.id}
+                id={movie.id}
+                media_type={"movie"}
+                title={movie.title}
+                name={movie.name}
+                poster_path={movie.poster_path}
+                href={`/details/movie/${movie.id}`}
+                className="flex-1 min-w-44 max-w-60"
+              />
+            ))}
+        </div>
+
+        {/* Pagination */}
+        <div className="flex justify-center mt-10">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={`py-2 px-4 mx-1 rounded ${currentPage === 1 ? "bg-gray-400" : "bg-yellow-500 hover:bg-yellow-600"}`}
+          >
+            {t("Previous")}
+          </button>
+          <span className="py-2 px-4 mx-1">{`${t("Page")} ${currentPage} ${t("of")} ${totalPages}`}</span>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className={`py-2 px-4 mx-1 rounded ${currentPage === totalPages ? "bg-gray-400" : "bg-yellow-500 hover:bg-yellow-600"}`}
+          >
+            {t("Next")}
+          </button>
         </div>
       </div>
     </div>
