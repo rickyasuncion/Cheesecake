@@ -46,12 +46,13 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/search/:searched" element={<Search />} />
+                    <Route path="/" element={<Movies />} />
+                    <Route path="/type/:type" element={<Movies />} />
                     <Route path="/movies" element={<Movies />} />
                     <Route
-                      path="/movies/:type/genre/:genreId"
+                      path="/type/:media/:type/:id"
                       element={<MoviesWIthGenre />}
                     />
-                    <Route path="/tvShows" element={<TvShows />} />
                     <Route path="/details/:type/:id" element={<Details />} />
                     <Route
                       path="/filtered-content"

@@ -53,12 +53,12 @@ const Sidebar = () => {
             <NavItem
               icon={<Film size={20} />}
               text={t("Movies")}
-              link="/movies"
+              link="/type/movie"
             />
             <NavItem
               icon={<Tv size={20} />}
               text={t("Shows")}
-              link="/tvShows"
+              link="/type/tv"
             />
             <NavItem icon={<List size={20} />} text={t("List")} link="/lists" />
           </div>
