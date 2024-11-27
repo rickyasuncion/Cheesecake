@@ -6,7 +6,6 @@ import { cn } from "./lib/utils";
 import { useTranslation } from "react-i18next";
 import ListModal from "../ListsPage/ListModal";
 import { deleteUserFavourite, updateUserFavourites } from "../../_utils/firestore";
-import { auth } from "../../_utils/firebase";
 
 const MovieCard = ({ id, media_type, title, name, poster_path, userData, className }) => {
   const { t } = useTranslation();

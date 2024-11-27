@@ -41,19 +41,6 @@ const NavBar = () => {
         <Link to="/Kids" className="hover:text-yellow-400">
           {t("Kids")}
         </Link>
-
-        {/* Genres Dropdown */}
-        <div className="relative" ref={genresRef}>
-          <button
-            onClick={toggleGenresDropdown}
-            className="hover:text-yellow-400"
-          >
-            {t("Genres")}
-          </button>
-          {isGenresDropdownOpen && (
-            <GenresDropdown toggleGenresDropdown={toggleGenresDropdown} />
-          )}
-        </div>
       </nav>
     </div>
   );
