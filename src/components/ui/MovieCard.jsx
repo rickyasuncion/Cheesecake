@@ -1,153 +1,80 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./button";
-import { FaHeart } from "react-icons/fa";
+import { Heart, BookmarkPlus } from "lucide-react";
 import { cn } from "./lib/utils";
-import { useMovieTrailerContext } from "../../providers/MovieTrailerProvider";
+import { useTranslation } from "react-i18next";
+import ListModal from "../ListsPage/ListModal";
+import { deleteUserFavourite, updateUserFavourites } from "../../_utils/firestore";
+import { auth } from "../../_utils/firebase";
 
-const MovieCard = ({ id, media_type, title, name, poster_path, showFavButton = true, className }) => {
-  const videoRef = useRef();
-  const containerRef = useRef();
+const MovieCard = ({ id, media_type, title, name, poster_path, userData, className }) => {
+  const { t } = useTranslation();
   const detailPath = `/details/${media_type}/${id}`;
-  const [isFavourite, setIsFavourite] = useState(false);
-  const [trailerPath, setTrailerPath] = useState(null);
-  const { shouldPlayTrailer } = useMovieTrailerContext();
+  const [isListModalOpen, setIsListModalOpen] = useState(false);
 
-  async function getTrailer(movieId) {
-    try {
-      const res = await fetch(
-        `https://api.themoviedb.org/3/${media_type}/${movieId}/videos?api_key=bbd89781c7835917a2decb4989b56470&language=en-US`
-      );
-      const data = await res.json();
+  // Check if the movie/show is already in user's favorites
+  const isFavourite = userData ? userData.favourites.some((fav) => fav.type === media_type && fav.id === id) : false;
 
-      if (data.results) {
-        const trailerPathFound = data.results.find(
-          (video) => video.site === "YouTube" && video.type === "Trailer"
-        );
-        setTrailerPath(trailerPathFound || null);
-      } else {
-        setTrailerPath(null);
-      }
-    } catch (error) {
-      console.error("Error fetching trailer:", error);
-      setTrailerPath(null);
-    }
-  }
-
-  useEffect(() => {
-    const favouriteMovies = JSON.parse(localStorage.getItem("favouriteMovies")) || [];
-    const favouriteTv = JSON.parse(localStorage.getItem("favouriteTv")) || [];
-
-    const isAlreadyFavourite = favouriteMovies.includes(id) || favouriteTv.includes(id);
-    if (isAlreadyFavourite) {
-      setIsFavourite(true);
-    }
-
-    getTrailer(id);
-
-    const handleVideoPause = () => {
-      videoRef.current?.contentWindow.postMessage(
-        `{"event":"command","func":"pauseVideo","args":""}`,
-        "*"
-      );
-    };
-
-    const handleVideoPlay = () => {
-      videoRef.current?.contentWindow.postMessage(
-        `{"event":"command","func":"playVideo","args":""}`,
-        "*"
-      );
-    };
-
-    const container = containerRef.current;
-    if (container) {
-      // ChatGPT: how to use add and remove event listeners react
-      container.addEventListener('mouseleave', handleVideoPause);
-      container.addEventListener('focusout', handleVideoPause);
-      container.addEventListener('mouseenter', handleVideoPlay);
-      container.addEventListener('focusin', handleVideoPlay);
-    }
-
-    // ChatGPT: how to use add and remove event listeners react
-    return () => {
-      if (container) {
-        container.removeEventListener('mouseleave', handleVideoPause);
-        container.removeEventListener('mouseenter', handleVideoPlay);
-        container.removeEventListener('focusin', handleVideoPlay);
-        container.removeEventListener('focusout', handleVideoPause);
-      }
-      if (shouldPlayTrailer) {
-        getTrailer(id);
-      }
-    };
-  }, [id, shouldPlayTrailer]);
-
-  useEffect(() => {
-    if (shouldPlayTrailer) {
-      getTrailer(id);
-    }
-  }, [shouldPlayTrailer]);
-
-  function addToFavourites(contentId) {
-    const favouriteMovies = JSON.parse(localStorage.getItem("favouriteMovies")) || [];
-    const favouriteTv = JSON.parse(localStorage.getItem("favouriteTv")) || [];
-
-    if (isFavourite) {
-      alert('Movie/TV show is already in favourites');
+  // Handle adding or removing from favorites
+  const handleFavouriteToggle = () => {
+    if (!userData) {
+      alert(t("Please log in to add to favorites"));
       return;
     }
 
-    setIsFavourite(true);
-
-    if (media_type === 'movie') {
-      localStorage.setItem('favouriteMovies', JSON.stringify([...favouriteMovies, contentId]));
-    } else if (media_type === 'tv') {
-      localStorage.setItem('favouriteTv', JSON.stringify([...favouriteTv, contentId]));
+    if (isFavourite) {
+      deleteUserFavourite({ type: media_type, id });
+    } else {
+      updateUserFavourites({ type: media_type, id });
     }
-  }
+  };
 
   return (
-    <div className={`relative max-w-[200px] group ${cn(className)}`} ref={containerRef}>
-      {/* ChatGPT: how to render a div when a value is true */}
-      {shouldPlayTrailer &&
-        <div className="absolute border-8 border-black shadow-lg order hidden group-hover:block group-focus-within:block h-52 aspect-video -left-1/2 top-1/2 -translate-y-1/2 bg-green-200 z-40">
+    <div className={`relative max-w-[200px] group ${cn(className)}`}>
+      <div className="relative group">
+        <Link to={detailPath}>
+          <div className="rounded-md overflow-hidden">
+            {poster_path && (
+              <img
+                src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
+                alt={media_type === "movie" ? title : name}
+                className="group-hover:scale-110 transition-transform duration-200"
+              />
+            )}
+          </div>
+          <h3 className="font-medium text-sm mt-2">{title || name}</h3>
+        </Link>
 
-          {trailerPath ?
-          // ChatGPT: using iframes in react
-            <iframe
-              ref={videoRef}
-              src={`https://www.youtube.com/embed/${trailerPath.key}?enablejsapi=1&modestbranding=1&controls=1&showinfo=0&rel=0&autoplay=1`}
-              className="w-full h-full"
-              title="Movie Trailer"
-              allow="accelerometer;clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-            ></iframe> : <span className="text-black">No Trailer found</span>
-          }
-        </div>
+        {userData && (
+          <div className="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Button
+              onClick={handleFavouriteToggle}
+              className={`z-30 p-1 h-fit shadow shadow-black 
+                ${isFavourite ? 'bg-rose-600 text-white' : 'bg-white text-rose-500'}`}
+            >
+              <Heart className={isFavourite ? 'fill-white' : ''} size={20} />
+            </Button>
 
-      }
+            <Button
+              onClick={() => {
+                setIsListModalOpen(true);
+              }}
+              className="z-30 p-1 h-fit shadow shadow-black bg-white text-blue-500"
+            >
+              <BookmarkPlus size={20} />
+            </Button>
+          </div>
+        )}
+      </div>
 
-
-      <Link to={detailPath}>
-        <div className="rounded-md overflow-hidden">
-          {poster_path && (
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
-              alt={media_type === "movie" ? title : name}
-              className="group-hover:scale-110 transition-transform duration-200"
-            />
-          )}
-        </div>
-        <h3 className="font-medium text-sm">{title || name}</h3>
-      </Link>
-
-      {showFavButton && (
-        <Button
-          onClick={() => addToFavourites(id)}
-          className={`z-30 absolute top-2 right-2 p-1 h-fit shadow shadow-black text-red-900 ${isFavourite ? 'bg-green-600' : 'bg-red-400'}`}
-        >
-          <FaHeart />
-        </Button>
-      )}
+      <ListModal 
+        isOpen={isListModalOpen} 
+        setIsOpen={setIsListModalOpen} 
+        userData={userData} 
+        type={media_type} 
+        id={id} 
+      />
     </div>
   );
 };

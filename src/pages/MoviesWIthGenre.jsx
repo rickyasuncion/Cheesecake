@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { MovieCard } from "../components/ui/MovieCard";
 import { useTranslation } from "react-i18next";
@@ -14,13 +14,15 @@ import thrillerHeader from "../media/thriller-header.jpg";
 import dramaHeader from "../media/drama-header.jpg";
 import actionHeader from "../media/action-header.webp";
 import { fetchData } from "../_utils/utils";
+import { UserData } from "../providers/UserDataProvider";
 
 const MoviesWithGenre = () => {
+  const { userData } = useContext(UserData);
   const { media, type, id } = useParams();
   const [movies, setMovies] = useState([]);
   const [headerImage, setHeaderImage] = useState("");
-  const [currentPage, setCurrentPage] = useState(1); // New state for pagination
-  const [totalPages, setTotalPages] = useState(1); // Total number of pages
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const { t, i18n } = useTranslation();
 
   const genreImages = {
@@ -70,7 +72,7 @@ const MoviesWithGenre = () => {
 
       const data = await fetchData(url);
       setMovies(data?.results || []);
-      setTotalPages(data?.total_pages || 1); // Set total pages
+      setTotalPages(data?.total_pages || 1);
     };
 
     fetchMovies();
@@ -104,6 +106,7 @@ const MoviesWithGenre = () => {
                 name={movie.name}
                 poster_path={movie.poster_path}
                 href={`/details/movie/${movie.id}`}
+                userData={userData}
                 className="flex-1 min-w-44 max-w-60"
               />
             ))}
