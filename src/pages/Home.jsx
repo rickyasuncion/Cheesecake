@@ -46,8 +46,8 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-100 isolate">
       <MovieTrailer></MovieTrailer>
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 -mt-32 z-10">
-        {/* <FeaturedSection featuredCo ntent={featured} /> */}
+      <main className="max-w-7xl mx-auto mt-20 px-4 sm:px-6 lg:px-8 pb-8 z-10">
+        {/* <FeaturedSection featuredContent={featured} /> */}
         <MediaCarousel
           movies={movies1}
           text={t("Now In Theaters")}

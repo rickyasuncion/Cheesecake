@@ -65,7 +65,7 @@ const FriendsTab = ({ friends, userData, auth }) => {
   };
 
   useEffect(() => {
-    if (userData) {
+    if (userData?.notifications) {
       setFriendRequests(
         userData.notifications.filter(
           (notif) => notif.type === "friend-request" || []

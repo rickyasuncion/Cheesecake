@@ -192,14 +192,14 @@ const Sidebar = ({ movie, crews, type }) => {
                 "_blank"
               )
             }
-            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base bg-yellow-500 text-black"
+            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base bg-yellow-600 hover:bg-yellow-700 text-white"
           >
             {t("Find Free Viewing Options on TMDb")} <ArrowRight />
           </Button>
         ) : (
           <Button
             onClick={handleSubscribe}
-            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base bg-yellow-500 text-black"
+            className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base bg-yellow-600 hover:bg-yellow-700 text-white"
             disabled={isSubscribed}
           >
             {isSubscribed

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { fetchData } from "../../_utils/utils";
 import Reviews from "./Reviews/Reviews";
 import { useTranslation } from "react-i18next";
+import { Button } from "../ui/button";
+import { ArrowRight } from "lucide-react";
 
 const DetailsInfo = ({ movie, cast, type, id }) => {
   const { t, i18n } = useTranslation();
@@ -123,6 +125,92 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
     </>
   );
 
+  //01
+  const ProvidersTab = () => {
+    const [providers, setProviders] = useState(null);
+
+    useEffect(() => {
+      const fetchProviders = async () => {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/${type}/${id}/watch/providers?api_key=bbd89781c7835917a2decb4989b56470`
+        );
+        const data = await response.json();
+        setProviders(data.results);
+      };
+
+      fetchProviders();
+    }, [id]);
+
+    if (!providers) return <p>Loading...</p>;
+
+    const countryProviders = providers?.CA || {};
+    return (
+      <div className="space-y-6">
+        {/* <h2 className="text-2xl font-semibold">{t("Providers")}</h2> */}
+        <div>
+          {countryProviders.free && (
+            <div>
+              <h3 className="text-lg font-bold mb-2">Free</h3>
+              <div className="flex gap-4">
+                {countryProviders.free.map((provider, index) => (
+                  <img
+                    key={index}
+                    src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                    alt={provider.provider_name}
+                    className="w-12 h-12 rounded-lg"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+          {countryProviders.rent && (
+            <div>
+              <h3 className="text-lg font-bold mb-2">Rent</h3>
+              <div className="flex gap-4">
+                {countryProviders.rent.map((provider, index) => (
+                  <img
+                    key={index}
+                    src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                    alt={provider.provider_name}
+                    className="w-12 h-12 rounded-lg"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+          {countryProviders.buy && (
+            <div>
+              <h3 className="text-lg font-bold mb-2">Buy</h3>
+              <div className="flex gap-4">
+                {countryProviders.buy.map((provider, index) => (
+                  <img
+                    key={index}
+                    src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                    alt={provider.provider_name}
+                    className="w-12 h-12 rounded-lg"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="mt-4">
+            <Button
+              onClick={() =>
+                window.open(
+                  `https://www.themoviedb.org/${type}/${movie.id}/watch`,
+                  "_blank"
+                )
+              }
+              className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base bg-yellow-600 hover:bg-yellow-700 text-white"
+            >
+              {t("View All Options on TMDb")} <ArrowRight />
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderTabContent = () => {
     switch (selectedTab) {
       case "Overview":
@@ -133,6 +221,8 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
         return (
           <Reviews title={movie.title || movie.name} type={type} id={id} />
         );
+      case "providers":
+        return <ProvidersTab />;
       default:
         return <OverviewTab />;
     }
@@ -155,6 +245,12 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
               onClick={() => setSelectedTab("reviews")}
             >
               {t("Reviews")}
+            </TabButton>
+            <TabButton
+              active={selectedTab === "providers"}
+              onClick={() => setSelectedTab("providers")}
+            >
+              {t("Providers")}
             </TabButton>
           </div>
         </div>
@@ -188,6 +284,12 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
               onClick={() => setSelectedTab("reviews")}
             >
               {t("Reviews")}
+            </TabButton>
+            <TabButton
+              active={selectedTab === "providers"}
+              onClick={() => setSelectedTab("providers")}
+            >
+              {t("Providers")}
             </TabButton>
           </div>
         </div>
