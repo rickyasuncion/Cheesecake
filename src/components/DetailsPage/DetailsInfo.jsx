@@ -125,7 +125,6 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
     </>
   );
 
-  //01
   const ProvidersTab = () => {
     const [providers, setProviders] = useState(null);
 
@@ -144,69 +143,99 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
     if (!providers) return <p>Loading...</p>;
 
     const countryProviders = providers?.CA || {};
+
+    const hasProviders =
+      countryProviders.free ||
+      countryProviders.ads ||
+      countryProviders.rent ||
+      countryProviders.buy ||
+      countryProviders.flatrate;
+
     return (
       <div className="space-y-6">
-        {/* <h2 className="text-2xl font-semibold">{t("Providers")}</h2> */}
-        <div>
-          {countryProviders.free && (
-            <div>
-              <h3 className="text-lg font-bold mb-2">Free</h3>
-              <div className="flex gap-4">
-                {countryProviders.free.map((provider, index) => (
-                  <img
-                    key={index}
-                    src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
-                    alt={provider.provider_name}
-                    className="w-12 h-12 rounded-lg"
-                  />
-                ))}
+        {!hasProviders ? (
+          <p className="text-gray-400 text-lg">
+            {t("No providers are available.")}
+          </p>
+        ) : (
+          <div>
+            {countryProviders.free && (
+              <div>
+                <h3 className="text-lg font-bold mb-2">Free</h3>
+                <div className="flex gap-4">
+                  {countryProviders.free.map((provider, index) => (
+                    <img
+                      key={index}
+                      src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                      alt={provider.provider_name}
+                      className="w-12 h-12 rounded-lg"
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-          {countryProviders.rent && (
-            <div>
-              <h3 className="text-lg font-bold mb-2">Rent</h3>
-              <div className="flex gap-4">
-                {countryProviders.rent.map((provider, index) => (
-                  <img
-                    key={index}
-                    src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
-                    alt={provider.provider_name}
-                    className="w-12 h-12 rounded-lg"
-                  />
-                ))}
+            )}
+            {countryProviders.flatrate && (
+              <div>
+                <h3 className="text-lg font-bold mb-2">Stream</h3>
+                <div className="flex gap-4">
+                  {countryProviders.flatrate.map((provider, index) => (
+                    <img
+                      key={index}
+                      src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                      alt={provider.provider_name}
+                      className="w-12 h-12 rounded-lg"
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-          {countryProviders.buy && (
-            <div>
-              <h3 className="text-lg font-bold mb-2">Buy</h3>
-              <div className="flex gap-4">
-                {countryProviders.buy.map((provider, index) => (
-                  <img
-                    key={index}
-                    src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
-                    alt={provider.provider_name}
-                    className="w-12 h-12 rounded-lg"
-                  />
-                ))}
+            )}
+            {countryProviders.ads && (
+              <div>
+                <h3 className="text-lg font-bold mb-2">Ads</h3>
+                <div className="flex gap-4">
+                  {countryProviders.ads.map((provider, index) => (
+                    <img
+                      key={index}
+                      src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                      alt={provider.provider_name}
+                      className="w-12 h-12 rounded-lg"
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-          <div className="mt-4">
-            <Button
-              onClick={() =>
-                window.open(
-                  `https://www.themoviedb.org/${type}/${movie.id}/watch`,
-                  "_blank"
-                )
-              }
-              className="rounded-full h-auto px-6 m-0 flex gap-1 items-center text-base bg-yellow-600 hover:bg-yellow-700 text-white"
-            >
-              {t("View All Options on TMDb")} <ArrowRight />
-            </Button>
+            )}
+            {countryProviders.rent && (
+              <div>
+                <h3 className="text-lg font-bold mb-2">Rent</h3>
+                <div className="flex gap-4">
+                  {countryProviders.rent.map((provider, index) => (
+                    <img
+                      key={index}
+                      src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                      alt={provider.provider_name}
+                      className="w-12 h-12 rounded-lg"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {countryProviders.buy && (
+              <div>
+                <h3 className="text-lg font-bold mb-2">Buy</h3>
+                <div className="flex gap-4">
+                  {countryProviders.buy.map((provider, index) => (
+                    <img
+                      key={index}
+                      src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                      alt={provider.provider_name}
+                      className="w-12 h-12 rounded-lg"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        )}
       </div>
     );
   };
