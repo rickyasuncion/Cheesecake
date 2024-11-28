@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "../../ui/sheet";
 import { useUserAuth } from "../../../_utils/auth-context";
@@ -9,16 +9,17 @@ import {
   Home,
   Film,
   Tv,
-  Grid,
   List,
   Heart,
   User,
   Settings,
   Menu,
 } from "lucide-react";
+import { auth } from "../../../_utils/firebase";
+import { UserData } from "../../../providers/UserDataProvider";
 
 const Sidebar = () => {
-  const { user, firebaseSignOut } = useUserAuth();
+  const { firebaseSignOut } = useUserAuth();
   const { t } = useTranslation();
 
   return (
@@ -28,15 +29,18 @@ const Sidebar = () => {
       </SheetTrigger>
       <SheetContent side="right" className="bg-white text-gray-400">
         <div className="flex items-center mb-8">
-          <div className="relative">
-            {/* <img
-              alt="Profile"
-              className="rounded-full"
-            /> */}
-          </div>
+          {auth.currentUser && (
+            <div className="relative">
+              <img
+                alt="Profile"
+                src={auth.currentUser.photoURL}
+                className="rounded-full size-12"
+              />
+            </div>
+          )}
           <div className="ml-3">
             <h2 className="text-xl font-semibold text-yellow-400">
-              {t("Hi, User")}
+              {t(`Hi, ${auth.currentUser?.displayName || "User"}`)}
             </h2>
             <p className="text-gray-400 text-sm">{t("Welcome")}</p>
           </div>
@@ -76,14 +80,14 @@ const Sidebar = () => {
             <NavItem
               icon={<User size={20} />}
               text={t("Users")}
-              link="/users"
+              link="/users/friends"
             />
             <NavItem
               icon={<Settings size={20} />}
               text={t("Settings")}
-              link="/settings"
+              link="/users/settings"
             />
-            {user ? (
+            {auth.currentUser ? (
               <button onClick={() => firebaseSignOut()}>
                 <NavItem
                   icon={<LogOut size={20} />}

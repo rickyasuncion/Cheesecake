@@ -7,9 +7,11 @@ import ChatInput from "./ChatInput";
 import Message from "./Message";
 import { updateChatMessage } from "../../../_utils/firestore_friends";
 import { MessageSquare } from "lucide-react";
+import { useParams } from "react-router-dom";
 const ChatTab = ({ userData }) => {
+  const {id} = useParams();
   const [message, setMessage] = useState("");
-  const [selectedChat, setSelectedChat] = useState(null);
+  const [selectedChat, setSelectedChat] = useState(id);
   const [selectedChatName, setSelectedChatName] = useState(null);
   const [messages, setMessages] = useState([]);
 

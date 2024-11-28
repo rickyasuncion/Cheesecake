@@ -67,6 +67,8 @@ function App() {
                     <Route path="/free-movies" element={<FreeMovies />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/users" element={<UsersPage />} />
+                    <Route path="/users/:tab" element={<UsersPage />} />
+                    <Route path="/users/:tab/:id" element={<UsersPage />} />
                     <Route path="/Kids" element={<Kids />} />
                     <Route path="/lists" element={<Lists />} />
                     <Route path="/test" element={<Test />} />
