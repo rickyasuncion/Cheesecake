@@ -38,7 +38,9 @@ const Similiar = ({ similarMovies, type }) => {
 
   return (
     <div className="mt-16">
-      <h2 className="text-2xl font-semibold mb-6">{t("Similar Movies")}</h2>
+      <h2 className="text-2xl font-semibold mb-6">
+        {type === "tv" ? t("Similar Shows") : t("Similar Movies")}
+      </h2>
       <div className="grid grid-cols-8 gap-6">
         {similarMovies.map((movie, index) => (
           <div key={index} className="space-y-2">
