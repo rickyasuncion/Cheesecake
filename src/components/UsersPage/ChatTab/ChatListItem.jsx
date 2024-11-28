@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { User } from "lucide-react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../../_utils/firebase";
+import { useNavigate } from "react-router-dom";
 
 const ChatListItem = ({
   id,
@@ -11,6 +12,8 @@ const ChatListItem = ({
   setSelectedChat,
   setSelectedChatName,
 }) => {
+  const navigate = useNavigate();
+
   const [chat, setChat] = useState(null);
   const chatDocRef = doc(db, "chats", id);
 
@@ -30,8 +33,9 @@ const ChatListItem = ({
   return (
     <button
       onClick={() => {
-        setSelectedChat(chat.id);
+        setSelectedChat(chat.id)
         setSelectedChatName(name);
+        navigate(`/users/chat/${chat.id}`);
       }}
       className={`w-full p-4 flex items-center space-x-4 ${
         isSelected ? "bg-red-50" : "hover:bg-gray-50"
