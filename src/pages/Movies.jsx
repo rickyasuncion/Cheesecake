@@ -189,7 +189,7 @@ const Movies = () => {
   const [movies2, setMovies2] = useState([]);
   const [movies3, setMovies3] = useState([]);
   const [movies4, setMovies4] = useState([]);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const updateBackdropPaths = (genres, movies) => {
     const usedBackdrops = new Set();
@@ -221,30 +221,30 @@ const Movies = () => {
       if (type === "movie") {
         genresList = movies;
         movie1 = await fetchData(
-          "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+          `https://api.themoviedb.org/3/movie/popular?language=${i18n.language}&page=1&api_key=bbd89781c7835917a2decb4989b56470`
         );
         movie2 = await fetchData(
-          "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+          `https://api.themoviedb.org/3/movie/now_playing?language=${i18n.language}&page=1&api_key=bbd89781c7835917a2decb4989b56470`
         );
         movie3 = await fetchData(
-          "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+          `https://api.themoviedb.org/3/movie/upcoming?language=${i18n.language}&page=1&api_key=bbd89781c7835917a2decb4989b56470`
         );
         movie4 = await fetchData(
-          "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+          `https://api.themoviedb.org/3/movie/top_rated?language=${i18n.language}&page=1&api_key=bbd89781c7835917a2decb4989b56470`
         );
       } else if (type === "tv") {
         genresList = shows;
         movie1 = await fetchData(
-          "https://api.themoviedb.org/3/trending/tv/day?language=en-US&api_key=bbd89781c7835917a2decb4989b56470"
+          `https://api.themoviedb.org/3/trending/tv/day?language=${i18n.language}&api_key=bbd89781c7835917a2decb4989b56470`
         );
         movie2 = await fetchData(
-          "https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+          `https://api.themoviedb.org/3/tv/airing_today?language=${i18n.language}&page=1&api_key=bbd89781c7835917a2decb4989b56470`
         );
         movie3 = await fetchData(
-          "https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+          `https://api.themoviedb.org/3/tv/on_the_air?language=${i18n.language}&page=1&api_key=bbd89781c7835917a2decb4989b56470`
         );
         movie4 = await fetchData(
-          "https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1&api_key=bbd89781c7835917a2decb4989b56470"
+          `https://api.themoviedb.org/3/tv/top_rated?language=${i18n.language}&page=1&api_key=bbd89781c7835917a2decb4989b56470`
         );
       }
       setMovies1(updateBackdropPaths(genresList, movie1.results));
@@ -283,7 +283,7 @@ const Movies = () => {
               sectionTitle="Now Playing"
               baseUrl={`/type/${type}/now_playing`}
             />
-            
+
             <Separator className="h-0.5 bg-secondary/5 my-5" />
 
             <GenreCarousel
@@ -307,7 +307,7 @@ const Movies = () => {
 
             <GenreCarousel
               genres={movies3}
-              sectionTitle="On Tv"
+              sectionTitle={t("On Tv")}
               baseUrl={`/type/${type}/on_tv`}
             />
           </>

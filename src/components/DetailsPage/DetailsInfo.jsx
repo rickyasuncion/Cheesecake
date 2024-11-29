@@ -161,7 +161,7 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
           <div>
             {countryProviders.free && (
               <div>
-                <h3 className="text-lg font-bold mb-2">Free</h3>
+                <h3 className="text-lg font-bold mb-2">{t("Free")}</h3>
                 <div className="flex gap-4">
                   {countryProviders.free.map((provider, index) => (
                     <img
@@ -176,7 +176,7 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
             )}
             {countryProviders.flatrate && (
               <div>
-                <h3 className="text-lg font-bold mb-2">Stream</h3>
+                <h3 className="text-lg font-bold mb-2">{t("Stream")}</h3>
                 <div className="flex gap-4">
                   {countryProviders.flatrate.map((provider, index) => (
                     <img
@@ -191,7 +191,7 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
             )}
             {countryProviders.ads && (
               <div>
-                <h3 className="text-lg font-bold mb-2">Ads</h3>
+                <h3 className="text-lg font-bold mb-2">{t("Ads")}</h3>
                 <div className="flex gap-4">
                   {countryProviders.ads.map((provider, index) => (
                     <img
@@ -206,7 +206,7 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
             )}
             {countryProviders.rent && (
               <div>
-                <h3 className="text-lg font-bold mb-2">Rent</h3>
+                <h3 className="text-lg font-bold mb-2">{t("Rent")}</h3>
                 <div className="flex gap-4">
                   {countryProviders.rent.map((provider, index) => (
                     <img
@@ -221,7 +221,7 @@ const DetailsInfo = ({ movie, cast, type, id }) => {
             )}
             {countryProviders.buy && (
               <div>
-                <h3 className="text-lg font-bold mb-2">Buy</h3>
+                <h3 className="text-lg font-bold mb-2">{t("Buy")}</h3>
                 <div className="flex gap-4">
                   {countryProviders.buy.map((provider, index) => (
                     <img
