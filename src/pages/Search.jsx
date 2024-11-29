@@ -1,16 +1,36 @@
-import React, { useEffect, useState } from "react";
-import { Search as SearchIcon, Film, Tv, Clock, LineChart } from "lucide-react";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Search as SearchIcon,
+  Film,
+  Tv,
+  Clock,
+  LineChart,
+  Heart,
+  BookmarkPlus,
+} from "lucide-react";
 import { useParams } from "react-router-dom";
 import { fetchData } from "../_utils/utils";
+import { deleteUserFavourite, updateUserFavourites } from "../_utils/firestore";
+import ListModal from "../components/ListsPage/ListModal";
+import { UserData } from "../providers/UserDataProvider";
+import { auth } from "../_utils/firebase";
 
 const Search = () => {
   const { searched } = useParams();
+  const { userData } = useContext(UserData);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeM, setActiveM] = useState(false);
   const [activeT, setActiveT] = useState(false);
   const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [recentSearches, setRecentSearches] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [bookmarks, setBookmarks] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // New state for modal visibility and selected media
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -36,6 +56,11 @@ const Search = () => {
     }
   }, [activeM, activeT, movies]);
 
+  useEffect(() => {
+    setFavorites(userData?.favourites || []);
+    setBookmarks(userData?.lists || []);
+  }, [userData]);
+
   const submitHandler = (e) => {
     e.preventDefault();
     let recent = recentSearches
@@ -59,6 +84,37 @@ const Search = () => {
     }
   };
 
+  const toggleFavorite = async (item) => {
+    if (isLoading) return;
+    setIsLoading(true);
+
+    try {
+      const isFavorite = favorites.some((fav) => fav.id === item.id);
+      if (isFavorite) {
+        await deleteUserFavourite({ type: item.media_type, id: item.id });
+        setFavorites(favorites.filter((fav) => fav.id !== item.id));
+      } else {
+        await updateUserFavourites({
+          id: item.id,
+          type: item.media_type,
+          title: item.title || item.name,
+          poster_path: item.poster_path,
+          added_at: new Date().toISOString(),
+        });
+        setFavorites([...favorites, item]);
+      }
+    } catch (error) {
+      console.error("Error updating favorites:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddToList = (item) => {
+    setSelectedMedia(item);
+    setIsModalOpen(true);
+  };
+
   const MediaCard = ({
     title,
     name,
@@ -66,28 +122,57 @@ const Search = () => {
     poster_path,
     first_air_date,
     release_date,
-    id
-  }) => (
-    <div className="flex flex-col space-y-2">
-      <a href={`/details/${media_type}/${id}`}>
-      <div className="relative group">
-        <img
-          src={`https://image.tmdb.org/t/p/w500${poster_path}`}
-          alt={title}
-          className="rounded-lg w-full h-[300px] object-cover transition-transform duration-200 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200 rounded-lg" />
+    id,
+  }) => {
+    const isFavorite = favorites.some((fav) => fav.id === id);
+
+    return (
+      <div className="flex flex-col space-y-2">
+        <a href={`/details/${media_type}/${id}`}>
+          <div className="relative group">
+            <img
+              src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+              alt={title}
+              className="rounded-lg w-full h-[300px] object-cover transition-transform duration-200 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200 rounded-lg" />
+          </div>
+          <h3 className="font-medium text-gray-900">{title || name}</h3>
+        </a>
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-gray-500">{media_type}</p>
+          <p className="text-sm text-gray-500">
+            {release_date || first_air_date}
+          </p>
+        </div>
+        {auth.currentUser && (
+          <div className="flex space-x-4">
+            <button
+              onClick={() =>
+                toggleFavorite({ id, media_type, title, name, poster_path })
+              }
+              disabled={isLoading}
+              className={`p-2 rounded-full hover:bg-gray-200 transition-colors ${
+                isFavorite ? "text-red-500" : "text-gray-500"
+              }`}
+            >
+              <Heart
+                size={24}
+                fill={isFavorite ? "currentColor" : "none"}
+                className="transition-colors"
+              />
+            </button>
+            <button
+              onClick={() => handleAddToList({ id: id, type: media_type })}
+              className="p-2 rounded-full hover:bg-gray-200 transition-colors text-gray-500"
+            >
+              <BookmarkPlus size={24} />
+            </button>
+          </div>
+        )}
       </div>
-      <h3 className="font-medium text-gray-900">{title || name}</h3>
-      </a>
-      <div className="flex justify-between">
-        <p className="text-sm text-gray-500">{media_type}</p>
-        <p className="text-sm text-gray-500">
-          {release_date || first_air_date}
-        </p>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -180,6 +265,16 @@ const Search = () => {
           </div>
         </div>
       </div>
+      {/* List Modal */}
+      {isModalOpen && (
+        <ListModal
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          userData={userData}
+          type={selectedMedia.type}
+          id={selectedMedia.id}
+        />
+      )}
     </div>
   );
 };

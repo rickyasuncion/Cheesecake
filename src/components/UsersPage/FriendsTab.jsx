@@ -10,9 +10,12 @@ import {
   updateUserFriends,
 } from "../../_utils/firestore";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const FriendsTab = ({ friends, userData, auth }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [friendRequests, setFriendRequests] = useState([]);
   const [showRequests, setShowRequests] = useState(false);
@@ -44,11 +47,19 @@ const FriendsTab = ({ friends, userData, auth }) => {
 
   const messageHandler = async (from, to) => {
     try {
-      const existingChat = from.chats.some((c) =>
-        to.chats.some((chat) => chat.id === c.id)
+      let id;
+      const existingChat = from.chats.find((c) =>
+        to.chats.some((chat) => {
+          if (chat.id === c.id) {
+            id = chat.id;
+            return true;
+          }
+          return false;
+        })
       );
 
       if (existingChat) {
+        navigate(`/users/chat/${id}`);
         console.log("Chat already exists!");
         return;
       }
@@ -58,7 +69,7 @@ const FriendsTab = ({ friends, userData, auth }) => {
       await sendUserChat({ id: chatId, name: to.displayName }, from.id);
       await sendUserChat({ id: chatId, name: from.displayName }, to.id);
 
-      alert("Chat created successfully!");
+      navigate(`/users/chat/${chatId}`)
     } catch (error) {
       console.error("Error creating chat:", error);
     }

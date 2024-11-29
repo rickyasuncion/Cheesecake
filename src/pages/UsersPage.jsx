@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import StatsTab from "../components/UsersPage/StatsTab";
 import FriendsTab from "../components/UsersPage/FriendsTab";
 import Tabs from "../components/UsersPage/Tabs";
@@ -14,9 +14,9 @@ import AccountNotice from "../components/AccountNotice";
 const UsersPage = () => {
   const { t } = useTranslation();
   const { userData } = useContext(UserData);
-  const navigate = useNavigate();
+  const {tab} = useParams();
 
-  const [activeTab, setActiveTab] = useState("friends");
+  const [activeTab, setActiveTab] = useState( tab || "friends");
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -56,13 +56,13 @@ const UsersPage = () => {
       <Tabs
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        tabs={[t("friends"), t("chat"), t("stats"), t("profile")]}
+        tabs={[t("friends"), t("chat"), t("stats"), t("settings")]}
       />
-      {activeTab === t("friends") && (
+      {tab === t("friends") && (
         <FriendsTab friends={friends} auth={auth} userData={userData} />
       )}
-      {activeTab === "chat" && <ChatTab userData={userData} />}
-      {activeTab === "stats" && (
+      {tab === "chat" && <ChatTab userData={userData} />}
+      {tab === "stats" && (
         <StatsTab
           friendsCount={friends.length}
           moviesWatched={24}
@@ -70,7 +70,7 @@ const UsersPage = () => {
           watchlistCount={15}
         />
       )}
-      {activeTab === "profile" && <ProfileTab />}
+      {tab === "settings" && <ProfileTab />}
     </div>
   );
 };
