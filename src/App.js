@@ -12,7 +12,6 @@ import Header from "./components/Layout/Header/Header";
 import Movies from "./pages/Movies";
 import FilteredContent from "./pages/FilteredContent";
 import MoviesWIthGenre from "./pages/MoviesWIthGenre";
-import TvShows from "./pages/TvShows";
 import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
@@ -23,7 +22,6 @@ import Settings from "./pages/Settings";
 import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
 import Kids from "./pages/Kids";
 import Details from "./pages/Details";
-import Test from "./pages/Test";
 import Favourites from "./pages/Favourites";
 import { UserDataProvider } from "./providers/UserDataProvider";
 import UsersPage from "./pages/UsersPage";
@@ -73,7 +71,6 @@ function App() {
                     <Route path="/Kids" element={<Kids />} />
                     <Route path="/lists" element={<Lists />} />
                     <Route path="/for_you" element={<ForYou />} />
-                    <Route path="/test" element={<Test />} />
                   </Routes>
                 </main>
 
