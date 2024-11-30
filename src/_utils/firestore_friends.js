@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth";
-import { addDoc, arrayUnion, collection, doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, limit, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import { db } from "./firebase";
 import { v4 as uuidv4 } from 'uuid'
 
@@ -127,12 +127,21 @@ async function updateChatMessage(chatId, messageData) {
   }
 }
 
-// Example usage
-// addMessage("chatId1", { text: "Hello, World!", createdAt: new Date(), sender: "userId1" });
+async function searchUsersByName(searchTerm) {
+  const usersRef = collection(db, 'users');
+  const q = query(
+    usersRef, 
+    where('displayName', '>=', searchTerm),
+    where('displayName', '<=', searchTerm + '\uf8ff'),
+    limit(10)
+  );
+  
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+};
 
 
-// Example usage
-// createChat({ name: "General", createdAt: new Date() });
-
-
-export { sendUserNotifications, getUsersByIds, createChat, sendUserChat, updateChatMessage };
+export { sendUserNotifications, getUsersByIds, createChat, sendUserChat, updateChatMessage, searchUsersByName };

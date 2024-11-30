@@ -12,22 +12,19 @@ import Header from "./components/Layout/Header/Header";
 import Movies from "./pages/Movies";
 import FilteredContent from "./pages/FilteredContent";
 import MoviesWIthGenre from "./pages/MoviesWIthGenre";
-import TvShows from "./pages/TvShows";
 import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
 import ContactUs from "./pages/ContactUs";
 import FreeMovies from "./pages/FreeMovies";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Settings from "./pages/Settings";
 import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
-import Kids from "./pages/Kids";
 import Details from "./pages/Details";
-import Test from "./pages/Test";
 import Favourites from "./pages/Favourites";
 import { UserDataProvider } from "./providers/UserDataProvider";
 import UsersPage from "./pages/UsersPage";
 import Lists from "./pages/Lists";
+import ForYou from "./pages/ForYou";
 
 function App() {
   return (
@@ -65,13 +62,11 @@ function App() {
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/contact-us" element={<ContactUs />} />
                     <Route path="/free-movies" element={<FreeMovies />} />
-                    <Route path="/settings" element={<Settings />} />
                     <Route path="/users" element={<UsersPage />} />
                     <Route path="/users/:tab" element={<UsersPage />} />
                     <Route path="/users/:tab/:id" element={<UsersPage />} />
-                    <Route path="/Kids" element={<Kids />} />
                     <Route path="/lists" element={<Lists />} />
-                    <Route path="/test" element={<Test />} />
+                    <Route path="/for_you" element={<ForYou />} />
                   </Routes>
                 </main>
 

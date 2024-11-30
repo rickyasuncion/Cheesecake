@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import StatsTab from "../components/UsersPage/StatsTab";
 import FriendsTab from "../components/UsersPage/FriendsTab";
 import Tabs from "../components/UsersPage/Tabs";
@@ -56,7 +56,7 @@ const UsersPage = () => {
       <Tabs
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        tabs={[t("friends"), t("chat"), t("stats"), t("settings")]}
+        tabs={[t("friends"), t("chat"), t("settings")]}
       />
       {tab === t("friends") && (
         <FriendsTab friends={friends} auth={auth} userData={userData} />
