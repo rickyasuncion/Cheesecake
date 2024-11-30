@@ -20,7 +20,6 @@ import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Settings from "./pages/Settings";
 import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
-import Kids from "./pages/Kids";
 import Details from "./pages/Details";
 import Favourites from "./pages/Favourites";
 import { UserDataProvider } from "./providers/UserDataProvider";
@@ -68,7 +67,6 @@ function App() {
                     <Route path="/users" element={<UsersPage />} />
                     <Route path="/users/:tab" element={<UsersPage />} />
                     <Route path="/users/:tab/:id" element={<UsersPage />} />
-                    <Route path="/Kids" element={<Kids />} />
                     <Route path="/lists" element={<Lists />} />
                     <Route path="/for_you" element={<ForYou />} />
                   </Routes>
