@@ -6,10 +6,10 @@ import Tabs from "../components/UsersPage/Tabs";
 import ProfileTab from "../components/UsersPage/ProfileTab";
 import { auth } from "../_utils/firebase";
 import { UserData } from "../providers/UserDataProvider";
-import { getUsersByIds } from "../_utils/firestore_friends";
 import { useTranslation } from "react-i18next";
 import ChatTab from "../components/UsersPage/ChatTab/ChatTab";
 import AccountNotice from "../components/AccountNotice";
+import { getUsersByIds } from "../_utils/firestore_friends";
 
 const UsersPage = () => {
   const { t } = useTranslation();
