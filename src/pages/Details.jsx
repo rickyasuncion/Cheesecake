@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { fetchData } from "../_utils/utils";
 // import { updateUserRecentlyViewedMovies } from "../_utils/firestore";
 import { useTranslation } from "react-i18next";
+import { updateUserRecentlyViewedMovies, updateUserRecentlyViewedTv } from "../_utils/firestore";
 
 const Details = () => {
   const { t, i18n } = useTranslation();
@@ -45,7 +46,11 @@ const Details = () => {
       );
       setSimiliar(data.results);
 
-      // updateUserRecentlyViewedMovies(id);
+      if (type === "movie") {
+        updateUserRecentlyViewedMovies(id);
+      } else if (type === "tv") {
+        updateUserRecentlyViewedTv(id);
+      }
     };
 
     getData();

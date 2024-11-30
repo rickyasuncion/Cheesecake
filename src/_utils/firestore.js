@@ -42,7 +42,6 @@ async function createUser() {
         favourites: [],
         lists: [],
         reviews: [],
-        recentlyViewed: [],
         friends: [],
         chats: [],
       });
@@ -349,7 +348,7 @@ async function deleteUserNotification(notificationId) {
   }
 }
 
-async function updateUserRecentlyViewed(viewedObject) {
+async function updateUserRecentlyViewedMovies(viewedMovie) {
   const user = auth.currentUser;
   if (user) {
     try {
@@ -359,21 +358,46 @@ async function updateUserRecentlyViewed(viewedObject) {
         console.log("User document does not exist!");
         return;
       }
-      const existingRecentlyViewed = userDoc.data().recentlyViewed || [];
-      const newNotifications = [...existingRecentlyViewed, viewedObject];
-      await updateDoc(userDocRef, { recentlyViewed: newNotifications });
-      console.log("RecentlyViewed added successfully!");
+      const existingMovies = userDoc.data().recentlyViewedMovies || [];
+      if (existingMovies.length >= 5) {
+        existingMovies.splice(0, 1);
+      }
+      const updatedMovies = [...existingMovies, viewedMovie];
+      await updateDoc(userDocRef, { recentlyViewedMovies: updatedMovies });
+      console.log("Recently viewed movie added successfully!");
     } catch (error) {
-      console.error("Error adding recentlyViewed:", error);
+      console.error("Error adding recently viewed movie:", error);
     }
   }
 }
 
-//01
+async function updateUserRecentlyViewedTv(viewedTvShow) {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        console.log("User document does not exist!");
+        return;
+      }
+      const existingTvShows = userDoc.data().recentlyViewedTv || [];
+      if (existingTvShows.length >= 5) {
+        existingTvShows.splice(0, 1);
+      }
+      const updatedTvShows = [...existingTvShows, viewedTvShow];
+      await updateDoc(userDocRef, { recentlyViewedTv: updatedTvShows });
+      console.log("Recently viewed TV show added successfully!");
+    } catch (error) {
+      console.error("Error adding recently viewed TV show:", error);
+    }
+  }
+}
+
+
 async function subscribeUserToMovieNotifications(movieId) {
   const user = auth.currentUser;
   if (!user) {
-    // Redirect to login if not logged in
     window.open("/login", "_blank");
     return;
   }
@@ -460,7 +484,8 @@ export {
   updateUserReviews,
   updateUserFriends,
   updateUserNotifications,
-  updateUserRecentlyViewed,
+  updateUserRecentlyViewedMovies,
+  updateUserRecentlyViewedTv,
   updateUserLists,
   updateUserListItem,
   removeUserListItem,

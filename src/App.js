@@ -28,6 +28,7 @@ import Favourites from "./pages/Favourites";
 import { UserDataProvider } from "./providers/UserDataProvider";
 import UsersPage from "./pages/UsersPage";
 import Lists from "./pages/Lists";
+import ForYou from "./pages/ForYou";
 
 function App() {
   return (
@@ -71,6 +72,7 @@ function App() {
                     <Route path="/users/:tab/:id" element={<UsersPage />} />
                     <Route path="/Kids" element={<Kids />} />
                     <Route path="/lists" element={<Lists />} />
+                    <Route path="/for_you" element={<ForYou />} />
                     <Route path="/test" element={<Test />} />
                   </Routes>
                 </main>
