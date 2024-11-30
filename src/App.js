@@ -18,7 +18,6 @@ import ContactUs from "./pages/ContactUs";
 import FreeMovies from "./pages/FreeMovies";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Settings from "./pages/Settings";
 import { MovieTrailerContextProvider } from "./providers/MovieTrailerProvider";
 import Details from "./pages/Details";
 import Favourites from "./pages/Favourites";
@@ -63,7 +62,6 @@ function App() {
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/contact-us" element={<ContactUs />} />
                     <Route path="/free-movies" element={<FreeMovies />} />
-                    <Route path="/settings" element={<Settings />} />
                     <Route path="/users" element={<UsersPage />} />
                     <Route path="/users/:tab" element={<UsersPage />} />
                     <Route path="/users/:tab/:id" element={<UsersPage />} />

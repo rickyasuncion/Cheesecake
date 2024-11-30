@@ -28,7 +28,7 @@ const ChatListItem = ({
       });
       return () => unsubscribe();
     }
-  }, [id]);
+  }, [id, chatDocRef]);
 
   return (
     <button
