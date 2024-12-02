@@ -273,7 +273,24 @@
     "Active Customers": "活跃客户",
     "Watch Now": "立即观看",
     "Movies Playing Now": "现在正在播放的电影",
-    "List": "列表"
+    "List": "列表",
+    "Have any questions or feedback? Reach out to us and we'll get back to you as soon as possible.": "有任何问题或反馈？ 请联系我们，我们会尽快回复您。",
+    "Reach Us Directly": "直接联系我们",
+    "Or Leave Us a Message": "或给我们留言",
+    "Your Name": "您的姓名",
+    "Enter your name": "输入您的姓名",
+    "Your Email": "您的电子邮件",
+    "Your Message": "您的訊息",
+    "Write your message here..." : "在此处写下您的訊息...",
+    "Send Message": "发送訊息",
+    "My Lists": "我的列表",
+    "No items in list": "列表中没有项目",
+    "selectListToView": "选择一个列表查看",
+    "selectListDescription": "选择一个列表查看",
+    "Create List": "创建列表"
+
+
+
 
   }
   

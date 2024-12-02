@@ -227,7 +227,9 @@ const Lists = () => {
       <div className="bg-gray-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-semibold text-gray-900">My Lists</h1>
+            <h1 className="text-2xl font-semibold text-gray-900">
+              {t("My Lists")}
+            </h1>
             <CreateList userData={userData} />
           </div>
         </div>
@@ -270,7 +272,7 @@ const Lists = () => {
                     ))
                   ) : (
                     <div className="text-center py-8 text-gray-500">
-                      No items in list
+                      {t("No items in list")}
                     </div>
                   )}
                 </div>
