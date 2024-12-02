@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
 import { Plus, Check, X } from "lucide-react";
 import { updateUserLists } from "../../_utils/firestore";
+import { useTranslation } from "react-i18next";
 
-
-const CreateList = ({userData}) => {
+const CreateList = ({ userData }) => {
+  const { t } = useTranslation();
   const [playlistName, setPlaylistName] = useState("");
   const [newPlaylist, setNewPlaylist] = useState(false);
   const inputRef = useRef();
@@ -67,7 +68,7 @@ const CreateList = ({userData}) => {
           className="flex items-center space-x-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
         >
           <Plus className="w-5 h-5" />
-          <span>Create List</span>
+          <span>{t("Create List")}</span>
         </button>
       )}
     </div>
