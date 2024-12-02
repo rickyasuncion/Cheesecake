@@ -133,7 +133,7 @@ const FreeMovies = () => {
               <p>
                 {t("Vote Average")}: {movie.vote_average}
               </p>
-              <p>
+              {/* <p>
                 <Button
                   className="rounded-full h-auto px-4 m-0 flex gap-1 items-center text-base text-xs"
                   onClick={() => window.open(movie.link, "_blank")}
@@ -141,7 +141,7 @@ const FreeMovies = () => {
                   {t("Find Free Viewing Options on TMDb")}{" "}
                   <ArrowRight className="size-5" />
                 </Button>
-              </p>
+              </p> */}
             </div>
           ))}
       </div>
