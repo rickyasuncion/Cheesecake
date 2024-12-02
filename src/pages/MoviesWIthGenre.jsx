@@ -29,175 +29,175 @@ const MoviesWithGenre = () => {
   const movie = [
     {
       id: 28,
-      name: "Action",
+      name: t("Action"),
       backdrop_path: "path_to_action_backdrop.jpg",
     },
     {
       id: 12,
-      name: "Adventure",
+      name: t("Adventure"),
       backdrop_path: "path_to_adventure_backdrop.jpg",
     },
     {
       id: 16,
-      name: "Animation",
+      name: t("Animation"),
       backdrop_path: "path_to_animation_backdrop.jpg",
     },
     {
       id: 35,
-      name: "Comedy",
+      name: t("Comedy"),
       backdrop_path: "path_to_comedy_backdrop.jpg",
     },
     {
       id: 80,
-      name: "Crime",
+      name: t("Crime"),
       backdrop_path: "path_to_crime_backdrop.jpg",
     },
     {
       id: 99,
-      name: "Documentary",
+      name: t("Documentary"),
       backdrop_path: "path_to_documentary_backdrop.jpg",
     },
     {
       id: 18,
-      name: "Drama",
+      name: t("Drama"),
       backdrop_path: "path_to_drama_backdrop.jpg",
     },
     {
       id: 10751,
-      name: "Family",
+      name: t("Family"),
       backdrop_path: "path_to_family_backdrop.jpg",
     },
     {
       id: 14,
-      name: "Fantasy",
+      name: t("Fantasy"),
       backdrop_path: "path_to_fantasy_backdrop.jpg",
     },
     {
       id: 36,
-      name: "History",
+      name: t("History"),
       backdrop_path: "path_to_history_backdrop.jpg",
     },
     {
       id: 27,
-      name: "Horror",
+      name: t("Horror"),
       backdrop_path: "path_to_horror_backdrop.jpg",
     },
     {
       id: 10402,
-      name: "Music",
+      name: t("Music"),
       backdrop_path: "path_to_music_backdrop.jpg",
     },
     {
       id: 9648,
-      name: "Mystery",
+      name: t("Mystery"),
       backdrop_path: "path_to_mystery_backdrop.jpg",
     },
     {
       id: 10749,
-      name: "Romance",
+      name: t("Romance"),
       backdrop_path: "path_to_romance_backdrop.jpg",
     },
     {
       id: 878,
-      name: "Science Fiction",
+      name: t("Science Fiction"),
       backdrop_path: "path_to_science_fiction_backdrop.jpg",
     },
     {
       id: 10770,
-      name: "TV Movie",
+      name: t("TV Movie"),
       backdrop_path: "path_to_tv_movie_backdrop.jpg",
     },
     {
       id: 53,
-      name: "Thriller",
+      name: t("Thriller"),
       backdrop_path: "path_to_thriller_backdrop.jpg",
     },
     {
       id: 10752,
-      name: "War",
+      name: t("War"),
       backdrop_path: "path_to_war_backdrop.jpg",
     },
     {
       id: 37,
-      name: "Western",
+      name: t("Western"),
       backdrop_path: "path_to_western_backdrop.jpg",
     },
   ];
-  
+
   const shows = [
     {
       id: 10759,
-      name: "Action & Adventure",
+      name: t("Action & Adventure"),
       backdrop_path: "path_to_action_adventure_backdrop.jpg",
     },
     {
       id: 16,
-      name: "Animation",
+      name: t("Animation"),
       backdrop_path: "path_to_animation_backdrop.jpg",
     },
     {
       id: 35,
-      name: "Comedy",
+      name: t("Comedy"),
       backdrop_path: "path_to_comedy_backdrop.jpg",
     },
     {
       id: 80,
-      name: "Crime",
+      name: t("Crime"),
       backdrop_path: "path_to_crime_backdrop.jpg",
     },
     {
       id: 99,
-      name: "Documentary",
+      name: t("Documentary"),
       backdrop_path: "path_to_documentary_backdrop.jpg",
     },
     {
       id: 18,
-      name: "Drama",
+      name: t("Drama"),
       backdrop_path: "path_to_drama_backdrop.jpg",
     },
     {
       id: 10751,
-      name: "Family",
+      name: t("Family"),
       backdrop_path: "path_to_family_backdrop.jpg",
     },
     {
       id: 10762,
-      name: "Kids",
+      name: t("Kids"),
       backdrop_path: "path_to_kids_backdrop.jpg",
     },
     {
       id: 9648,
-      name: "Mystery",
+      name: t("Mystery"),
       backdrop_path: "path_to_mystery_backdrop.jpg",
     },
     {
       id: 10764,
-      name: "Reality",
+      name: t("Reality"),
       backdrop_path: "path_to_reality_backdrop.jpg",
     },
     {
       id: 10765,
-      name: "Sci-Fi & Fantasy",
+      name: t("Sci-Fi & Fantasy"),
       backdrop_path: "path_to_sci_fi_fantasy_backdrop.jpg",
     },
     {
       id: 10766,
-      name: "Soap",
+      name: t("Soap"),
       backdrop_path: "path_to_soap_backdrop.jpg",
     },
     {
       id: 10767,
-      name: "Talk",
+      name: t("Talk"),
       backdrop_path: "path_to_talk_backdrop.jpg",
     },
     {
       id: 10768,
-      name: "War & Politics",
+      name: t("War & Politics"),
       backdrop_path: "path_to_war_politics_backdrop.jpg",
     },
     {
       id: 37,
-      name: "Western",
+      name: t("Western"),
       backdrop_path: "path_to_western_backdrop.jpg",
     },
   ];
@@ -235,11 +235,10 @@ const MoviesWithGenre = () => {
   return (
     <div className="bg-gray-900 text-secondary pt-5 pb-16">
       <div className="container">
-
         <div className="pt-48 pb-3 relative overflow-hidden rounded-md isolate">
           <div className="bg-neutral-900/60 absolute top-0 bottom-0 z-10 w-full">
             <h1 className="px-4 font-semibold text-3xl text-white absolute bottom-3 capitalize">
-              {t(type)} - {media === "movie" ? "Movies" : "Tv Shows"}
+              {t(type)} - {media === "movie" ? t("Movies") : t("Tv Shows")}
             </h1>
           </div>
           <img
@@ -291,17 +290,25 @@ const MoviesWithGenre = () => {
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
             className={`py-2 px-4 mx-1 rounded ${
-              currentPage === 1 ? "bg-gray-400" : "bg-yellow-500 hover:bg-yellow-600"
+              currentPage === 1
+                ? "bg-gray-400"
+                : "bg-yellow-500 hover:bg-yellow-600"
             }`}
           >
             {t("Previous")}
           </button>
-          <span className="py-2 px-4 mx-1">{`${t("Page")} ${currentPage} ${t("of")} ${totalPages}`}</span>
+          <span className="py-2 px-4 mx-1">{`${t("Page")} ${currentPage} ${t(
+            "of"
+          )} ${totalPages}`}</span>
           <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
             disabled={currentPage === totalPages}
             className={`py-2 px-4 mx-1 rounded ${
-              currentPage === totalPages ? "bg-gray-400" : "bg-yellow-500 hover:bg-yellow-600"
+              currentPage === totalPages
+                ? "bg-gray-400"
+                : "bg-yellow-500 hover:bg-yellow-600"
             }`}
           >
             {t("Next")}

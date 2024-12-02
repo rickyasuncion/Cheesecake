@@ -3,8 +3,10 @@ import { FaPause, FaPlay } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { useTranslation } from "react-i18next";
 
 const MovieTrailer = () => {
+  const { t } = useTranslation();
   const videoRef = useRef();
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
@@ -15,18 +17,18 @@ const MovieTrailer = () => {
           className="text-6xl text-center w-fit font-thin "
           style={{ letterSpacing: "1rem" }}
         >
-          <span className="block">OUR</span> <span>OCEANS</span>{" "}
+          <span className="block">{t("OUR")}</span> <span>{t("OCEANS")}</span>{" "}
         </h1>
 
         <span className="font-semibold text-lg block">
-          <span className="bg-red-500 p-1 rounded-sm mr-2">Top 10</span>
-          #2 movie in trending
+          <span className="bg-red-500 p-1 rounded-sm mr-2">{t("Top 10")}</span>
+          {t("#2 movie in trending")}
         </span>
 
         <p className="max-w-lg">
-          Embark on a global odyssey to discover the largest and least explored
-          habitat on earth. New ocean science and technology has allowed us to
-          go further into the unknown than we ever thought possible.
+          {t(
+            "Embark on a global odyssey to discover the largest and least explored habitat on earth. New ocean science and technology has allowed us to go further into the unknown than we ever thought possible."
+          )}
         </p>
 
         <div className="flex gap-3 mt-3">
@@ -43,7 +45,7 @@ const MovieTrailer = () => {
             }}
           >
             {isVideoPlaying ? <FaPause /> : <FaPlay />}
-            {isVideoPlaying ? "Pause" : "Play"}
+            {isVideoPlaying ? t("Pause") : t("Play")}
           </button>
 
           <Button
@@ -53,7 +55,7 @@ const MovieTrailer = () => {
           >
             <Link to={`/details/movie/533962`}>
               <IoMdInformationCircleOutline className="size-7 mr-2" />
-              More info
+              {t("More info")}
             </Link>
           </Button>
         </div>

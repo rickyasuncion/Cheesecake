@@ -18,7 +18,7 @@ const LatestMoviesWithCount = () => {
 
   return (
     <div className="container my-10">
-      <h1 className="text-3xl font-medium">Movies Playing now</h1>
+      <h1 className="text-3xl font-medium">{t("Movies Playing Now")}</h1>
       <div className="flex py-5 gap-3 px-2 overflow-auto">
         {movies.map((movie, idx) => {
           return (
