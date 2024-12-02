@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import GenreCarousel from "./GenrePage/GenreCarousel";
 import { fetchData } from "../_utils/utils";
+import GenreCarousel from "../components/GenrePage/GenreCarousel";
 
 const movies = [
   {
@@ -184,7 +184,6 @@ const shows = [
 const Movies = () => {
   const type = useParams().type;
 
-  const [genres, setGenres] = useState([]);
   const [movies1, setMovies1] = useState([]);
   const [movies2, setMovies2] = useState([]);
   const [movies3, setMovies3] = useState([]);

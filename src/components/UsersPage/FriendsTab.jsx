@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { UserPlus, MessageSquare, Check, X, Bell } from "lucide-react";
+import { UserPlus, MessageSquare, Check, X, Bell, Search } from "lucide-react";
 import {
   createChat,
-  sendUserChat,
   sendUserNotifications,
+  sendUserChat,
+  searchUsersByName,
 } from "../../_utils/firestore_friends";
 import {
   deleteUserNotification,
@@ -19,11 +20,11 @@ const FriendsTab = ({ friends, userData, auth }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [friendRequests, setFriendRequests] = useState([]);
   const [showRequests, setShowRequests] = useState(false);
+  const [userSearchResults, setUserSearchResults] = useState([]);
 
-  const addFriendHandler = () => {
-    if (auth.currentUser.uid === searchTerm) {
+  const addFriendHandler = (userId) => {
+    if (auth.currentUser.uid === userId) {
       alert("You cannot add yourself as a friend.");
-      setSearchTerm("");
       return;
     }
 
@@ -31,17 +32,31 @@ const FriendsTab = ({ friends, userData, auth }) => {
       type: "friend-request",
       title: auth.currentUser.displayName,
       from: auth.currentUser.uid,
-      to: searchTerm,
+      to: userId,
     };
 
     try {
-      sendUserNotifications(notif, searchTerm);
+      sendUserNotifications(notif, userId);
       alert("Friend request sent successfully!");
     } catch (error) {
       console.error("Failed to send friend request:", error);
       alert("Could not send friend request. Please try again.");
-    } finally {
-      setSearchTerm("");
+    }
+  };
+
+  const searchUsersHandler = async () => {
+    try {
+      const results = await searchUsersByName(searchTerm);
+      // Filter out current user and existing friends
+      const filteredResults = results.filter(
+        user => 
+          user.id !== auth.currentUser.uid && 
+          !friends.some(friend => friend.id === user.id)
+      );
+      setUserSearchResults(filteredResults);
+    } catch (error) {
+      console.error("Failed to search users:", error);
+      alert("Could not search users. Please try again.");
     }
   };
 
@@ -60,7 +75,6 @@ const FriendsTab = ({ friends, userData, auth }) => {
 
       if (existingChat) {
         navigate(`/users/chat/${id}`);
-        console.log("Chat already exists!");
         return;
       }
 
@@ -91,10 +105,11 @@ const FriendsTab = ({ friends, userData, auth }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">{t("Friends")}</h2>
-        <div className="flex gap-2">
+    <div className="space-y-6">
+      {/* Friends List Section */}
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">{t("Friends")}</h2>
           <div className="relative">
             <button
               className="px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg flex items-center gap-2"
@@ -144,52 +159,69 @@ const FriendsTab = ({ friends, userData, auth }) => {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="space-y-4">
+          {friends &&
+            friends.map((friend, index) => (
+              <div key={index} className="border rounded-lg p-4 hover:bg-gray-50">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-medium text-lg">{friend.displayName}</h3>
+                  <button
+                    onClick={() => messageHandler(userData, friend)}
+                    className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2"
+                  >
+                    <MessageSquare className="h-4 w-4" />
+                    {t("Message")}
+                  </button>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+
+      {/* User Search Section */}
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+        <h2 className="text-xl font-bold mb-4">{t("Add New Friends")}</h2>
+        <div className="flex gap-2 mb-4">
           <input
             type="text"
-            placeholder={t("Search friends by id...")}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder={t("Search users by name...")}
+            className="flex-grow px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded-lg flex items-center gap-2"
-            onClick={addFriendHandler}
+            onClick={searchUsersHandler}
           >
-            <UserPlus className="h-4 w-4" />
-            {t("Add Friend")}
+            <Search className="h-4 w-4" />
+            {t("Search")}
           </button>
         </div>
-      </div>
-      <div className="space-y-4">
-        {friends &&
-          friends.map((friend, index) => (
-            <div key={index} className="border rounded-lg p-4 hover:bg-gray-50">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-medium text-lg">{friend.displayName}</h3>
+
+        {userSearchResults.length > 0 && (
+          <div className="space-y-4">
+            {userSearchResults.map((user, index) => (
+              <div 
+                key={index} 
+                className="border rounded-lg p-4 flex justify-between items-center hover:bg-gray-50"
+              >
+                <div>
+                  <h4 className="font-medium text-lg">{user.displayName}</h4>
+                  <p className="text-sm text-gray-500">{user.email}</p>
+                </div>
                 <button
-                  onClick={() => messageHandler(userData, friend)}
-                  className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2"
+                  onClick={() => addFriendHandler(user.id)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg flex items-center gap-2"
                 >
-                  <MessageSquare className="h-4 w-4" />
-                  Message
+                  <UserPlus className="h-4 w-4" />
+                  {t("Add Friend")}
                 </button>
               </div>
-              {/* <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-sm font-medium mb-1">Recently Watched</div>
-                <div className="text-sm text-gray-500">
-                  {friend.recentlyWatched.join(", ")}
-                </div>
-              </div>
-              <div>
-                <div className="text-sm font-medium mb-1">Watchlist</div>
-                <div className="text-sm text-gray-500">
-                  {friend.watchlist.join(", ")}
-                </div>
-              </div>
-            </div> */}
-            </div>
-          ))}
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

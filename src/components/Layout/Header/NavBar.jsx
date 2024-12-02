@@ -38,9 +38,6 @@ const NavBar = () => {
         <Link to="/free-movies" className="hover:text-yellow-400">
           {t("Free Movies")}
         </Link>
-        <Link to="/Kids" className="hover:text-yellow-400">
-          {t("Kids")}
-        </Link>
       </nav>
     </div>
   );

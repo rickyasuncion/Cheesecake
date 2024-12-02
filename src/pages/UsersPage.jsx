@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import StatsTab from "../components/UsersPage/StatsTab";
 import FriendsTab from "../components/UsersPage/FriendsTab";
 import Tabs from "../components/UsersPage/Tabs";
 import ProfileTab from "../components/UsersPage/ProfileTab";
 import { auth } from "../_utils/firebase";
 import { UserData } from "../providers/UserDataProvider";
-import { getUsersByIds } from "../_utils/firestore_friends";
 import { useTranslation } from "react-i18next";
 import ChatTab from "../components/UsersPage/ChatTab/ChatTab";
 import AccountNotice from "../components/AccountNotice";
+import { getUsersByIds } from "../_utils/firestore_friends";
 
 const UsersPage = () => {
   const { t } = useTranslation();
@@ -56,7 +56,7 @@ const UsersPage = () => {
       <Tabs
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        tabs={[t("friends"), t("chat"), t("stats"), t("settings")]}
+        tabs={[t("friends"), t("chat"), t("settings")]}
       />
       {tab === t("friends") && (
         <FriendsTab friends={friends} auth={auth} userData={userData} />

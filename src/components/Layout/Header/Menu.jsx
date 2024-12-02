@@ -73,7 +73,11 @@ const Sidebar = () => {
               text={t("Favorites")}
               link="/favourites"
             />
-            <NavItem icon={<User size={20} />} text={t("For You")} link="#" />
+            <NavItem
+              icon={<User size={20} />}
+              text={t("For You")}
+              link="/for_you"
+            />
           </div>
 
           <div className="mt-8 space-y-1">
