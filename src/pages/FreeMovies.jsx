@@ -27,7 +27,7 @@ const FreeMovies = () => {
 
     const language = i18n.language;
 
-    while (freeMovies.length < 20 && totalMovies < 100) {
+    while (freeMovies.length < 20 && totalMovies < 50) {
       try {
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=${language}&page=${page}`
