@@ -183,7 +183,7 @@ const Sidebar = ({ movie, crews, type }) => {
       </div>
 
       {/* Free Movie Notification Button */}
-      <div className="mt-4">
+      {/* <div className="mt-4">
         {isFree ? (
           <Button
             onClick={() =>
@@ -208,7 +208,7 @@ const Sidebar = ({ movie, crews, type }) => {
             <ArrowRight />
           </Button>
         )}
-      </div>
+      </div> */}
 
       {/* Test Button to Toggle Free Status */}
       {/* <div className="mt-4">

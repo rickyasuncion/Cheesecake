@@ -45,7 +45,7 @@ const MovieTrailer = () => {
             }}
           >
             {isVideoPlaying ? <FaPause /> : <FaPlay />}
-            {isVideoPlaying ? "Pause" : "Play"}
+            {isVideoPlaying ? t("Pause") : t("Play")}
           </button>
 
           <Button
@@ -55,7 +55,7 @@ const MovieTrailer = () => {
           >
             <Link to={`/details/movie/533962`}>
               <IoMdInformationCircleOutline className="size-7 mr-2" />
-              More info
+              {t("More info")}
             </Link>
           </Button>
         </div>

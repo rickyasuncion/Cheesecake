@@ -225,6 +225,7 @@
     "friends": "好友",
     "chat": "聊天",
     "stats": "统计",
+    "settings": "设置",
     "profile": "个人资料",
     "Search chats...": "搜索聊天...",
     "Select a chat to start messaging": "选择一个聊天开始发送消息",
@@ -264,12 +265,15 @@
     "#2 movie in trending": "热门电影第二名",
     "Pause": "暂停",
     "Play": "播放",
-    "More info": "更多信息"
-
-
-
-
-    
+    "More info": "更多信息",
+    "Embark on a global odyssey to discover the largest and least explored habitat on earth. New ocean science and technology has allowed us to go further into the unknown than we ever thought possible.": "踏上全球探险之旅，发现地球上最大且最不为人所知的栖息地。 新的海洋科学和技术使我们能够进入比我们以往认为可能的未知领域更远。",
+    "Free Movies are Live Now For Friends & Family": "免费电影现在已经上线，适合朋友和家人观看",
+    "Watch latest movies for free!! That a latest offering of cheescake. Free movies for kids, adults and animation lovers all at one place." : "免费观看最新电影！！ 这是Cheescake的最新提供。 适合儿童，成人和动画爱好者的免费电影都在一个地方。",
+    "FULL HD": "全高清",
+    "Active Customers": "活跃客户",
+    "Watch Now": "立即观看",
+    "Movies Playing Now": "现在正在播放的电影",
+    "List": "列表"
 
   }
   
