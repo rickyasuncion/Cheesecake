@@ -16,10 +16,25 @@ import {
 const Header = () => {
   const { toggleTrailerState } = useMovieTrailerContext();
 
+  
   return (
     <div>
     <header className="flex items-center justify-between p-3 text-black bg-white/50 backdrop-blur-sm fixed w-full z-50 top-0">
       <NavBar />
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Toggle onPressedChange={toggleTrailerState}>
+              <FaCirclePlay className="size-6" />
+            </Toggle>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Should play trailers on hover?</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      
       <div className="flex items-center space-x-4">
         <SearchBar />
         <LanguageSelector />

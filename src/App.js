@@ -10,7 +10,6 @@ import { LanguageProvider } from "./_utils/LanguageContext";
 import Search from "./pages/Search";
 import Header from "./components/Layout/Header/Header";
 import Movies from "./pages/Movies";
-import FilteredContent from "./pages/FilteredContent";
 import MoviesWIthGenre from "./pages/MoviesWIthGenre";
 import About from "./pages/About";
 import Footer from "./components/Layout/Footer";
@@ -51,10 +50,6 @@ function App() {
                       element={<MoviesWIthGenre />}
                     />
                     <Route path="/details/:type/:id" element={<Details />} />
-                    <Route
-                      path="/filtered-content"
-                      element={<FilteredContent />}
-                    />
                     <Route path="*" element={<NotFound />} />
                     <Route path="/favourites" element={<Favourites />} />
                     <Route path="/contact-us" element={<ContactUs />} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./button";
 import { Heart, BookmarkPlus } from "lucide-react";
@@ -7,15 +7,26 @@ import { useTranslation } from "react-i18next";
 import ListModal from "../ListsPage/ListModal";
 import { deleteUserFavourite, updateUserFavourites } from "../../_utils/firestore";
 
-const MovieCard = ({ id, media_type, title, name, poster_path, userData, className }) => {
+const MovieCard = ({
+  id,
+  media_type,
+  title,
+  name,
+  poster_path,
+  userData,
+  className,
+  shouldPlayTrailer,
+}) => {
   const { t } = useTranslation();
   const detailPath = `/details/${media_type}/${id}`;
+  const [isHovered, setIsHovered] = useState(false);
   const [isListModalOpen, setIsListModalOpen] = useState(false);
+  const [trailerUrl, setTrailerUrl] = useState("");
 
-  // Check if the movie/show is already in user's favorites
-  const isFavourite = userData ? userData.favourites.some((fav) => fav.type === media_type && fav.id === id) : false;
+  const isFavourite = userData
+    ? userData.favourites.some((fav) => fav.type === media_type && fav.id === id)
+    : false;
 
-  // Handle adding or removing from favorites
   const handleFavouriteToggle = () => {
     if (!userData) {
       alert(t("Please log in to add to favorites"));
@@ -29,8 +40,33 @@ const MovieCard = ({ id, media_type, title, name, poster_path, userData, classNa
     }
   };
 
+  const fetchTrailer = async () => {
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/${media_type}/${id}/videos?api_key=bbd89781c7835917a2decb4989b56470`
+      );
+      const data = await response.json();
+      const trailer = data.results.find((video) => video.type === "Trailer");
+      if (trailer) {
+        setTrailerUrl(`https://www.youtube.com/embed/${trailer.key}`);
+      }
+    } catch (error) {
+      console.error("Error fetching trailer:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (isHovered && shouldPlayTrailer) {
+      fetchTrailer();
+    }
+  }, [isHovered, shouldPlayTrailer]);
+
   return (
-    <div className={`relative max-w-[200px] group ${cn(className)}`}>
+    <div
+      className={`relative max-w-[200px] group ${cn(className)}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="relative group">
         <Link to={detailPath}>
           <div className="rounded-md overflow-hidden">
@@ -50,9 +86,9 @@ const MovieCard = ({ id, media_type, title, name, poster_path, userData, classNa
             <Button
               onClick={handleFavouriteToggle}
               className={`z-30 p-1 h-fit shadow shadow-black 
-                ${isFavourite ? 'bg-rose-600 text-white' : 'bg-white text-rose-500'}`}
+                ${isFavourite ? "bg-rose-600 text-white" : "bg-white text-rose-500"}`}
             >
-              <Heart className={isFavourite ? 'fill-white' : ''} size={20} />
+              <Heart className={isFavourite ? "fill-white" : ""} size={20} />
             </Button>
 
             <Button
@@ -67,12 +103,24 @@ const MovieCard = ({ id, media_type, title, name, poster_path, userData, classNa
         )}
       </div>
 
-      <ListModal 
-        isOpen={isListModalOpen} 
-        setIsOpen={setIsListModalOpen} 
-        userData={userData} 
-        type={media_type} 
-        id={id} 
+      {isHovered && shouldPlayTrailer && trailerUrl && (
+        <div className="absolute top-0 left-full ml-4 w-[300px] h-[200px] bg-black/80 flex items-center justify-center rounded overflow-hidden z-20">
+          <iframe
+            src={trailerUrl}
+            title={`${title || name} Trailer`}
+            className="w-full h-full"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+          ></iframe>
+        </div>
+      )}
+
+      <ListModal
+        isOpen={isListModalOpen}
+        setIsOpen={setIsListModalOpen}
+        userData={userData}
+        type={media_type}
+        id={id}
       />
     </div>
   );
