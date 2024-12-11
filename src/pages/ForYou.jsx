@@ -189,10 +189,11 @@ const ForYou = () => {
           <div className="mb-6">
             <div className="flex justify-between text-gray-700 mb-2">
               <span>
-                Question {currentStep + 1} of {questions.length}
+                {t("Question")} {currentStep + 1} {t("of")} {questions.length}
               </span>
               <span>
-                {Math.round((currentStep / questions.length) * 100)}% complete
+                {Math.round((currentStep / questions.length) * 100)}%{" "}
+                {t("complete")}
               </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
