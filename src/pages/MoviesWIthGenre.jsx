@@ -15,6 +15,7 @@ import dramaHeader from "../media/drama-header.jpg";
 import actionHeader from "../media/action-header.webp";
 import { fetchData } from "../_utils/utils";
 import { UserData } from "../providers/UserDataProvider";
+import { useMovieTrailerContext } from "../providers/MovieTrailerProvider";
 
 const MoviesWithGenre = () => {
   const { userData } = useContext(UserData);
@@ -24,7 +25,10 @@ const MoviesWithGenre = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState(id);
+  const [selectedYear, setSelectedYear] = useState({ start: "", end: "" });
   const { t, i18n } = useTranslation();
+  const { shouldPlayTrailer } = useMovieTrailerContext();
+
 
   const movie = [
     {
@@ -222,15 +226,33 @@ const MoviesWithGenre = () => {
     setHeaderImage(genreImages[Number(selectedGenre)] || "/default-header.jpg");
 
     const fetchMovies = async () => {
-      const baseURL = `https://api.themoviedb.org/3/discover/${media}?include_adult=false&include_video=false&language=${i18n.language}&sort_by=popularity.desc&with_genres=${selectedGenre}&api_key=bbd89781c7835917a2decb4989b56470&page=${currentPage}`;
-      const url = baseURL;
-      const data = await fetchData(url);
+      let baseURL = `https://api.themoviedb.org/3/discover/${media}?include_adult=false&include_video=false&language=${i18n.language}&sort_by=popularity.desc&with_genres=${selectedGenre}&api_key=bbd89781c7835917a2decb4989b56470&page=${currentPage}`;
+
+      if (selectedYear.start) {
+        baseURL += `&primary_release_date.gte=${selectedYear.start}-01-01`;
+      }
+      if (selectedYear.end) {
+        baseURL += `&primary_release_date.lte=${selectedYear.end}-12-31`;
+      }
+
+      if (selectedYear) {
+        baseURL += `&primary_release_year=${selectedYear}`;
+      }
+
+      const data = await fetchData(baseURL);
       setMovies(data?.results || []);
       setTotalPages(data?.total_pages || 1);
     };
 
     fetchMovies();
-  }, [selectedGenre, i18n.language, currentPage]);
+  }, [selectedGenre, i18n.language, currentPage, selectedYear, media]);
+
+  useEffect(() => {
+    if (selectedYear.start && selectedYear.end && selectedYear.start > selectedYear.end) {
+      setSelectedYear((prev) => ({ ...prev, end: prev.start }));
+    }
+  }, [selectedYear.start, selectedYear.end]);
+  
 
   return (
     <div className="bg-gray-900 text-secondary pt-5 pb-16">
@@ -248,8 +270,9 @@ const MoviesWithGenre = () => {
           />
         </div>
 
-        {/* Genre Selector */}
-        <div className="flex justify-end mt-4">
+        {/* Filters */}
+        <div className="flex justify-between mt-4">
+          {/* Genre Selector */}
           <select
             value={selectedGenre}
             onChange={(e) => {
@@ -264,6 +287,50 @@ const MoviesWithGenre = () => {
               </option>
             ))}
           </select>
+
+          {/* Year Selector */}
+          {/* Year Range Selectors */}
+          <div className="flex gap-2 items-center">
+            <select
+              value={selectedYear.start}
+              onChange={(e) => {
+                setSelectedYear((prev) => ({ ...prev, start: e.target.value }));
+                setCurrentPage(1); // Reset to first page when year changes
+              }}
+              className="bg-neutral-900 text-white p-2 rounded"
+            >
+              <option value="">{t("Start Year")}</option>
+              {Array.from(
+                { length: 30 },
+                (_, i) => new Date().getFullYear() - i
+              ).map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+
+            <span className="text-white">{t("to")}</span>
+
+            <select
+              value={selectedYear.end}
+              onChange={(e) => {
+                setSelectedYear((prev) => ({ ...prev, end: e.target.value }));
+                setCurrentPage(1); // Reset to first page when year changes
+              }}
+              className="bg-neutral-900 text-white p-2 rounded"
+            >
+              <option value="">{t("End Year")}</option>
+              {Array.from(
+                { length: 30 },
+                (_, i) => new Date().getFullYear() - i
+              ).map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Movies List */}
@@ -279,6 +346,7 @@ const MoviesWithGenre = () => {
                 poster_path={movie.poster_path}
                 href={`/details/${media}/${movie.id}`}
                 userData={userData}
+                shouldPlayTrailer={shouldPlayTrailer}
                 className="flex-1 min-w-44 max-w-60"
               />
             ))}
