@@ -75,12 +75,12 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link to={"/movies"} className="hover:underline me-4 md:me-6">
+              <Link to={"type/movie"} className="hover:underline me-4 md:me-6">
                 {t("Movies")}
               </Link>
             </li>
             <li>
-              <Link to={"/tvShows"} className="hover:underline me-4 md:me-6">
+              <Link to={"type/tv"} className="hover:underline me-4 md:me-6">
                 {t("TV Shows")}
               </Link>
             </li>
