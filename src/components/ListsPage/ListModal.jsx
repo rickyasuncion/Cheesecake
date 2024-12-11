@@ -7,6 +7,7 @@ import {
   updateUserLists,
   userData,
 } from "../../_utils/firestore";
+import { useTranslation } from "react-i18next";
 
 const ListModal = ({ isOpen, setIsOpen, userData, type, id }) => {
   const [newPlaylist, setNewPlaylist] = useState(false);
@@ -15,6 +16,7 @@ const ListModal = ({ isOpen, setIsOpen, userData, type, id }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const modalRef = useRef(null);
   const inputRef = useRef(null);
+  const { t } = useTranslation();
 
   const initialCheckedState =
     userData?.lists.reduce((acc, list) => {
@@ -88,7 +90,7 @@ const ListModal = ({ isOpen, setIsOpen, userData, type, id }) => {
         ...prevState,
         [listName]: !prevState[listName],
       }));
-      console.error('Failed to update list:', error);
+      console.error("Failed to update list:", error);
     }
   };
 
@@ -100,7 +102,7 @@ const ListModal = ({ isOpen, setIsOpen, userData, type, id }) => {
         setPlaylistName("");
         setNewPlaylist(false);
       } catch (error) {
-        console.error('Failed to create playlist:', error);
+        console.error("Failed to create playlist:", error);
       }
     }
   };
@@ -119,7 +121,7 @@ const ListModal = ({ isOpen, setIsOpen, userData, type, id }) => {
             className="bg-zinc-900 rounded-lg p-4 w-64 shadow-lg text-white"
           >
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-medium">Save to...</h3>
+              <h3 className="text-sm font-medium">{t("Save to...")}</h3>
               <button
                 className="p-1 text-gray-400 hover:text-white rounded-full hover:bg-zinc-800 transition-colors"
                 onClick={() => setIsOpen(false)}
@@ -140,7 +142,7 @@ const ListModal = ({ isOpen, setIsOpen, userData, type, id }) => {
                       setIsDeleting(true);
                       await deleteUserList(userData.id, list.name);
                     } catch (error) {
-                      console.error('Failed to delete list:', error);
+                      console.error("Failed to delete list:", error);
                     } finally {
                       setIsDeleting(false);
                     }
@@ -148,7 +150,7 @@ const ListModal = ({ isOpen, setIsOpen, userData, type, id }) => {
                   isDeleting={isDeleting}
                 />
               ))}
-              
+
               {newPlaylist ? (
                 <div className="border border-gray-700 rounded-md overflow-hidden mt-2">
                   <form onSubmit={handleSubmit} className="relative">
@@ -190,7 +192,7 @@ const ListModal = ({ isOpen, setIsOpen, userData, type, id }) => {
                            hover:bg-zinc-800 rounded-md transition-colors mt-2"
                 >
                   <Plus size={18} className="mr-2" />
-                  New playlist
+                  {t("New playlist")}
                 </button>
               )}
             </div>
@@ -201,9 +203,15 @@ const ListModal = ({ isOpen, setIsOpen, userData, type, id }) => {
   );
 };
 
-const PlaylistItem = ({ text, checked, onCheckboxChange, onDelete, isDeleting }) => {
+const PlaylistItem = ({
+  text,
+  checked,
+  onCheckboxChange,
+  onDelete,
+  isDeleting,
+}) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  
+
   const handleDelete = () => {
     if (showDeleteConfirm) {
       onDelete();
@@ -229,29 +237,35 @@ const PlaylistItem = ({ text, checked, onCheckboxChange, onDelete, isDeleting })
         />
         <span className="text-sm truncate pr-2">{text}</span>
       </div>
-      
+
       <button
         onClick={handleDelete}
         disabled={isDeleting}
         className={`p-1.5 rounded-full transition-all duration-200
-          ${showDeleteConfirm 
-            ? 'bg-red-500/10 hover:bg-red-500/20' 
-            : 'opacity-0 group-hover:opacity-100 hover:bg-zinc-700'}
-          ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
-        title={showDeleteConfirm ? 'Click again to confirm deletion' : 'Delete playlist'}
+          ${
+            showDeleteConfirm
+              ? "bg-red-500/10 hover:bg-red-500/20"
+              : "opacity-0 group-hover:opacity-100 hover:bg-zinc-700"
+          }
+          ${isDeleting ? "opacity-50 cursor-not-allowed" : ""}`}
+        title={
+          showDeleteConfirm
+            ? "Click again to confirm deletion"
+            : "Delete playlist"
+        }
       >
-        <Trash2 
-          size={14} 
-          className={`${showDeleteConfirm ? 'text-red-500' : 'text-gray-400'}`}
+        <Trash2
+          size={14}
+          className={`${showDeleteConfirm ? "text-red-500" : "text-gray-400"}`}
         />
       </button>
 
       {showDeleteConfirm && (
-        <div 
+        <div
           className="absolute bottom-0 left-0 h-0.5 bg-red-500"
           style={{
-            width: '100%',
-            animation: 'shrink 3s linear forwards'
+            width: "100%",
+            animation: "shrink 3s linear forwards",
           }}
         />
       )}

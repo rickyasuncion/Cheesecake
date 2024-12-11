@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { MovieCard } from "../ui/MovieCard";
+import { useTranslation } from "react-i18next";
 
 const MovieReccomending = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -8,6 +9,7 @@ const MovieReccomending = () => {
   const [showResults, setShowResults] = useState(false);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { t, i18n } = useTranslation();
 
   const questions = [
     {
@@ -106,16 +108,19 @@ const MovieReccomending = () => {
       const runtimeFilter = runtime[length];
       const [startYear, endYear] = releaseDate[era].split("-");
 
-      const response = await axios.get(`${BASE_URL}/discover/movie?include_adult=false`, {
-        params: {
-          api_key: API_KEY,
-          with_genres: genre,
-          "release_date.gte": `${startYear}-01-01`,
-          "release_date.lte": `${endYear}-12-31`,
-          with_runtime: runtimeFilter,
-          sort_by: "popularity.desc",
-        },
-      });
+      const response = await axios.get(
+        `${BASE_URL}/discover/movie?include_adult=false`,
+        {
+          params: {
+            api_key: API_KEY,
+            with_genres: genre,
+            "release_date.gte": `${startYear}-01-01`,
+            "release_date.lte": `${endYear}-12-31`,
+            with_runtime: runtimeFilter,
+            sort_by: "popularity.desc",
+          },
+        }
+      );
 
       setRecommendedMovies(response.data.results.slice(0, 5));
     } catch (error) {
@@ -137,15 +142,25 @@ const MovieReccomending = () => {
       <div className="container mx-auto px-4 py-6 min-h-screen">
         <div className="mb-8">
           <h2 className="text-3xl font-bold mb-6 border-b-2 border-blue-500 pb-2">
-            Your Personalized Recommendations
+            {t("Your Personalized Recommendations")}
           </h2>
           <div className="mb-4">
-            <h3 className="font-medium mb-2">Based on your preferences:</h3>
+            <h3 className="font-medium mb-2">
+              {t("Based on your preferences")}:
+            </h3>
             <ul className="text-sm text-gray-600 mb-6">
-              <li>Mood: {userAnswers.mood}</li>
-              <li>Length: {userAnswers.length}</li>
-              <li>Era: {userAnswers.era}</li>
-              <li>Watching: {userAnswers.company}</li>
+              <li>
+                {t("Mood")}: {userAnswers.mood}
+              </li>
+              <li>
+                {t("Length")}: {userAnswers.length}
+              </li>
+              <li>
+                {t("Era")}: {userAnswers.era}
+              </li>
+              <li>
+                {t("Watching")}: {userAnswers.company}
+              </li>
             </ul>
           </div>
 
@@ -184,10 +199,11 @@ const MovieReccomending = () => {
       <div className="mb-6">
         <div className="flex justify-between text-gray-700 mb-2">
           <span>
-            Question {currentStep + 1} of {questions.length}
+            {t("Question")} {currentStep + 1} {t("of")} {questions.length}
           </span>
           <span>
-            {Math.round((currentStep / questions.length) * 100)}% complete
+            {Math.round((currentStep / questions.length) * 100)}%{" "}
+            {t("complete")}
           </span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
@@ -209,7 +225,9 @@ const MovieReccomending = () => {
             onClick={() => handleSelect(option)}
             className="p-4 bg-white border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
           >
-            <div className="text-lg font-medium text-gray-800">{option.name}</div>
+            <div className="text-lg font-medium text-gray-800">
+              {option.name}
+            </div>
             <div className="text-sm text-gray-600">{option.description}</div>
           </button>
         ))}

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const AccountNotice = () => {
   const navigate = useNavigate();
-  
+
   return (
     <div className="w-3/4 mx-auto p-4">
       <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
@@ -18,13 +18,13 @@ const AccountNotice = () => {
           onClick={() => navigate("/login")}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
         >
-          {t("login")}
+          {t("Login")}
         </button>
         <button
           onClick={() => navigate("/signup")}
           className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
         >
-          {t("signup")}
+          {t("Sign Up")}
         </button>
       </div>
     </div>

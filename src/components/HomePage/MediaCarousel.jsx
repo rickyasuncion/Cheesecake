@@ -154,11 +154,12 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
                     {userData && (
                       <button
                         onClick={() => {
-                          setId(movie.id)
-                          setIsOpen(true)}}
+                          setId(movie.id);
+                          setIsOpen(true);
+                        }}
                         className="flex bg-white text-black px-4 py-2 rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform"
                       >
-                        Save
+                        {t("Save")}
                         <BookmarkPlus size={20} />
                       </button>
                     )}
@@ -175,7 +176,13 @@ const MediaCarousel = ({ movies, text, type, userData }) => {
           })}
         </div>
       </div>
-      <ListModal isOpen={isOpen} setIsOpen={setIsOpen} userData={userData} type={type} id={id} />
+      <ListModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        userData={userData}
+        type={type}
+        id={id}
+      />
     </div>
   );
 };

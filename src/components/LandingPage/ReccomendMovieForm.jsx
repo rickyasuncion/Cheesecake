@@ -3,8 +3,10 @@ import { fetchData, filterResults } from "../../_utils/utils";
 import { Button } from "../ui/button";
 import MovieListView from "./MovieListView";
 import "./ReccomendMovieForm.css";
+import { useTranslation } from "react-i18next";
 
 const Questions = ({ topic, options, setQuestions, question, setter }) => {
+  const { t, i18n } = useTranslation();
   const btnHandler = (option) => {
     setter(option);
     setQuestions(question + 1);

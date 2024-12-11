@@ -23,47 +23,50 @@ const ForYou = () => {
   const questions = [
     {
       id: "mood",
-      title: "I feel like...",
+      title: t("I feel like..."),
       options: [
-        { name: "Dramatic", description: "(Action, Adventure, Drama)" },
-        { name: "Intense", description: "(Horror, Thriller)" },
-        { name: "Gentle", description: "(Comedy, Family, Romance)" },
-        { name: "Curious", description: "(History, Mystery)" },
+        { name: t("Dramatic"), description: t("(Action, Adventure, Drama)") },
+        { name: t("Intense"), description: t("(Horror, Thriller)") },
+        { name: t("Gentle"), description: t("(Comedy, Family, Romance)") },
+        { name: t("Curious"), description: t("(History, Mystery)") },
         {
-          name: "Out of this world",
-          description: "(Fantasy, Science-Fiction)",
+          name: t("Out of this world"),
+          description: t("(Fantasy, Science-Fiction)"),
         },
-        { name: "Realistic", description: "(Documentary)" },
+        { name: t("Realistic"), description: t("(Documentary)") },
       ],
     },
     {
       id: "length",
-      title: "I have time for...",
+      title: t("I have time for..."),
       options: [
-        { name: "Quick watch", description: "(Under 90 minutes)" },
-        { name: "Standard length", description: "(90-120 minutes)" },
-        { name: "Long journey", description: "(Over 2 hours)" },
-        { name: "Mini series", description: "(Multiple episodes)" },
+        { name: t("Quick watch"), description: t("(Under 90 minutes)") },
+        { name: t("Standard length"), description: t("(90-120 minutes)") },
+        { name: t("Long journey"), description: t("(Over 2 hours)") },
+        { name: t("Mini series"), description: t("(Multiple episodes)") },
       ],
     },
     {
       id: "era",
-      title: "I prefer movies from...",
+      title: t("I prefer movies from..."),
       options: [
-        { name: "Classic era", description: "(Before 1980)" },
-        { name: "Golden age", description: "(1980-2000)" },
-        { name: "Modern classics", description: "(2000-2015)" },
-        { name: "Contemporary", description: "(2015-Present)" },
+        { name: t("Classic era"), description: t("(Before 1980)") },
+        { name: t("Golden age"), description: "(1980-2000)" },
+        { name: t("Modern classics"), description: "(2000-2015)" },
+        { name: t("Contemporary"), description: t("(2015-Present)") },
       ],
     },
     {
       id: "company",
-      title: "I'm watching...",
+      title: t("I'm watching..."),
       options: [
-        { name: "Netflix", description: "Stream on Netflix" },
-        { name: "Amazon Prime Video", description: "Stream on Prime Video" },
-        { name: "Hulu", description: "Stream on Hulu" },
-        { name: "Disney+", description: "Stream on Disney+" },
+        { name: "Netflix", description: t("Stream on Netflix") },
+        {
+          name: "Amazon Prime Video",
+          description: t("Stream on Prime Video"),
+        },
+        { name: "Hulu", description: t("Stream on Hulu") },
+        { name: "Disney+", description: t("Stream on Disney+") },
       ],
     },
   ];
@@ -224,15 +227,25 @@ const ForYou = () => {
       ) : (
         <div className="mb-8">
           <h2 className="text-3xl font-bold mb-6 border-b-2 border-yellow-500 pb-2">
-            Your Personalized Recommendations
+            {t("Your Personalized Recommendations")}
           </h2>
           <div className="mb-4">
-            <h3 className="font-medium mb-2">Based on your preferences:</h3>
+            <h3 className="font-medium mb-2">
+              {t("Based on your preferences")}:
+            </h3>
             <ul className="text-sm text-gray-600 mb-6">
-              <li>Mood: {userAnswers.mood}</li>
-              <li>Length: {userAnswers.length}</li>
-              <li>Era: {userAnswers.era}</li>
-              <li>Watching: {userAnswers.company}</li>
+              <li>
+                {t("Mood")}: {userAnswers.mood}
+              </li>
+              <li>
+                {t("Length")}: {userAnswers.length}
+              </li>
+              <li>
+                {t("Era")}: {userAnswers.era}
+              </li>
+              <li>
+                {t("Watching")}: {userAnswers.company}
+              </li>
             </ul>
           </div>
 
@@ -259,7 +272,7 @@ const ForYou = () => {
             onClick={restart}
             className="w-full p-4 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors mt-6"
           >
-            Start Over
+            {t("Start Over")}
           </button>
         </div>
       )}
